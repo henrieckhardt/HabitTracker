@@ -3,7 +3,6 @@ import SwiftUI
 enum RecurrencePreset: String, CaseIterable, Identifiable {
     case daily = "Täglich"
     case weekly = "Wöchentlich"
-    case weekdays = "An Wochentagen"
     case custom = "Individuell"
 
     var id: String { rawValue }
@@ -16,7 +15,7 @@ enum CustomRecurrenceKind: String, CaseIterable, Identifiable {
     var id: String { rawValue }
 }
 
-/// Editable state backing the 4 user-facing recurrence presets. Converts
+/// Editable state backing the 3 user-facing recurrence presets. Converts
 /// to/from the underlying `RecurrenceRule` used for persistence.
 struct RecurrenceEditorState {
     var preset: RecurrencePreset
@@ -41,7 +40,10 @@ struct RecurrenceEditorState {
         case .daily:
             return RecurrenceEditorState(preset: .daily)
         case .weekdays(let days):
-            return RecurrenceEditorState(preset: days.count <= 1 ? .weekly : .weekdays, selectedWeekdays: days)
+            if days.count <= 1 {
+                return RecurrenceEditorState(preset: .weekly, selectedWeekdays: days)
+            }
+            return RecurrenceEditorState(preset: .custom, selectedWeekdays: days, customKind: .weekdays)
         case .monthly(let days):
             return RecurrenceEditorState(preset: .custom, customKind: .monthly, selectedMonthDays: days)
         }
@@ -51,7 +53,7 @@ struct RecurrenceEditorState {
         switch preset {
         case .daily:
             return .daily
-        case .weekly, .weekdays:
+        case .weekly:
             return .weekdays(selectedWeekdays)
         case .custom:
             switch customKind {
@@ -67,7 +69,7 @@ struct RecurrenceEditorState {
         switch preset {
         case .daily:
             return true
-        case .weekly, .weekdays:
+        case .weekly:
             return !selectedWeekdays.isEmpty
         case .custom:
             switch customKind {
@@ -78,7 +80,7 @@ struct RecurrenceEditorState {
     }
 }
 
-/// Lets the user pick one of the 4 user-facing recurrence presets, editing
+/// Lets the user pick one of the 3 user-facing recurrence presets, editing
 /// the bound `RecurrenceEditorState` in place.
 struct RecurrencePickerView: View {
     @Binding var state: RecurrenceEditorState
@@ -98,8 +100,6 @@ struct RecurrencePickerView: View {
             case .weekly:
                 WeekdaySelector(selection: $state.selectedWeekdays, allowsMultiple: false)
                     .onAppear { ensureExactlyOneWeekday() }
-            case .weekdays:
-                WeekdaySelector(selection: $state.selectedWeekdays, allowsMultiple: true)
             case .custom:
                 Picker("Art", selection: $state.customKind) {
                     ForEach(CustomRecurrenceKind.allCases) { kind in
