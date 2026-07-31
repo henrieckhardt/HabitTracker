@@ -11,6 +11,8 @@ struct HabitEditorView: View {
     @State private var title: String
     @State private var icon: String
     @State private var recurrenceState: RecurrenceEditorState
+    @State private var reminderEnabled: Bool
+    @State private var reminderTime: Date
 
     private static let iconChoices = [
         "checkmark.circle", "flame", "figure.run", "book", "drop",
@@ -18,11 +20,17 @@ struct HabitEditorView: View {
         "moon.stars", "sun.max", "heart", "brain.head.profile", "sparkles"
     ]
 
+    private static var defaultReminderTime: Date {
+        Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: .now) ?? .now
+    }
+
     init(habit: Habit? = nil) {
         self.habitToEdit = habit
         _title = State(initialValue: habit?.title ?? "")
         _icon = State(initialValue: habit?.icon ?? "checkmark.circle")
         _recurrenceState = State(initialValue: RecurrenceEditorState.from(habit?.recurrenceRule ?? .daily))
+        _reminderEnabled = State(initialValue: habit?.reminderTime != nil)
+        _reminderTime = State(initialValue: habit?.reminderTime ?? Self.defaultReminderTime)
     }
 
     var body: some View {
@@ -47,6 +55,18 @@ struct HabitEditorView: View {
                 }
 
                 RecurrencePickerView(state: $recurrenceState)
+
+                Section("Erinnerung") {
+                    Toggle("Erinnerung aktivieren", isOn: $reminderEnabled)
+                        .onChange(of: reminderEnabled) { _, isEnabled in
+                            if isEnabled {
+                                Task { await NotificationService.requestAuthorization() }
+                            }
+                        }
+                    if reminderEnabled {
+                        DatePicker("Uhrzeit", selection: $reminderTime, displayedComponents: .hourAndMinute)
+                    }
+                }
             }
             .navigationTitle(habitToEdit == nil ? "Neuer Habit" : "Habit bearbeiten")
             .navigationBarTitleDisplayMode(.inline)
@@ -65,15 +85,26 @@ struct HabitEditorView: View {
     private func save() {
         let rule = recurrenceState.buildRule()
         let trimmedTitle = title.trimmingCharacters(in: .whitespaces)
+        let newReminderTime = reminderEnabled ? reminderTime : nil
 
-        if let habit = habitToEdit {
+        let habit: Habit
+        if let existingHabit = habitToEdit {
+            habit = existingHabit
             habit.title = trimmedTitle
             habit.icon = icon
             habit.recurrenceRule = rule
         } else {
-            let habit = Habit(title: trimmedTitle, icon: icon, recurrenceRule: rule)
+            habit = Habit(title: trimmedTitle, icon: icon, recurrenceRule: rule)
             modelContext.insert(habit)
         }
+        habit.reminderTime = newReminderTime
+
+        if newReminderTime != nil {
+            NotificationService.scheduleReminders(for: habit)
+        } else {
+            NotificationService.cancelReminders(for: habit)
+        }
+
         try? modelContext.save()
         dismiss()
     }

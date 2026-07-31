@@ -19,6 +19,10 @@ struct RootTabView: View {
                 .tabItem {
                     Label("Habits", systemImage: "checkmark.circle")
                 }
+            StatsView()
+                .tabItem {
+                    Label("Statistik", systemImage: "chart.bar.fill")
+                }
         }
         .onChange(of: scenePhase) { _, newPhase in
             if newPhase == .active {

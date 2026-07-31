@@ -33,11 +33,13 @@ struct HabitListView: View {
                             .swipeActions {
                                 Button("Archivieren", systemImage: "archivebox") {
                                     habit.isArchived = true
+                                    NotificationService.cancelReminders(for: habit)
                                     try? modelContext.save()
                                 }
                                 .tint(.orange)
 
                                 Button("Löschen", systemImage: "trash", role: .destructive) {
+                                    NotificationService.cancelReminders(for: habit)
                                     modelContext.delete(habit)
                                     try? modelContext.save()
                                 }

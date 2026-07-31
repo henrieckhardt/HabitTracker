@@ -7,11 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		18045C4FADF25D1D4BC00126 /* StreakEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBC4C9A0E022A89CA0F9FAA6 /* StreakEngine.swift */; };
 		24BAD097D640501F3D0E4A68 /* HabitTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6301FCAA76F348B44F8BE9C7 /* HabitTrackerApp.swift */; };
 		28AF11CE69A90159D01496C6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E563461ADB59303758A5A6A6 /* Assets.xcassets */; };
 		39C10189F97EE0176B533650 /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F68627CFACA866D15E0AA93 /* RootTabView.swift */; };
+		3D1DDB58121531A27A01760E /* NotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC653A32D3ABE164A1B0B52 /* NotificationDelegate.swift */; };
 		784C2B3695187B5FD94B2CC4 /* RolloverServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50BD2B73001619495CF21EF /* RolloverServiceTests.swift */; };
 		7D4F6E2715AF8EFC0E7D0408 /* RecurrenceEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D806678F8172CF38BA7A78E8 /* RecurrenceEngine.swift */; };
+		80D5834BBA338DE8B5FE9151 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE09BE65A43EAAC056D676D /* NotificationService.swift */; };
 		820A169091D49764FED85FB0 /* RecurrenceRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63777F15EA648AC4D87F18AF /* RecurrenceRule.swift */; };
 		84B48B5D11DF4F84EE07573B /* HabitEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14636F2B3FEABCE88B66127 /* HabitEditorView.swift */; };
 		8DFE1D22A5532300DF453C5A /* ToDoEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD2C2579DB6A373C5347CD7 /* ToDoEditorView.swift */; };
@@ -21,9 +24,11 @@
 		A6A78DC48ABD8248EE7108BA /* HabitListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF3E6BE07F9FB7C10D61993 /* HabitListView.swift */; };
 		A8CB5D0AA8755ACC890CB2FD /* RecurrencePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93789DB634C41D94F7DCF78 /* RecurrencePickerView.swift */; };
 		AC0CC1C935707A7C84BC7118 /* Habit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757134E23848D6632FD1EA11 /* Habit.swift */; };
+		AD46DB286ABE4AF3C8393763 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C4BCEFC3DD5733BBFAA70E /* StatsView.swift */; };
 		C24E56AA325F665AFC094F01 /* DayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E0EB92AE9E9404755F136D /* DayView.swift */; };
 		C4B478508D942F40DC7BF32F /* WeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D61281011B7203F7DD7891D /* WeekView.swift */; };
 		D15908D094A110E475ABE2F0 /* RolloverService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014B24A6799466357380EC3F /* RolloverService.swift */; };
+		D9B7E8B008CA3B5662B45A0A /* StreakEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F9090466EA890C4BF98B0 /* StreakEngineTests.swift */; };
 		DE12831EA16BD8A1399D0B2B /* RecurrenceEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DE77127A2CFCC34F55BD00 /* RecurrenceEngineTests.swift */; };
 		EA98341D44B7F7B69684C6B0 /* HabitCompletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946E6209E086DEC58E7D5BF1 /* HabitCompletion.swift */; };
 		EAA33138B3F10D2A5B72CEA6 /* ToDo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745E1E4C0F363E51E7241BC8 /* ToDo.swift */; };
@@ -43,6 +48,7 @@
 		014B24A6799466357380EC3F /* RolloverService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RolloverService.swift; sourceTree = "<group>"; };
 		1EA330085B77C76D00AED076 /* WeekdaySelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekdaySelector.swift; sourceTree = "<group>"; };
 		21E0EB92AE9E9404755F136D /* DayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayView.swift; sourceTree = "<group>"; };
+		26C4BCEFC3DD5733BBFAA70E /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
 		3AF3E6BE07F9FB7C10D61993 /* HabitListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitListView.swift; sourceTree = "<group>"; };
 		3E76BAA37AAE86C749C7AC17 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		51DE77127A2CFCC34F55BD00 /* RecurrenceEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurrenceEngineTests.swift; sourceTree = "<group>"; };
@@ -59,8 +65,12 @@
 		A23F8410FFD146F6B134A267 /* HabitTrackerTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = HabitTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A93789DB634C41D94F7DCF78 /* RecurrencePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurrencePickerView.swift; sourceTree = "<group>"; };
 		B14636F2B3FEABCE88B66127 /* HabitEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitEditorView.swift; sourceTree = "<group>"; };
+		BEC653A32D3ABE164A1B0B52 /* NotificationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDelegate.swift; sourceTree = "<group>"; };
+		CEE09BE65A43EAAC056D676D /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		D50BD2B73001619495CF21EF /* RolloverServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RolloverServiceTests.swift; sourceTree = "<group>"; };
 		D806678F8172CF38BA7A78E8 /* RecurrenceEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurrenceEngine.swift; sourceTree = "<group>"; };
+		DBC4C9A0E022A89CA0F9FAA6 /* StreakEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakEngine.swift; sourceTree = "<group>"; };
+		DD4F9090466EA890C4BF98B0 /* StreakEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakEngineTests.swift; sourceTree = "<group>"; };
 		DDD2C2579DB6A373C5347CD7 /* ToDoEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoEditorView.swift; sourceTree = "<group>"; };
 		E563461ADB59303758A5A6A6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -79,6 +89,7 @@
 			children = (
 				51DE77127A2CFCC34F55BD00 /* RecurrenceEngineTests.swift */,
 				D50BD2B73001619495CF21EF /* RolloverServiceTests.swift */,
+				DD4F9090466EA890C4BF98B0 /* StreakEngineTests.swift */,
 			);
 			path = HabitTrackerTests;
 			sourceTree = "<group>";
@@ -157,10 +168,21 @@
 		C31E65DCE16EF06192345FA0 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				BEC653A32D3ABE164A1B0B52 /* NotificationDelegate.swift */,
+				CEE09BE65A43EAAC056D676D /* NotificationService.swift */,
 				D806678F8172CF38BA7A78E8 /* RecurrenceEngine.swift */,
 				014B24A6799466357380EC3F /* RolloverService.swift */,
+				DBC4C9A0E022A89CA0F9FAA6 /* StreakEngine.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		C7C487BCDF3FCB20426033FE /* Stats */ = {
+			isa = PBXGroup;
+			children = (
+				26C4BCEFC3DD5733BBFAA70E /* StatsView.swift */,
+			);
+			path = Stats;
 			sourceTree = "<group>";
 		};
 		D6ECF9B08F98D87F6F44C8AD = {
@@ -184,6 +206,7 @@
 			isa = PBXGroup;
 			children = (
 				2A883FEC813FD445155D047F /* Habits */,
+				C7C487BCDF3FCB20426033FE /* Stats */,
 				76DE3398BD7632129DDB3833 /* Today */,
 				EEDD3D72F59D4C0A16B77EC7 /* ToDos */,
 				1C3F1003A3CA679325814438 /* Week */,
@@ -287,6 +310,7 @@
 			files = (
 				DE12831EA16BD8A1399D0B2B /* RecurrenceEngineTests.swift in Sources */,
 				784C2B3695187B5FD94B2CC4 /* RolloverServiceTests.swift in Sources */,
+				D9B7E8B008CA3B5662B45A0A /* StreakEngineTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,11 +325,15 @@
 				A6A78DC48ABD8248EE7108BA /* HabitListView.swift in Sources */,
 				24BAD097D640501F3D0E4A68 /* HabitTrackerApp.swift in Sources */,
 				9A417BFF0907812DBE1F78EF /* MonthDaySelector.swift in Sources */,
+				3D1DDB58121531A27A01760E /* NotificationDelegate.swift in Sources */,
+				80D5834BBA338DE8B5FE9151 /* NotificationService.swift in Sources */,
 				7D4F6E2715AF8EFC0E7D0408 /* RecurrenceEngine.swift in Sources */,
 				A8CB5D0AA8755ACC890CB2FD /* RecurrencePickerView.swift in Sources */,
 				820A169091D49764FED85FB0 /* RecurrenceRule.swift in Sources */,
 				D15908D094A110E475ABE2F0 /* RolloverService.swift in Sources */,
 				39C10189F97EE0176B533650 /* RootTabView.swift in Sources */,
+				AD46DB286ABE4AF3C8393763 /* StatsView.swift in Sources */,
+				18045C4FADF25D1D4BC00126 /* StreakEngine.swift in Sources */,
 				EAA33138B3F10D2A5B72CEA6 /* ToDo.swift in Sources */,
 				8DFE1D22A5532300DF453C5A /* ToDoEditorView.swift in Sources */,
 				C4B478508D942F40DC7BF32F /* WeekView.swift in Sources */,
