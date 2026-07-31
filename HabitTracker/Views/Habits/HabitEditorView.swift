@@ -54,19 +54,11 @@ struct HabitEditorView: View {
                     .padding(.vertical, 4)
                 }
 
-                RecurrencePickerView(state: $recurrenceState)
-
-                Section("Erinnerung") {
-                    Toggle("Erinnerung aktivieren", isOn: $reminderEnabled)
-                        .onChange(of: reminderEnabled) { _, isEnabled in
-                            if isEnabled {
-                                Task { await NotificationService.requestAuthorization() }
-                            }
-                        }
-                    if reminderEnabled {
-                        DatePicker("Uhrzeit", selection: $reminderTime, displayedComponents: .hourAndMinute)
-                    }
+                Section("Wiederholung") {
+                    RecurrencePickerView(state: $recurrenceState)
                 }
+
+                ReminderToggleSection(isEnabled: $reminderEnabled, time: $reminderTime)
             }
             .navigationTitle(habitToEdit == nil ? "Neuer Habit" : "Habit bearbeiten")
             .navigationBarTitleDisplayMode(.inline)

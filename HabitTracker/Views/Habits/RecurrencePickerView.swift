@@ -82,11 +82,16 @@ struct RecurrenceEditorState {
 
 /// Lets the user pick one of the 3 user-facing recurrence presets, editing
 /// the bound `RecurrenceEditorState` in place.
+///
+/// Intentionally has no `Section` of its own — a custom View whose body IS a
+/// `Section` used directly as a `Form` child confuses List's hit-testing for
+/// whatever sibling section follows it (the next Section's rows become
+/// untappable). The caller wraps this in its own `Section("Wiederholung")`.
 struct RecurrencePickerView: View {
     @Binding var state: RecurrenceEditorState
 
     var body: some View {
-        Section("Wiederholung") {
+        Group {
             Picker("Turnus", selection: $state.preset) {
                 ForEach(RecurrencePreset.allCases) { preset in
                     Text(preset.rawValue).tag(preset)

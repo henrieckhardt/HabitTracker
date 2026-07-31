@@ -26,6 +26,9 @@ enum RolloverService {
         if let overdueToDos = try? context.fetch(descriptor) {
             for toDo in overdueToDos {
                 toDo.scheduledDate = startOfToday
+                if toDo.reminderTime != nil {
+                    NotificationService.scheduleReminder(for: toDo, calendar: calendar)
+                }
             }
             if !overdueToDos.isEmpty {
                 try? context.save()

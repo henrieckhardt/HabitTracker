@@ -59,7 +59,9 @@ struct DayContentView: View {
                 }
                 .onDelete { offsets in
                     for index in offsets {
-                        modelContext.delete(toDosForDay[index])
+                        let toDo = toDosForDay[index]
+                        NotificationService.cancelReminder(for: toDo)
+                        modelContext.delete(toDo)
                     }
                     try? modelContext.save()
                 }
@@ -265,6 +267,11 @@ private struct ToDoRow: View {
     private func toggleCompletion() {
         toDo.isCompleted.toggle()
         toDo.completedAt = toDo.isCompleted ? .now : nil
+        if toDo.isCompleted {
+            NotificationService.cancelReminder(for: toDo)
+        } else if toDo.reminderTime != nil {
+            NotificationService.scheduleReminder(for: toDo)
+        }
         try? modelContext.save()
     }
 }

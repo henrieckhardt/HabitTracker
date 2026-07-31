@@ -10,6 +10,7 @@ final class ToDo {
     var createdAt: Date = Date.now
     var isCompleted: Bool = false
     var completedAt: Date?
+    var reminderTime: Date?
 
     init(
         title: String,
@@ -17,7 +18,8 @@ final class ToDo {
         scheduledDate: Date,
         createdAt: Date = .now,
         isCompleted: Bool = false,
-        completedAt: Date? = nil
+        completedAt: Date? = nil,
+        reminderTime: Date? = nil
     ) {
         self.id = UUID()
         self.title = title
@@ -26,5 +28,6 @@ final class ToDo {
         self.createdAt = createdAt
         self.isCompleted = isCompleted
         self.completedAt = completedAt
+        self.reminderTime = reminderTime
     }
 }

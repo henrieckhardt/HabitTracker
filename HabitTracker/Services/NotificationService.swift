@@ -2,24 +2,41 @@ import Foundation
 import UserNotifications
 
 enum NotificationService {
-    static let completeActionIdentifier = "COMPLETE_HABIT"
-    static let categoryIdentifier = "HABIT_REMINDER"
+    static let completeHabitActionIdentifier = "COMPLETE_HABIT"
+    static let habitCategoryIdentifier = "HABIT_REMINDER"
     static let habitIDKey = "habitID"
 
-    /// Registers the "Erledigt" quick-action category. Call once at app launch.
+    static let completeToDoActionIdentifier = "COMPLETE_TODO"
+    static let toDoCategoryIdentifier = "TODO_REMINDER"
+    static let toDoIDKey = "toDoID"
+
+    /// Registers the "Erledigt" quick-action categories. Call once at app launch.
     static func registerCategories() {
-        let completeAction = UNNotificationAction(
-            identifier: completeActionIdentifier,
+        let completeHabitAction = UNNotificationAction(
+            identifier: completeHabitActionIdentifier,
             title: "Erledigt",
             options: []
         )
-        let category = UNNotificationCategory(
-            identifier: categoryIdentifier,
-            actions: [completeAction],
+        let habitCategory = UNNotificationCategory(
+            identifier: habitCategoryIdentifier,
+            actions: [completeHabitAction],
             intentIdentifiers: [],
             options: []
         )
-        UNUserNotificationCenter.current().setNotificationCategories([category])
+
+        let completeToDoAction = UNNotificationAction(
+            identifier: completeToDoActionIdentifier,
+            title: "Erledigt",
+            options: []
+        )
+        let toDoCategory = UNNotificationCategory(
+            identifier: toDoCategoryIdentifier,
+            actions: [completeToDoAction],
+            intentIdentifiers: [],
+            options: []
+        )
+
+        UNUserNotificationCenter.current().setNotificationCategories([habitCategory, toDoCategory])
     }
 
     @discardableResult
@@ -38,7 +55,7 @@ enum NotificationService {
         content.title = habit.title
         content.body = "Zeit für deinen Habit"
         content.sound = .default
-        content.categoryIdentifier = categoryIdentifier
+        content.categoryIdentifier = habitCategoryIdentifier
         content.userInfo = [habitIDKey: habit.id.uuidString]
 
         func addRequest(suffix: String, dateComponents: DateComponents) {
@@ -47,7 +64,7 @@ enum NotificationService {
             comps.minute = timeComponents.minute
             let trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: true)
             let request = UNNotificationRequest(
-                identifier: identifierPrefix(for: habit) + suffix,
+                identifier: habitIdentifierPrefix(for: habit) + suffix,
                 content: content,
                 trigger: trigger
             )
@@ -69,14 +86,53 @@ enum NotificationService {
     }
 
     static func cancelReminders(for habit: Habit) {
-        let prefix = identifierPrefix(for: habit)
+        cancelRequests(withPrefix: habitIdentifierPrefix(for: habit))
+    }
+
+    /// Cancels any existing reminder for the ToDo, then schedules a one-time
+    /// reminder on its scheduled date at the given time (if set). Call again
+    /// whenever `scheduledDate` changes (e.g. on rollover) to move the trigger.
+    static func scheduleReminder(for toDo: ToDo, calendar: Calendar = .current) {
+        cancelReminder(for: toDo)
+        guard let time = toDo.reminderTime else { return }
+
+        var comps = calendar.dateComponents([.year, .month, .day], from: toDo.scheduledDate)
+        let timeComponents = calendar.dateComponents([.hour, .minute], from: time)
+        comps.hour = timeComponents.hour
+        comps.minute = timeComponents.minute
+
+        let content = UNMutableNotificationContent()
+        content.title = toDo.title
+        content.body = "Fällig heute"
+        content.sound = .default
+        content.categoryIdentifier = toDoCategoryIdentifier
+        content.userInfo = [toDoIDKey: toDo.id.uuidString]
+
+        let trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: false)
+        let request = UNNotificationRequest(
+            identifier: toDoIdentifier(for: toDo),
+            content: content,
+            trigger: trigger
+        )
+        UNUserNotificationCenter.current().add(request)
+    }
+
+    static func cancelReminder(for toDo: ToDo) {
+        cancelRequests(withPrefix: toDoIdentifier(for: toDo))
+    }
+
+    private static func cancelRequests(withPrefix prefix: String) {
         UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
             let idsToRemove = requests.map(\.identifier).filter { $0.hasPrefix(prefix) }
             UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: idsToRemove)
         }
     }
 
-    private static func identifierPrefix(for habit: Habit) -> String {
+    private static func habitIdentifierPrefix(for habit: Habit) -> String {
         "habit-reminder-\(habit.id.uuidString)-"
+    }
+
+    private static func toDoIdentifier(for toDo: ToDo) -> String {
+        "todo-reminder-\(toDo.id.uuidString)"
     }
 }
