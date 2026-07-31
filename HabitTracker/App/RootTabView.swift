@@ -11,6 +11,10 @@ struct RootTabView: View {
                 .tabItem {
                     Label("Heute", systemImage: "calendar")
                 }
+            WeekView()
+                .tabItem {
+                    Label("Woche", systemImage: "calendar.day.timeline.left")
+                }
             HabitListView()
                 .tabItem {
                     Label("Habits", systemImage: "checkmark.circle")

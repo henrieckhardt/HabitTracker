@@ -1,16 +1,33 @@
 import SwiftUI
 import SwiftData
 
+/// Tab-root wrapper: owns the NavigationStack so the "Heute" tab has its own
+/// navigation context, separate from the Woche tab's stack.
 struct DayView: View {
+    var body: some View {
+        NavigationStack {
+            DayContentView(initialDate: Calendar.current.startOfDay(for: .now))
+        }
+    }
+}
+
+/// The actual day content (habit/todo lists, date header, add button).
+/// Reused as a push destination from WeekView, which supplies its own
+/// NavigationStack, so this view must not wrap one itself.
+struct DayContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(filter: #Predicate<Habit> { !$0.isArchived }, sort: \Habit.createdAt)
     private var allHabits: [Habit]
     @Query(sort: \ToDo.createdAt) private var allToDos: [ToDo]
 
-    @State private var selectedDate: Date = Calendar.current.startOfDay(for: .now)
+    @State private var selectedDate: Date
     @State private var showingAddToDo = false
 
     private let calendar = Calendar.current
+
+    init(initialDate: Date) {
+        _selectedDate = State(initialValue: Calendar.current.startOfDay(for: initialDate))
+    }
 
     private var habitsForDay: [Habit] {
         allHabits.filter { RecurrenceEngine.isScheduled($0.recurrenceRule, on: selectedDate, calendar: calendar) }
@@ -23,60 +40,59 @@ struct DayView: View {
     }
 
     var body: some View {
-        NavigationStack {
-            List {
-                if !habitsForDay.isEmpty {
-                    Section("Habits") {
-                        ForEach(habitsForDay) { habit in
-                            HabitCompletionRow(habit: habit, date: selectedDate)
-                        }
+        List {
+            if !habitsForDay.isEmpty {
+                Section("Habits") {
+                    ForEach(habitsForDay) { habit in
+                        HabitCompletionRow(habit: habit, date: selectedDate)
                     }
                 }
+            }
 
-                Section("ToDos") {
-                    if toDosForDay.isEmpty {
-                        Text("Keine ToDos für diesen Tag.")
-                            .foregroundStyle(.secondary)
-                    }
-                    ForEach(toDosForDay) { toDo in
-                        ToDoRow(toDo: toDo)
-                    }
-                    .onDelete { offsets in
-                        for index in offsets {
-                            modelContext.delete(toDosForDay[index])
-                        }
-                        try? modelContext.save()
-                    }
+            Section("ToDos") {
+                if toDosForDay.isEmpty {
+                    Text("Keine ToDos für diesen Tag.")
+                        .foregroundStyle(.secondary)
                 }
+                ForEach(toDosForDay) { toDo in
+                    ToDoRow(toDo: toDo)
+                }
+                .onDelete { offsets in
+                    for index in offsets {
+                        modelContext.delete(toDosForDay[index])
+                    }
+                    try? modelContext.save()
+                }
+            }
 
-                if habitsForDay.isEmpty && toDosForDay.isEmpty {
-                    ContentUnavailableView(
-                        "Nichts geplant",
-                        systemImage: "checkmark.circle",
-                        description: Text("Für diesen Tag stehen keine Habits oder ToDos an.")
-                    )
-                    .listRowSeparator(.hidden)
+            if habitsForDay.isEmpty && toDosForDay.isEmpty {
+                ContentUnavailableView(
+                    "Nichts geplant",
+                    systemImage: "checkmark.circle",
+                    description: Text("Für diesen Tag stehen keine Habits oder ToDos an.")
+                )
+                .listRowSeparator(.hidden)
+            }
+        }
+        .navigationTitle("Heute")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                DateHeader(selectedDate: $selectedDate)
+            }
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    showingAddToDo = true
+                } label: {
+                    Image(systemName: "plus")
                 }
             }
-            .navigationTitle("Heute")
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    DateHeader(selectedDate: $selectedDate)
-                }
-                ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        showingAddToDo = true
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-                }
-            }
-            .sheet(isPresented: $showingAddToDo) {
-                ToDoEditorView(defaultDate: selectedDate)
-            }
-            .task {
-                RolloverService.rolloverIfNeeded(context: modelContext)
-            }
+        }
+        .sheet(isPresented: $showingAddToDo) {
+            ToDoEditorView(defaultDate: selectedDate)
+        }
+        .task {
+            RolloverService.rolloverIfNeeded(context: modelContext)
         }
     }
 }
@@ -209,15 +225,22 @@ private struct HabitCompletionRow: View {
 private struct ToDoRow: View {
     @Environment(\.modelContext) private var modelContext
     let toDo: ToDo
+    @State private var showingEditor = false
 
     var body: some View {
-        Button {
-            toggle()
-        } label: {
-            HStack(spacing: 12) {
+        HStack(spacing: 12) {
+            Button {
+                toggleCompletion()
+            } label: {
                 Image(systemName: toDo.isCompleted ? "checkmark.circle.fill" : "circle")
                     .font(.title3)
                     .foregroundStyle(toDo.isCompleted ? Color.accentColor : Color.secondary)
+            }
+            .buttonStyle(.plain)
+
+            Button {
+                showingEditor = true
+            } label: {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(toDo.title)
                         .strikethrough(toDo.isCompleted)
@@ -228,14 +251,18 @@ private struct ToDoRow: View {
                             .foregroundStyle(.secondary)
                     }
                 }
-                Spacer()
+                .contentShape(Rectangle())
             }
-            .contentShape(Rectangle())
+            .buttonStyle(.plain)
+
+            Spacer()
         }
-        .buttonStyle(.plain)
+        .sheet(isPresented: $showingEditor) {
+            ToDoEditorView(toDo: toDo)
+        }
     }
 
-    private func toggle() {
+    private func toggleCompletion() {
         toDo.isCompleted.toggle()
         toDo.completedAt = toDo.isCompleted ? .now : nil
         try? modelContext.save()

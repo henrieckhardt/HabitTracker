@@ -22,6 +22,7 @@
 		A8CB5D0AA8755ACC890CB2FD /* RecurrencePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93789DB634C41D94F7DCF78 /* RecurrencePickerView.swift */; };
 		AC0CC1C935707A7C84BC7118 /* Habit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757134E23848D6632FD1EA11 /* Habit.swift */; };
 		C24E56AA325F665AFC094F01 /* DayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E0EB92AE9E9404755F136D /* DayView.swift */; };
+		C4B478508D942F40DC7BF32F /* WeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D61281011B7203F7DD7891D /* WeekView.swift */; };
 		D15908D094A110E475ABE2F0 /* RolloverService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014B24A6799466357380EC3F /* RolloverService.swift */; };
 		DE12831EA16BD8A1399D0B2B /* RecurrenceEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DE77127A2CFCC34F55BD00 /* RecurrenceEngineTests.swift */; };
 		EA98341D44B7F7B69684C6B0 /* HabitCompletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946E6209E086DEC58E7D5BF1 /* HabitCompletion.swift */; };
@@ -51,6 +52,7 @@
 		745E1E4C0F363E51E7241BC8 /* ToDo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDo.swift; sourceTree = "<group>"; };
 		7524BCC44507CB4B57E59A9A /* MonthDaySelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthDaySelector.swift; sourceTree = "<group>"; };
 		757134E23848D6632FD1EA11 /* Habit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Habit.swift; sourceTree = "<group>"; };
+		7D61281011B7203F7DD7891D /* WeekView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekView.swift; sourceTree = "<group>"; };
 		8F68627CFACA866D15E0AA93 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
 		934C18A7F2EB31512CEB4A4E /* HabitTracker.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = HabitTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		946E6209E086DEC58E7D5BF1 /* HabitCompletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitCompletion.swift; sourceTree = "<group>"; };
@@ -64,6 +66,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		1C3F1003A3CA679325814438 /* Week */ = {
+			isa = PBXGroup;
+			children = (
+				7D61281011B7203F7DD7891D /* WeekView.swift */,
+			);
+			path = Week;
+			sourceTree = "<group>";
+		};
 		205CA1387EBF37732F8D43CC /* HabitTrackerTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -176,6 +186,7 @@
 				2A883FEC813FD445155D047F /* Habits */,
 				76DE3398BD7632129DDB3833 /* Today */,
 				EEDD3D72F59D4C0A16B77EC7 /* ToDos */,
+				1C3F1003A3CA679325814438 /* Week */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -297,6 +308,7 @@
 				39C10189F97EE0176B533650 /* RootTabView.swift in Sources */,
 				EAA33138B3F10D2A5B72CEA6 /* ToDo.swift in Sources */,
 				8DFE1D22A5532300DF453C5A /* ToDoEditorView.swift in Sources */,
+				C4B478508D942F40DC7BF32F /* WeekView.swift in Sources */,
 				92B8C4DFE5D6A7477354E4F0 /* Weekday.swift in Sources */,
 				9B7A0B5C97511CA41AFACBA9 /* WeekdaySelector.swift in Sources */,
 			);

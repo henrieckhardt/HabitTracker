@@ -5,12 +5,18 @@ struct ToDoEditorView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
 
-    @State private var title: String = ""
-    @State private var notes: String = ""
+    /// nil when creating a new ToDo.
+    private let toDoToEdit: ToDo?
+
+    @State private var title: String
+    @State private var notes: String
     @State private var scheduledDate: Date
 
-    init(defaultDate: Date) {
-        _scheduledDate = State(initialValue: defaultDate)
+    init(toDo: ToDo? = nil, defaultDate: Date = Calendar.current.startOfDay(for: .now)) {
+        self.toDoToEdit = toDo
+        _title = State(initialValue: toDo?.title ?? "")
+        _notes = State(initialValue: toDo?.notes ?? "")
+        _scheduledDate = State(initialValue: toDo?.scheduledDate ?? defaultDate)
     }
 
     var body: some View {
@@ -27,7 +33,7 @@ struct ToDoEditorView: View {
                         .datePickerStyle(.graphical)
                 }
             }
-            .navigationTitle("Neues ToDo")
+            .navigationTitle(toDoToEdit == nil ? "Neues ToDo" : "ToDo bearbeiten")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -42,12 +48,21 @@ struct ToDoEditorView: View {
     }
 
     private func save() {
-        let toDo = ToDo(
-            title: title.trimmingCharacters(in: .whitespaces),
-            notes: notes.trimmingCharacters(in: .whitespaces).isEmpty ? nil : notes,
-            scheduledDate: Calendar.current.startOfDay(for: scheduledDate)
-        )
-        modelContext.insert(toDo)
+        let trimmedTitle = title.trimmingCharacters(in: .whitespaces)
+        let trimmedNotes = notes.trimmingCharacters(in: .whitespaces)
+
+        if let toDo = toDoToEdit {
+            toDo.title = trimmedTitle
+            toDo.notes = trimmedNotes.isEmpty ? nil : trimmedNotes
+            toDo.scheduledDate = Calendar.current.startOfDay(for: scheduledDate)
+        } else {
+            let toDo = ToDo(
+                title: trimmedTitle,
+                notes: trimmedNotes.isEmpty ? nil : trimmedNotes,
+                scheduledDate: Calendar.current.startOfDay(for: scheduledDate)
+            )
+            modelContext.insert(toDo)
+        }
         try? modelContext.save()
         dismiss()
     }

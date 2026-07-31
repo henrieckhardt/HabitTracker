@@ -72,8 +72,11 @@ private struct HabitRow: View {
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: habit.icon)
+                .font(.system(size: 16, weight: .semibold))
                 .foregroundStyle(Color.accentColor)
-                .frame(width: 28)
+                .frame(width: 36, height: 36)
+                .background(Color.accentColor.opacity(0.15))
+                .clipShape(Circle())
             VStack(alignment: .leading, spacing: 2) {
                 Text(habit.title)
                     .foregroundStyle(.primary)
