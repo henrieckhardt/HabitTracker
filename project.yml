@@ -19,12 +19,26 @@ targets:
       properties:
         UILaunchScreen: {}
         CFBundleDisplayName: Habit Tracker
+    entitlements:
+      path: HabitTracker/Resources/HabitTracker.entitlements
+      properties:
+        com.apple.developer.family-controls: true
+        com.apple.security.application-groups:
+          - group.com.henrieckhardt.habittracker
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.henrieckhardt.habittracker
         TARGETED_DEVICE_FAMILY: "1,2"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+    dependencies:
+      - target: FocusShieldMonitor
+        embed: true
+      - target: FocusShieldConfiguration
+        embed: true
+      - sdk: FamilyControls.framework
+      - sdk: ManagedSettings.framework
+      - sdk: DeviceActivity.framework
   HabitTrackerTests:
     type: bundle.unit-test
     platform: iOS
@@ -36,12 +50,83 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.henrieckhardt.habittracker.tests
         GENERATE_INFOPLIST_FILE: YES
+  FocusShieldMonitor:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: FocusShieldMonitor
+      - path: HabitTracker/App/AppGroup.swift
+      - path: HabitTracker/Models/Habit.swift
+      - path: HabitTracker/Models/HabitCompletion.swift
+      - path: HabitTracker/Models/ToDo.swift
+      - path: HabitTracker/Models/FocusSession.swift
+      - path: HabitTracker/Models/RecurrenceRule.swift
+      - path: HabitTracker/Models/Weekday.swift
+      - path: HabitTracker/Services/RecurrenceEngine.swift
+    info:
+      path: FocusShieldMonitor/Info.plist
+      properties:
+        CFBundleDisplayName: FocusShieldMonitor
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.deviceactivity.monitor-extension
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).FocusShieldMonitorExtension
+    entitlements:
+      path: FocusShieldMonitor/FocusShieldMonitor.entitlements
+      properties:
+        com.apple.developer.family-controls: true
+        com.apple.security.application-groups:
+          - group.com.henrieckhardt.habittracker
+    dependencies:
+      - sdk: FamilyControls.framework
+      - sdk: ManagedSettings.framework
+      - sdk: DeviceActivity.framework
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.henrieckhardt.habittracker.FocusShieldMonitor
+        SKIP_INSTALL: YES
+  FocusShieldConfiguration:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: FocusShieldConfiguration
+      - path: HabitTracker/App/AppGroup.swift
+      - path: HabitTracker/Models/Habit.swift
+      - path: HabitTracker/Models/HabitCompletion.swift
+      - path: HabitTracker/Models/ToDo.swift
+      - path: HabitTracker/Models/FocusSession.swift
+      - path: HabitTracker/Models/RecurrenceRule.swift
+      - path: HabitTracker/Models/Weekday.swift
+      - path: HabitTracker/Services/RecurrenceEngine.swift
+      - path: HabitTracker/Services/FocusScheduleEngine.swift
+    info:
+      path: FocusShieldConfiguration/Info.plist
+      properties:
+        CFBundleDisplayName: FocusShieldConfiguration
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.ManagedSettingsUI.shield-configuration-service
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).FocusShieldConfigurationExtension
+    entitlements:
+      path: FocusShieldConfiguration/FocusShieldConfiguration.entitlements
+      properties:
+        com.apple.developer.family-controls: true
+        com.apple.security.application-groups:
+          - group.com.henrieckhardt.habittracker
+    dependencies:
+      - sdk: FamilyControls.framework
+      - sdk: ManagedSettings.framework
+      - sdk: ManagedSettingsUI.framework
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.henrieckhardt.habittracker.FocusShieldConfiguration
+        SKIP_INSTALL: YES
 schemes:
   HabitTracker:
     build:
       targets:
         HabitTracker: all
         HabitTrackerTests: [test]
+        FocusShieldMonitor: all
+        FocusShieldConfiguration: all
     test:
       targets:
         - HabitTrackerTests

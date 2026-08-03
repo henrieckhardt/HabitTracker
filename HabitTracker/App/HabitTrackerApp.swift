@@ -8,7 +8,13 @@ struct HabitTrackerApp: App {
     private let notificationDelegate: NotificationDelegate
 
     init() {
-        let container = try! ModelContainer(for: Habit.self, HabitCompletion.self, ToDo.self, FocusSession.self)
+        // Stored in the shared App Group container (not the app's private
+        // container) so the FocusShieldMonitor/FocusShieldConfiguration
+        // extensions can read FocusSession data directly.
+        let container = try! ModelContainer(
+            for: Habit.self, HabitCompletion.self, ToDo.self, FocusSession.self,
+            configurations: AppGroup.makeModelConfiguration()
+        )
         modelContainer = container
 
         let delegate = NotificationDelegate(modelContainer: container)

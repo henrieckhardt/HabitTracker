@@ -49,10 +49,12 @@ struct FocusListView: View {
                                 Button("Archivieren", systemImage: "archivebox") {
                                     session.isArchived = true
                                     try? modelContext.save()
+                                    FocusBlockingScheduler.stop(session)
                                 }
                                 .tint(.orange)
 
                                 Button("Löschen", systemImage: "trash", role: .destructive) {
+                                    FocusBlockingScheduler.stop(session)
                                     modelContext.delete(session)
                                     try? modelContext.save()
                                 }
