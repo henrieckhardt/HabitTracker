@@ -19,6 +19,10 @@ struct RootTabView: View {
                 .tabItem {
                     Label("Habits", systemImage: "checkmark.circle")
                 }
+            FocusListView()
+                .tabItem {
+                    Label("Fokus", systemImage: "timer")
+                }
             StatsView()
                 .tabItem {
                     Label("Statistik", systemImage: "chart.bar.fill")

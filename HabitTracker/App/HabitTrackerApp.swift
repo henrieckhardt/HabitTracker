@@ -8,7 +8,7 @@ struct HabitTrackerApp: App {
     private let notificationDelegate: NotificationDelegate
 
     init() {
-        let container = try! ModelContainer(for: Habit.self, HabitCompletion.self, ToDo.self)
+        let container = try! ModelContainer(for: Habit.self, HabitCompletion.self, ToDo.self, FocusSession.self)
         modelContainer = container
 
         let delegate = NotificationDelegate(modelContainer: container)
