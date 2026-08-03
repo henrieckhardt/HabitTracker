@@ -132,3 +132,7 @@ schemes:
         - HabitTrackerTests
     run:
       config: Debug
+      executable: HabitTracker
+    profile:
+      config: Release
+      executable: HabitTracker
