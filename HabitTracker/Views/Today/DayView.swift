@@ -33,13 +33,18 @@ struct DayContentView: View {
 
     private var habitsForDay: [Habit] {
         let scheduled = allHabits.filter { RecurrenceEngine.isScheduled($0.recurrenceRule, on: selectedDate, calendar: calendar) }
-        return HabitDisplayOrdering.sortedForDay(scheduled, calendar: calendar)
+        let ordered = HabitDisplayOrdering.sortedForDay(scheduled, calendar: calendar)
+        // Completed habits sink to the bottom, keeping their relative order
+        // (untimed-then-timed-by-time) otherwise.
+        return ordered.sorted { !$0.isCompleted(on: selectedDate, calendar: calendar) && $1.isCompleted(on: selectedDate, calendar: calendar) }
     }
 
     private var toDosForDay: [ToDo] {
         allToDos
             .filter { calendar.isDate($0.scheduledDate, inSameDayAs: selectedDate) }
             .sorted { $0.createdAt < $1.createdAt }
+            // Completed ToDos sink to the bottom, keeping creation order otherwise.
+            .sorted { !$0.isCompleted && $1.isCompleted }
     }
 
     var body: some View {

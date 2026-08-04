@@ -72,7 +72,10 @@ struct HabitTrackerWidgetProvider: TimelineProvider {
                 WidgetItem(id: toDo.id, title: toDo.title, icon: "checklist", isCompleted: toDo.isCompleted)
             }
 
-        return HabitTrackerWidgetEntry(date: .now, items: habitItems + toDoItems)
+        // Completed items sink to the bottom, keeping their relative order
+        // otherwise — same convention as the Day View list.
+        let items = (habitItems + toDoItems).sorted { !$0.isCompleted && $1.isCompleted }
+        return HabitTrackerWidgetEntry(date: .now, items: items)
     }
 }
 
