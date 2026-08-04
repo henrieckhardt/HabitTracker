@@ -7,6 +7,8 @@ struct WeekView: View {
     @Query(sort: \ToDo.createdAt) private var allToDos: [ToDo]
 
     @State private var weekAnchor: Date = Calendar.current.startOfDay(for: .now)
+    @State private var showingQuickAdd = false
+    @State private var quickAddDate: Date = .now
 
     private var calendar: Calendar {
         var cal = Calendar.current
@@ -57,6 +59,15 @@ struct WeekView: View {
                             toDos: toDosForDay(date)
                         )
                     }
+                    .swipeActions(edge: .leading) {
+                        Button {
+                            quickAddDate = date
+                            showingQuickAdd = true
+                        } label: {
+                            Label("Hinzufügen", systemImage: "note.text.badge.plus")
+                        }
+                        .tint(.blue)
+                    }
                 }
             }
             .navigationTitle("Woche")
@@ -87,6 +98,9 @@ struct WeekView: View {
             }
             .navigationDestination(for: Date.self) { date in
                 DayContentView(initialDate: date)
+            }
+            .sheet(isPresented: $showingQuickAdd) {
+                QuickAddToDosView(date: quickAddDate)
             }
         }
     }

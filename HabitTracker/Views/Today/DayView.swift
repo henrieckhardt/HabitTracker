@@ -22,6 +22,8 @@ struct DayContentView: View {
 
     @State private var selectedDate: Date
     @State private var showingAddToDo = false
+    @State private var showingQuickAdd = false
+    @State private var toDoToMove: ToDo?
 
     private let calendar = Calendar.current
 
@@ -56,14 +58,27 @@ struct DayContentView: View {
                 }
                 ForEach(toDosForDay) { toDo in
                     ToDoRow(toDo: toDo)
-                }
-                .onDelete { offsets in
-                    for index in offsets {
-                        let toDo = toDosForDay[index]
-                        NotificationService.cancelReminder(for: toDo)
-                        modelContext.delete(toDo)
-                    }
-                    try? modelContext.save()
+                        .swipeActions(edge: .trailing) {
+                            Button(role: .destructive) {
+                                deleteToDo(toDo)
+                            } label: {
+                                Label("Löschen", systemImage: "trash")
+                            }
+
+                            Button {
+                                moveToTomorrow(toDo)
+                            } label: {
+                                Label("Morgen", systemImage: "arrow.right")
+                            }
+                            .tint(.orange)
+
+                            Button {
+                                toDoToMove = toDo
+                            } label: {
+                                Label("Verschieben", systemImage: "calendar")
+                            }
+                            .tint(.blue)
+                        }
                 }
             }
 
@@ -84,6 +99,13 @@ struct DayContentView: View {
             }
             ToolbarItem(placement: .primaryAction) {
                 Button {
+                    showingQuickAdd = true
+                } label: {
+                    Image(systemName: "note.text.badge.plus")
+                }
+            }
+            ToolbarItem(placement: .primaryAction) {
+                Button {
                     showingAddToDo = true
                 } label: {
                     Image(systemName: "plus")
@@ -93,9 +115,30 @@ struct DayContentView: View {
         .sheet(isPresented: $showingAddToDo) {
             ToDoEditorView(defaultDate: selectedDate)
         }
+        .sheet(isPresented: $showingQuickAdd) {
+            QuickAddToDosView(date: selectedDate)
+        }
+        .sheet(item: $toDoToMove) { toDo in
+            MoveToDoDateSheet(toDo: toDo)
+        }
         .task {
             RolloverService.rolloverIfNeeded(context: modelContext)
         }
+    }
+
+    private func deleteToDo(_ toDo: ToDo) {
+        NotificationService.cancelReminder(for: toDo)
+        modelContext.delete(toDo)
+        try? modelContext.save()
+    }
+
+    private func moveToTomorrow(_ toDo: ToDo) {
+        guard let tomorrow = calendar.date(byAdding: .day, value: 1, to: toDo.scheduledDate) else { return }
+        toDo.scheduledDate = calendar.startOfDay(for: tomorrow)
+        if toDo.reminderTime != nil {
+            NotificationService.scheduleReminder(for: toDo, calendar: calendar)
+        }
+        try? modelContext.save()
     }
 }
 
@@ -180,6 +223,53 @@ private struct DatePickerSheet: View {
             }
         }
         .presentationDetents([.medium])
+    }
+}
+
+/// Fast single-purpose date picker for moving one ToDo to a different day —
+/// deliberately separate from `ToDoEditorView`'s full form, and from
+/// `DatePickerSheet` above (which navigates the whole day view, not one
+/// ToDo's date).
+private struct MoveToDoDateSheet: View {
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
+    let toDo: ToDo
+    @State private var selectedDate: Date
+
+    init(toDo: ToDo) {
+        self.toDo = toDo
+        _selectedDate = State(initialValue: toDo.scheduledDate)
+    }
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                DatePicker("Datum", selection: $selectedDate, displayedComponents: .date)
+            }
+            .navigationTitle("Verschieben")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Abbrechen") { dismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Fertig") {
+                        move(to: selectedDate)
+                        dismiss()
+                    }
+                }
+            }
+        }
+        .presentationDetents([.medium])
+    }
+
+    private func move(to date: Date) {
+        let calendar = Calendar.current
+        toDo.scheduledDate = calendar.startOfDay(for: date)
+        if toDo.reminderTime != nil {
+            NotificationService.scheduleReminder(for: toDo, calendar: calendar)
+        }
+        try? modelContext.save()
     }
 }
 

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		027BC036331B4A92112195EA /* FamilyControls.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 371571CDFA9AE634FC04F59D /* FamilyControls.framework */; };
 		069C79F850CD63057DEA34F8 /* ReminderToggleSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBB7084E352718E6C2607D1 /* ReminderToggleSection.swift */; };
+		06BE977252F684F8AD7F6BD7 /* QuickAddToDosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75D86581B2E62CDFFB891E4 /* QuickAddToDosView.swift */; };
 		0928AA2E9723336E013F381A /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B0D9D8E170506613A74C49 /* AppGroup.swift */; };
 		0D50E669B431C1F5D1591291 /* FamilyControlsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFF0F0D973401BA1712F320 /* FamilyControlsService.swift */; };
 		160CEDF138CA18568D7FDDEF /* FocusSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB76B67E667A2BA36D3BAE1 /* FocusSession.swift */; };
@@ -159,6 +160,7 @@
 		DD5BA0A89E988B099F1DFE5E /* FocusShieldMonitor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FocusShieldMonitor.entitlements; sourceTree = "<group>"; };
 		DDD2C2579DB6A373C5347CD7 /* ToDoEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoEditorView.swift; sourceTree = "<group>"; };
 		E563461ADB59303758A5A6A6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E75D86581B2E62CDFFB891E4 /* QuickAddToDosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAddToDosView.swift; sourceTree = "<group>"; };
 		F01D32A0AB735D4EA1A2E29F /* FocusShieldConfiguration.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FocusShieldConfiguration.entitlements; sourceTree = "<group>"; };
 		FC40D6421982FC4F52C6A557 /* FocusScheduleEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusScheduleEngine.swift; sourceTree = "<group>"; };
 		FE0A31C352F8695F14ABEB69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -380,6 +382,7 @@
 		EEDD3D72F59D4C0A16B77EC7 /* ToDos */ = {
 			isa = PBXGroup;
 			children = (
+				E75D86581B2E62CDFFB891E4 /* QuickAddToDosView.swift */,
 				DDD2C2579DB6A373C5347CD7 /* ToDoEditorView.swift */,
 			);
 			path = ToDos;
@@ -587,6 +590,7 @@
 				9A417BFF0907812DBE1F78EF /* MonthDaySelector.swift in Sources */,
 				3D1DDB58121531A27A01760E /* NotificationDelegate.swift in Sources */,
 				80D5834BBA338DE8B5FE9151 /* NotificationService.swift in Sources */,
+				06BE977252F684F8AD7F6BD7 /* QuickAddToDosView.swift in Sources */,
 				7D4F6E2715AF8EFC0E7D0408 /* RecurrenceEngine.swift in Sources */,
 				A8CB5D0AA8755ACC890CB2FD /* RecurrencePickerView.swift in Sources */,
 				820A169091D49764FED85FB0 /* RecurrenceRule.swift in Sources */,
