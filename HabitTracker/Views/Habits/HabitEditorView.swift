@@ -60,10 +60,19 @@ struct HabitEditorView: View {
 
     /// Only the hour/minute of `startTime`/`endTime` matter. Mirrors
     /// `FocusEditorView`'s identical validation — an end time earlier than
-    /// the start time is a window spanning midnight, only an exactly
-    /// zero-length window is rejected.
+    /// the start time is a window spanning midnight. Windows shorter than
+    /// `FocusBlockingScheduler.minimumWindowMinutes` (including exactly
+    /// zero-length) are rejected — anything shorter fails
+    /// `DeviceActivityCenter` registration outright.
     private var isTimeRangeValid: Bool {
-        minutes(of: startTime) != minutes(of: endTime)
+        windowDurationMinutes >= FocusBlockingScheduler.minimumWindowMinutes
+    }
+
+    private var windowDurationMinutes: Int {
+        let start = minutes(of: startTime)
+        let end = minutes(of: endTime)
+        guard start != end else { return 0 }
+        return end > start ? end - start : (24 * 60 - start) + end
     }
 
     private var isOvernight: Bool {
@@ -141,7 +150,7 @@ struct HabitEditorView: View {
                         DatePicker("Start", selection: $startTime, displayedComponents: .hourAndMinute)
                         DatePicker("Ende", selection: $endTime, displayedComponents: .hourAndMinute)
                         if !isTimeRangeValid {
-                            Text("Start- und Endzeit dürfen nicht gleich sein.")
+                            Text("Das Zeitfenster muss mindestens \(FocusBlockingScheduler.minimumWindowMinutes) Minuten lang sein.")
                                 .font(.caption)
                                 .foregroundStyle(.red)
                         } else if isOvernight {

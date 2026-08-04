@@ -44,10 +44,19 @@ struct FocusEditorView: View {
     /// Only the hour/minute of `startTime`/`endTime` matter. An end time
     /// earlier than the start time is valid — it's a window spanning
     /// midnight into the next day (e.g. 22:00–08:00), handled by
-    /// `FocusScheduleEngine`/`FocusShieldMonitor`. Only an exactly
-    /// zero-length window (start == end) is rejected.
+    /// `FocusScheduleEngine`/`FocusShieldMonitor`. Windows shorter than
+    /// `FocusBlockingScheduler.minimumWindowMinutes` (including exactly
+    /// zero-length, start == end) are rejected — anything shorter fails
+    /// `DeviceActivityCenter` registration outright.
     private var isTimeRangeValid: Bool {
-        minutes(of: startTime) != minutes(of: endTime)
+        windowDurationMinutes >= FocusBlockingScheduler.minimumWindowMinutes
+    }
+
+    private var windowDurationMinutes: Int {
+        let start = minutes(of: startTime)
+        let end = minutes(of: endTime)
+        guard start != end else { return 0 }
+        return end > start ? end - start : (24 * 60 - start) + end
     }
 
     private var isOvernight: Bool {
@@ -93,7 +102,7 @@ struct FocusEditorView: View {
                         DatePicker("Start", selection: $startTime, displayedComponents: .hourAndMinute)
                         DatePicker("Ende", selection: $endTime, displayedComponents: .hourAndMinute)
                         if !isTimeRangeValid {
-                            Text("Start- und Endzeit dürfen nicht gleich sein.")
+                            Text("Das Zeitfenster muss mindestens \(FocusBlockingScheduler.minimumWindowMinutes) Minuten lang sein.")
                                 .font(.caption)
                                 .foregroundStyle(.red)
                         } else if isOvernight {

@@ -27,6 +27,15 @@ import SwiftData
 /// extension would eventually do — `ManagedSettingsStore` works from any
 /// process with Family Controls authorization, not just the extension.
 enum FocusBlockingScheduler {
+    /// `DeviceActivitySchedule` rejects registration with
+    /// `DeviceActivityScheduleError.intervalTooShort` if the interval
+    /// between start and end is shorter than this — confirmed via a real
+    /// `startMonitoring` failure on-device (Apple doesn't expose this as a
+    /// public constant). Editors validate against this before saving so the
+    /// failure shows up immediately in the UI instead of silently in a
+    /// console log.
+    static let minimumWindowMinutes = 15
+
     static func activityName(for session: FocusSession) -> DeviceActivityName {
         DeviceActivityName(session.id.uuidString)
     }
