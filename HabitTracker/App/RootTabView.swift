@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import WidgetKit
 
 struct RootTabView: View {
     @Environment(\.modelContext) private var modelContext
@@ -32,6 +33,11 @@ struct RootTabView: View {
             if newPhase == .active {
                 RolloverService.rolloverIfNeeded(context: modelContext)
             }
+            // Widget has no way to observe SwiftData changes itself, so
+            // nudge it on every phase change — cheap, and covers both
+            // "user just checked something off, then left the app" and
+            // "user just came back, rollover may have moved things".
+            WidgetCenter.shared.reloadAllTimelines()
         }
     }
 }

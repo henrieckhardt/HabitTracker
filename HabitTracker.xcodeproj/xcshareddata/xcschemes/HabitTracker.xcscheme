@@ -63,6 +63,20 @@
                ReferencedContainer = "container:HabitTracker.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BFE92C988F7B45F1443B790D"
+               BuildableName = "HabitTrackerWidget.appex"
+               BlueprintName = "HabitTrackerWidget"
+               ReferencedContainer = "container:HabitTracker.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction

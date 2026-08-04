@@ -36,9 +36,12 @@ targets:
         embed: true
       - target: FocusShieldConfiguration
         embed: true
+      - target: HabitTrackerWidget
+        embed: true
       - sdk: FamilyControls.framework
       - sdk: ManagedSettings.framework
       - sdk: DeviceActivity.framework
+      - sdk: WidgetKit.framework
   HabitTrackerTests:
     type: bundle.unit-test
     platform: iOS
@@ -119,6 +122,37 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.henrieckhardt.habittracker.FocusShieldConfiguration
         SKIP_INSTALL: YES
+  HabitTrackerWidget:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: HabitTrackerWidget
+      - path: HabitTracker/App/AppGroup.swift
+      - path: HabitTracker/Models/Habit.swift
+      - path: HabitTracker/Models/HabitCompletion.swift
+      - path: HabitTracker/Models/ToDo.swift
+      - path: HabitTracker/Models/FocusSession.swift
+      - path: HabitTracker/Models/RecurrenceRule.swift
+      - path: HabitTracker/Models/Weekday.swift
+      - path: HabitTracker/Services/RecurrenceEngine.swift
+    info:
+      path: HabitTrackerWidget/Info.plist
+      properties:
+        CFBundleDisplayName: HabitTrackerWidget
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    entitlements:
+      path: HabitTrackerWidget/HabitTrackerWidget.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.henrieckhardt.habittracker
+    dependencies:
+      - sdk: WidgetKit.framework
+      - sdk: SwiftUI.framework
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.henrieckhardt.habittracker.HabitTrackerWidget
+        SKIP_INSTALL: YES
 schemes:
   HabitTracker:
     build:
@@ -127,6 +161,7 @@ schemes:
         HabitTrackerTests: [test]
         FocusShieldMonitor: all
         FocusShieldConfiguration: all
+        HabitTrackerWidget: all
     test:
       targets:
         - HabitTrackerTests

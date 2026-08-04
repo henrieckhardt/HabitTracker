@@ -7,34 +7,44 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		026DDAC9721DA144ED18D1E1 /* HabitTrackerWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CCD60F3DA66C4CB96DD2150E /* HabitTrackerWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		027BC036331B4A92112195EA /* FamilyControls.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 371571CDFA9AE634FC04F59D /* FamilyControls.framework */; };
 		069C79F850CD63057DEA34F8 /* ReminderToggleSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBB7084E352718E6C2607D1 /* ReminderToggleSection.swift */; };
 		06BE977252F684F8AD7F6BD7 /* QuickAddToDosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75D86581B2E62CDFFB891E4 /* QuickAddToDosView.swift */; };
 		0928AA2E9723336E013F381A /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B0D9D8E170506613A74C49 /* AppGroup.swift */; };
+		0CB8E94F1C11B3528B403A42 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B0D9D8E170506613A74C49 /* AppGroup.swift */; };
 		0D50E669B431C1F5D1591291 /* FamilyControlsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFF0F0D973401BA1712F320 /* FamilyControlsService.swift */; };
 		160CEDF138CA18568D7FDDEF /* FocusSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB76B67E667A2BA36D3BAE1 /* FocusSession.swift */; };
 		17010DD35700A4B7C8B05100 /* RecurrenceRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63777F15EA648AC4D87F18AF /* RecurrenceRule.swift */; };
 		18045C4FADF25D1D4BC00126 /* StreakEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBC4C9A0E022A89CA0F9FAA6 /* StreakEngine.swift */; };
+		1979C49B7E488A62547CD8B3 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 616DB663EB93B26FAD6E78DD /* WidgetKit.framework */; };
+		198553B3701F3ABB40AF80D8 /* FocusSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB76B67E667A2BA36D3BAE1 /* FocusSession.swift */; };
 		207DB40ABA0BFF0D0344FF46 /* HabitCompletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946E6209E086DEC58E7D5BF1 /* HabitCompletion.swift */; };
 		24BAD097D640501F3D0E4A68 /* HabitTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6301FCAA76F348B44F8BE9C7 /* HabitTrackerApp.swift */; };
 		28AF11CE69A90159D01496C6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E563461ADB59303758A5A6A6 /* Assets.xcassets */; };
 		2A5949D2533841CCE2C76326 /* FocusShieldConfigurationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA9129998B0948C210BF3E3B /* FocusShieldConfigurationExtension.swift */; };
+		2F433403D86C0E29D2A1D6DD /* HabitCompletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946E6209E086DEC58E7D5BF1 /* HabitCompletion.swift */; };
 		37EBC680AE8E3D4CD1E0D43A /* Weekday.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB6375487A04DF9F68E955F /* Weekday.swift */; };
 		39C10189F97EE0176B533650 /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F68627CFACA866D15E0AA93 /* RootTabView.swift */; };
 		3D1DDB58121531A27A01760E /* NotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC653A32D3ABE164A1B0B52 /* NotificationDelegate.swift */; };
 		3DD321180CB2E2C7D19D02FD /* FocusEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9087B2979A0F23FDAD5D478 /* FocusEditorView.swift */; };
 		41F08B4027265B2B7693F6E6 /* RecurrenceEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D806678F8172CF38BA7A78E8 /* RecurrenceEngine.swift */; };
 		428E6915B055981FA017F7A3 /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 587E83514D32CE4A425AC064 /* ManagedSettings.framework */; };
+		45895B7756F94A07C6D4C95A /* RecurrenceRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63777F15EA648AC4D87F18AF /* RecurrenceRule.swift */; };
 		4AAB4AF8353ACE80C6E1EF32 /* FocusShieldConfiguration.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 4D4C525344D1CE660C9F15C5 /* FocusShieldConfiguration.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		4D77F973A94205A2123F5B4A /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 587E83514D32CE4A425AC064 /* ManagedSettings.framework */; };
+		62E2D3FD08B76A4A701585B0 /* HabitTrackerWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD3FF37B0FF8587EE08CEE9 /* HabitTrackerWidgetBundle.swift */; };
 		6D75FBD0545D5566BFC5757C /* FocusListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D914890A5E6D0547398053 /* FocusListView.swift */; };
 		7197978DE7B3CBCDE99A5EFA /* ToDo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745E1E4C0F363E51E7241BC8 /* ToDo.swift */; };
 		784C2B3695187B5FD94B2CC4 /* RolloverServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50BD2B73001619495CF21EF /* RolloverServiceTests.swift */; };
 		7AA601DCFD09A4BBCA117C2D /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 587E83514D32CE4A425AC064 /* ManagedSettings.framework */; };
 		7B4707B488CC02FB907FE2F4 /* ToDo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745E1E4C0F363E51E7241BC8 /* ToDo.swift */; };
 		7D4F6E2715AF8EFC0E7D0408 /* RecurrenceEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D806678F8172CF38BA7A78E8 /* RecurrenceEngine.swift */; };
+		7F7CF35B59861EF4B3D9C5FB /* ToDo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745E1E4C0F363E51E7241BC8 /* ToDo.swift */; };
+		80BBD96A426902C109846467 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928F7AE2905E094D35349379 /* SwiftUI.framework */; };
 		80D5834BBA338DE8B5FE9151 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE09BE65A43EAAC056D676D /* NotificationService.swift */; };
 		820A169091D49764FED85FB0 /* RecurrenceRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63777F15EA648AC4D87F18AF /* RecurrenceRule.swift */; };
+		83EEA970A6AEF54005446170 /* Habit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757134E23848D6632FD1EA11 /* Habit.swift */; };
 		8494F21F2CBB2E563984E043 /* DeviceActivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE58A4F8D8BB6A0992661F94 /* DeviceActivity.framework */; };
 		84B48B5D11DF4F84EE07573B /* HabitEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14636F2B3FEABCE88B66127 /* HabitEditorView.swift */; };
 		850AF8E028F64F1696379775 /* FamilyControls.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 371571CDFA9AE634FC04F59D /* FamilyControls.framework */; };
@@ -60,6 +70,7 @@
 		C8317F175BB9CAD4615D5A04 /* FocusBlockingScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7A7503A51307877B3536AC /* FocusBlockingScheduler.swift */; };
 		CDB1BA19612E567C4894A8C1 /* FocusScheduleEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC40D6421982FC4F52C6A557 /* FocusScheduleEngine.swift */; };
 		CE1AFEA92BFB318EBEC8BBC7 /* HabitCompletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946E6209E086DEC58E7D5BF1 /* HabitCompletion.swift */; };
+		CE1B442D3325CC2FF5DA2F46 /* HabitTrackerWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F3405CBD123109ACE1B843 /* HabitTrackerWidget.swift */; };
 		CF50E3AE5857E1B2CC416875 /* FocusSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB76B67E667A2BA36D3BAE1 /* FocusSession.swift */; };
 		D15908D094A110E475ABE2F0 /* RolloverService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014B24A6799466357380EC3F /* RolloverService.swift */; };
 		D7939F54AAD0CEFDF233CCB2 /* DeviceActivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE58A4F8D8BB6A0992661F94 /* DeviceActivity.framework */; };
@@ -68,9 +79,12 @@
 		DBBEC621A77332FA179F0BD2 /* FocusShieldMonitorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D70D86BA3678F134DEB547D /* FocusShieldMonitorExtension.swift */; };
 		DE12831EA16BD8A1399D0B2B /* RecurrenceEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DE77127A2CFCC34F55BD00 /* RecurrenceEngineTests.swift */; };
 		DFC4E104929FAA11578AE64B /* FocusScheduleEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC40D6421982FC4F52C6A557 /* FocusScheduleEngine.swift */; };
+		E79F1CC7705F6A84B168D3AC /* RecurrenceEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D806678F8172CF38BA7A78E8 /* RecurrenceEngine.swift */; };
 		EA98341D44B7F7B69684C6B0 /* HabitCompletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946E6209E086DEC58E7D5BF1 /* HabitCompletion.swift */; };
 		EAA33138B3F10D2A5B72CEA6 /* ToDo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745E1E4C0F363E51E7241BC8 /* ToDo.swift */; };
+		EB830DABA0E825D6B0E702BF /* Weekday.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB6375487A04DF9F68E955F /* Weekday.swift */; };
 		ECAFF4C4D5436D22F125AEBC /* RecurrenceRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63777F15EA648AC4D87F18AF /* RecurrenceRule.swift */; };
+		F19A5957396AAF400660FACC /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 616DB663EB93B26FAD6E78DD /* WidgetKit.framework */; };
 		FF76F3964B838D40D4AF8E17 /* FocusScheduleEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCDD184D3F2BFEC3C4FE1683 /* FocusScheduleEngineTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -88,6 +102,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 9E0E00F5452D1AB276ADAA3F;
 			remoteInfo = HabitTracker;
+		};
+		89419ED0902C87BBD23EC320 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E45E78256CA0A7B0829E02D1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BFE92C988F7B45F1443B790D;
+			remoteInfo = HabitTrackerWidget;
 		};
 		D5A38AAA9FBB0B7F455B0A81 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -107,6 +128,7 @@
 			files = (
 				A9CE582473EE0E505E5B6FAF /* FocusShieldMonitor.appex in Embed Foundation Extensions */,
 				4AAB4AF8353ACE80C6E1EF32 /* FocusShieldConfiguration.appex in Embed Foundation Extensions */,
+				026DDAC9721DA144ED18D1E1 /* HabitTrackerWidget.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -128,6 +150,7 @@
 		51DE77127A2CFCC34F55BD00 /* RecurrenceEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurrenceEngineTests.swift; sourceTree = "<group>"; };
 		587E83514D32CE4A425AC064 /* ManagedSettings.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ManagedSettings.framework; path = System/Library/Frameworks/ManagedSettings.framework; sourceTree = SDKROOT; };
 		5DB6375487A04DF9F68E955F /* Weekday.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weekday.swift; sourceTree = "<group>"; };
+		616DB663EB93B26FAD6E78DD /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		6301FCAA76F348B44F8BE9C7 /* HabitTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitTrackerApp.swift; sourceTree = "<group>"; };
 		63777F15EA648AC4D87F18AF /* RecurrenceRule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurrenceRule.swift; sourceTree = "<group>"; };
 		745E1E4C0F363E51E7241BC8 /* ToDo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDo.swift; sourceTree = "<group>"; };
@@ -138,6 +161,7 @@
 		8AFF0F0D973401BA1712F320 /* FamilyControlsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyControlsService.swift; sourceTree = "<group>"; };
 		8D70D86BA3678F134DEB547D /* FocusShieldMonitorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusShieldMonitorExtension.swift; sourceTree = "<group>"; };
 		8F68627CFACA866D15E0AA93 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
+		928F7AE2905E094D35349379 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		934C18A7F2EB31512CEB4A4E /* HabitTracker.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = HabitTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		946E6209E086DEC58E7D5BF1 /* HabitCompletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitCompletion.swift; sourceTree = "<group>"; };
 		98D914890A5E6D0547398053 /* FocusListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusListView.swift; sourceTree = "<group>"; };
@@ -145,13 +169,18 @@
 		A23F8410FFD146F6B134A267 /* HabitTrackerTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = HabitTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2B0D9D8E170506613A74C49 /* AppGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroup.swift; sourceTree = "<group>"; };
 		A93789DB634C41D94F7DCF78 /* RecurrencePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurrencePickerView.swift; sourceTree = "<group>"; };
+		AE8AB97114F36FDF25A90A82 /* HabitTrackerWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HabitTrackerWidget.entitlements; sourceTree = "<group>"; };
 		B14636F2B3FEABCE88B66127 /* HabitEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitEditorView.swift; sourceTree = "<group>"; };
 		B9087B2979A0F23FDAD5D478 /* FocusEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusEditorView.swift; sourceTree = "<group>"; };
 		BEC653A32D3ABE164A1B0B52 /* NotificationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDelegate.swift; sourceTree = "<group>"; };
 		BFB76B67E667A2BA36D3BAE1 /* FocusSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusSession.swift; sourceTree = "<group>"; };
+		BFD3FF37B0FF8587EE08CEE9 /* HabitTrackerWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitTrackerWidgetBundle.swift; sourceTree = "<group>"; };
+		C5F3405CBD123109ACE1B843 /* HabitTrackerWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitTrackerWidget.swift; sourceTree = "<group>"; };
 		CA9129998B0948C210BF3E3B /* FocusShieldConfigurationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusShieldConfigurationExtension.swift; sourceTree = "<group>"; };
+		CCD60F3DA66C4CB96DD2150E /* HabitTrackerWidget.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = HabitTrackerWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		CCDD184D3F2BFEC3C4FE1683 /* FocusScheduleEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusScheduleEngineTests.swift; sourceTree = "<group>"; };
 		CEE09BE65A43EAAC056D676D /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		D2F7D0902CF3C29F0640A516 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		D50BD2B73001619495CF21EF /* RolloverServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RolloverServiceTests.swift; sourceTree = "<group>"; };
 		D806678F8172CF38BA7A78E8 /* RecurrenceEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurrenceEngine.swift; sourceTree = "<group>"; };
 		DBC4C9A0E022A89CA0F9FAA6 /* StreakEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakEngine.swift; sourceTree = "<group>"; };
@@ -168,6 +197,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		04F3DB64C7E2354C57EBC6B6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1979C49B7E488A62547CD8B3 /* WidgetKit.framework in Frameworks */,
+				80BBD96A426902C109846467 /* SwiftUI.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		53F44D8C3A530D236FA41E68 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -175,6 +213,7 @@
 				850AF8E028F64F1696379775 /* FamilyControls.framework in Frameworks */,
 				428E6915B055981FA017F7A3 /* ManagedSettings.framework in Frameworks */,
 				D7939F54AAD0CEFDF233CCB2 /* DeviceActivity.framework in Frameworks */,
+				F19A5957396AAF400660FACC /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -309,6 +348,8 @@
 				371571CDFA9AE634FC04F59D /* FamilyControls.framework */,
 				587E83514D32CE4A425AC064 /* ManagedSettings.framework */,
 				1D43C794243615BD12D73A2B /* ManagedSettingsUI.framework */,
+				928F7AE2905E094D35349379 /* SwiftUI.framework */,
+				616DB663EB93B26FAD6E78DD /* WidgetKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -333,6 +374,17 @@
 			path = Shared;
 			sourceTree = "<group>";
 		};
+		B9C36B7A801831F51CC6A4D4 /* HabitTrackerWidget */ = {
+			isa = PBXGroup;
+			children = (
+				AE8AB97114F36FDF25A90A82 /* HabitTrackerWidget.entitlements */,
+				C5F3405CBD123109ACE1B843 /* HabitTrackerWidget.swift */,
+				BFD3FF37B0FF8587EE08CEE9 /* HabitTrackerWidgetBundle.swift */,
+				D2F7D0902CF3C29F0640A516 /* Info.plist */,
+			);
+			path = HabitTrackerWidget;
+			sourceTree = "<group>";
+		};
 		BDC4DE8D6609AA3C6B2338F1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -340,6 +392,7 @@
 				1CDCEFED00DEDE430332289C /* FocusShieldMonitor.appex */,
 				934C18A7F2EB31512CEB4A4E /* HabitTracker.app */,
 				A23F8410FFD146F6B134A267 /* HabitTrackerTests.xctest */,
+				CCD60F3DA66C4CB96DD2150E /* HabitTrackerWidget.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -374,6 +427,7 @@
 				82A39E6A22769DF0867923E5 /* FocusShieldMonitor */,
 				9C9D0BF25D7DE56F117F6DA2 /* HabitTracker */,
 				205CA1387EBF37732F8D43CC /* HabitTrackerTests */,
+				B9C36B7A801831F51CC6A4D4 /* HabitTrackerWidget */,
 				95041BB7344D9B390364B71C /* Frameworks */,
 				BDC4DE8D6609AA3C6B2338F1 /* Products */,
 			);
@@ -455,6 +509,7 @@
 			dependencies = (
 				4FEE47E0B98FDF2AD41F56CF /* PBXTargetDependency */,
 				EE4C9389161192D7140DBD40 /* PBXTargetDependency */,
+				4E49A4716CAE0286DDF3B2FC /* PBXTargetDependency */,
 			);
 			name = HabitTracker;
 			packageProductDependencies = (
@@ -481,6 +536,24 @@
 			productReference = A23F8410FFD146F6B134A267 /* HabitTrackerTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		BFE92C988F7B45F1443B790D /* HabitTrackerWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D6363D343C8AD599040D6819 /* Build configuration list for PBXNativeTarget "HabitTrackerWidget" */;
+			buildPhases = (
+				D0854E463B9AD8A738F28A07 /* Sources */,
+				04F3DB64C7E2354C57EBC6B6 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HabitTrackerWidget;
+			packageProductDependencies = (
+			);
+			productName = HabitTrackerWidget;
+			productReference = CCD60F3DA66C4CB96DD2150E /* HabitTrackerWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -506,6 +579,10 @@
 						DevelopmentTeam = YVY36N9DTR;
 						ProvisioningStyle = Automatic;
 					};
+					BFE92C988F7B45F1443B790D = {
+						DevelopmentTeam = YVY36N9DTR;
+						ProvisioningStyle = Automatic;
+					};
 				};
 			};
 			buildConfigurationList = 0C4671CC9F1D8325FB71B481 /* Build configuration list for PBXProject "HabitTracker" */;
@@ -526,6 +603,7 @@
 				B340C0C969207F301BAA1B19 /* HabitTrackerTests */,
 				73A90997AED48DB19CE49E9B /* FocusShieldMonitor */,
 				08868401D6DBB5B2D586C42F /* FocusShieldConfiguration */,
+				BFE92C988F7B45F1443B790D /* HabitTrackerWidget */,
 			);
 		};
 /* End PBXProject section */
@@ -567,6 +645,23 @@
 				ECAFF4C4D5436D22F125AEBC /* RecurrenceRule.swift in Sources */,
 				7B4707B488CC02FB907FE2F4 /* ToDo.swift in Sources */,
 				8798A3CB32A8A639578ECE4C /* Weekday.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D0854E463B9AD8A738F28A07 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0CB8E94F1C11B3528B403A42 /* AppGroup.swift in Sources */,
+				198553B3701F3ABB40AF80D8 /* FocusSession.swift in Sources */,
+				83EEA970A6AEF54005446170 /* Habit.swift in Sources */,
+				2F433403D86C0E29D2A1D6DD /* HabitCompletion.swift in Sources */,
+				CE1B442D3325CC2FF5DA2F46 /* HabitTrackerWidget.swift in Sources */,
+				62E2D3FD08B76A4A701585B0 /* HabitTrackerWidgetBundle.swift in Sources */,
+				E79F1CC7705F6A84B168D3AC /* RecurrenceEngine.swift in Sources */,
+				45895B7756F94A07C6D4C95A /* RecurrenceRule.swift in Sources */,
+				7F7CF35B59861EF4B3D9C5FB /* ToDo.swift in Sources */,
+				EB830DABA0E825D6B0E702BF /* Weekday.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -626,6 +721,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		4E49A4716CAE0286DDF3B2FC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BFE92C988F7B45F1443B790D /* HabitTrackerWidget */;
+			targetProxy = 89419ED0902C87BBD23EC320 /* PBXContainerItemProxy */;
+		};
 		4FEE47E0B98FDF2AD41F56CF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 73A90997AED48DB19CE49E9B /* FocusShieldMonitor */;
@@ -644,6 +744,23 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		030A2B98038AA2CA8C1C617E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = HabitTrackerWidget/HabitTrackerWidget.entitlements;
+				INFOPLIST_FILE = HabitTrackerWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.henrieckhardt.habittracker.HabitTrackerWidget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 		0C6971184C920898B54B8129 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -888,6 +1005,23 @@
 			};
 			name = Release;
 		};
+		C8102244BFABFAC5B8B0DA17 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = HabitTrackerWidget/HabitTrackerWidget.entitlements;
+				INFOPLIST_FILE = HabitTrackerWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.henrieckhardt.habittracker.HabitTrackerWidget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		C83486518A584B025F416EAB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -949,6 +1083,15 @@
 			buildConfigurations = (
 				9E552701C37ED2D012D8EC13 /* Debug */,
 				C83486518A584B025F416EAB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D6363D343C8AD599040D6819 /* Build configuration list for PBXNativeTarget "HabitTrackerWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				030A2B98038AA2CA8C1C617E /* Debug */,
+				C8102244BFABFAC5B8B0DA17 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
