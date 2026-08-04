@@ -36,6 +36,15 @@ struct WeekView: View {
     }
 
     var body: some View {
+        // Computed once per render and threaded down, instead of every row
+        // independently calling `calendar.isDateInToday(date)` — with 7
+        // separate calls, list rows built at slightly different times (e.g.
+        // while scrolling) could straddle a midnight rollover and each
+        // "correctly" see a different `Date()`, so two adjacent days both
+        // ended up marked "Heute". A single shared reference makes that
+        // structurally impossible.
+        let todayStart = calendar.startOfDay(for: .now)
+
         NavigationStack {
             List {
                 ForEach(daysInWeek, id: \.self) { date in
@@ -43,6 +52,7 @@ struct WeekView: View {
                         WeekDayRow(
                             date: date,
                             calendar: calendar,
+                            isToday: calendar.isDate(date, inSameDayAs: todayStart),
                             habits: habitsForDay(date),
                             toDos: toDosForDay(date)
                         )
@@ -85,12 +95,9 @@ struct WeekView: View {
 private struct WeekDayRow: View {
     let date: Date
     let calendar: Calendar
+    let isToday: Bool
     let habits: [Habit]
     let toDos: [ToDo]
-
-    private var isToday: Bool {
-        calendar.isDateInToday(date)
-    }
 
     private var weekdayLabel: String {
         let formatter = DateFormatter()
