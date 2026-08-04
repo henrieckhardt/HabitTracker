@@ -1,6 +1,7 @@
 import Foundation
 import DeviceActivity
 import ManagedSettings
+import SwiftData
 
 /// Schedules the `FocusShieldMonitor` extension via `DeviceActivityCenter`.
 ///
@@ -97,6 +98,31 @@ enum FocusBlockingScheduler {
     /// clearing `session.activeUntil` and saving.
     static func stopNow(_ session: FocusSession) {
         stop(session)
+    }
+
+    /// Self-healing safety net: call whenever the app becomes active to
+    /// re-sync every non-archived session's shield state against the
+    /// current time, instead of relying solely on
+    /// `FocusShieldMonitorExtension`'s `intervalDidStart`/`intervalDidEnd` —
+    /// which are known to be unreliable in practice, especially in
+    /// Xcode-attached Debug builds. Scheduled sessions get fully
+    /// re-registered (also re-applying/clearing their shield immediately,
+    /// see `reschedule`); on-demand sessions are left alone (their one-off
+    /// window is managed by `startNow`/`stopNow`) but get their shield
+    /// re-applied if they're still supposed to be running, in case it was
+    /// dropped for any reason.
+    static func resyncAll(context: ModelContext) {
+        let descriptor = FetchDescriptor<FocusSession>(predicate: #Predicate { !$0.isArchived })
+        guard let sessions = try? context.fetch(descriptor) else { return }
+        for session in sessions {
+            if session.isOnDemand {
+                if FocusScheduleEngine.isActive(session, at: .now) {
+                    applyShieldNow(for: session)
+                }
+            } else {
+                reschedule(session)
+            }
+        }
     }
 
     private static func applyShieldNow(for session: FocusSession) {
