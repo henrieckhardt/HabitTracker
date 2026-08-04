@@ -112,23 +112,36 @@ enum FocusBlockingScheduler {
     /// re-sync every non-archived session's shield state against the
     /// current time, instead of relying solely on
     /// `FocusShieldMonitorExtension`'s `intervalDidStart`/`intervalDidEnd` —
-    /// which are known to be unreliable in practice, especially in
-    /// Xcode-attached Debug builds. Scheduled sessions get fully
-    /// re-registered (also re-applying/clearing their shield immediately,
-    /// see `reschedule`); on-demand sessions are left alone (their one-off
-    /// window is managed by `startNow`/`stopNow`) but get their shield
-    /// re-applied if they're still supposed to be running, in case it was
-    /// dropped for any reason.
+    /// which are known to be unreliable in practice.
+    ///
+    /// **Deliberately does NOT call `reschedule`/touch `DeviceActivityCenter`
+    /// at all** — only `ManagedSettingsStore` is read/written here. Earlier
+    /// this called `reschedule(session)` for every scheduled session on
+    /// every foreground, which meant `stopMonitoring`/`startMonitoring` ran
+    /// repeatedly (every app open) instead of just once at save time. That's
+    /// a real risk: if `deviceactivityd` has an already-armed timer for the
+    /// next boundary crossing, tearing down and re-registering monitoring
+    /// while that's pending could plausibly cancel it — repeated
+    /// re-registration churn is exactly the kind of thing that could turn a
+    /// working schedule into one that never fires again. Since this
+    /// function only needs to fix up the *shield*, not the *schedule* (that
+    /// was already registered once, correctly, when the session was last
+    /// saved), it must leave `DeviceActivityCenter` completely alone.
     static func resyncAll(context: ModelContext) {
         let descriptor = FetchDescriptor<FocusSession>(predicate: #Predicate { !$0.isArchived })
         guard let sessions = try? context.fetch(descriptor) else { return }
-        for session in sessions {
-            if session.isOnDemand {
-                if FocusScheduleEngine.isActive(session, at: .now) {
-                    applyShieldNow(for: session)
-                }
-            } else {
-                reschedule(session)
+        for session in sessions where session.isBlockingEnabled {
+            if FocusScheduleEngine.isActive(session, at: .now) {
+                applyShieldNow(for: session)
+            } else if !session.isOnDemand {
+                // On-demand sessions that aren't active simply have nothing
+                // to do here — they're either not started yet (never had a
+                // shield) or already ended (cleared by stopNow or naturally
+                // expired); clearing them again is harmless but unnecessary.
+                // Scheduled sessions do need the explicit clear so a shield
+                // doesn't linger past its window if intervalDidEnd never
+                // fired.
+                clearShieldNow(for: session)
             }
         }
     }
