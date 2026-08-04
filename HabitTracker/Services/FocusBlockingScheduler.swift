@@ -128,9 +128,13 @@ enum FocusBlockingScheduler {
     /// was already registered once, correctly, when the session was last
     /// saved), it must leave `DeviceActivityCenter` completely alone.
     static func resyncAll(context: ModelContext) {
-        let descriptor = FetchDescriptor<FocusSession>(predicate: #Predicate { !$0.isArchived })
-        guard let sessions = try? context.fetch(descriptor) else { return }
-        for session in sessions where session.isBlockingEnabled {
+        // Fetch every session (not just non-archived) so orphan detection
+        // below has the full picture of what's legitimately still known.
+        guard let allSessions = try? context.fetch(FetchDescriptor<FocusSession>()) else { return }
+
+        cleanUpOrphanedMonitoring(knownSessionIDs: Set(allSessions.map(\.id)))
+
+        for session in allSessions where !session.isArchived && session.isBlockingEnabled {
             if FocusScheduleEngine.isActive(session, at: .now) {
                 applyShieldNow(for: session)
             } else if !session.isOnDemand {
@@ -144,6 +148,30 @@ enum FocusBlockingScheduler {
                 clearShieldNow(for: session)
             }
         }
+    }
+
+    /// Stops monitoring for any `DeviceActivityName` iOS currently has
+    /// registered that doesn't correspond to a `FocusSession` that still
+    /// exists locally — e.g. left over from a session that was deleted
+    /// without going through `stop()`, or from the local store being reset
+    /// during development (schema/App-Group migrations). iOS tracks
+    /// registrations independently of our data, so deleting a session
+    /// locally never cleans this up by itself — orphaned registrations can
+    /// silently accumulate across many test cycles. Also logs what's
+    /// currently registered, visible in Xcode's console, since there's no
+    /// other way to see this from inside the app.
+    static func cleanUpOrphanedMonitoring(knownSessionIDs: Set<UUID>) {
+        let center = DeviceActivityCenter()
+        let registered = center.activities
+        print("ℹ️ FocusBlockingScheduler: \(registered.count) DeviceActivityName(s) currently registered with iOS: \(registered.map(\.rawValue).sorted())")
+
+        let orphaned = registered.filter { name in
+            guard let uuid = UUID(uuidString: name.rawValue) else { return true }
+            return !knownSessionIDs.contains(uuid)
+        }
+        guard !orphaned.isEmpty else { return }
+        print("⚠️ FocusBlockingScheduler: stopping \(orphaned.count) orphaned registration(s): \(orphaned.map(\.rawValue))")
+        center.stopMonitoring(Array(orphaned))
     }
 
     private static func applyShieldNow(for session: FocusSession) {
