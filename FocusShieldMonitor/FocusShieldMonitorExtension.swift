@@ -22,7 +22,9 @@ final class FocusShieldMonitorExtension: DeviceActivityMonitor {
 
     private func applyShieldIfScheduledToday(for activity: DeviceActivityName) {
         guard let session = fetchSession(id: activity.rawValue) else { return }
-        guard RecurrenceEngine.isScheduled(session.recurrenceRule, on: .now) else { return }
+        // On-demand sessions have no recurrence — they were started manually
+        // right now, so there's no "is today a scheduled day" check to make.
+        guard session.isOnDemand || RecurrenceEngine.isScheduled(session.recurrenceRule, on: .now) else { return }
         guard let selection = session.blockedSelection else { return }
 
         let store = ManagedSettingsStore(named: ManagedSettingsStore.Name(activity.rawValue))

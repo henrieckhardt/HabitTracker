@@ -30,7 +30,8 @@ struct WeekView: View {
     }
 
     private func habitsForDay(_ date: Date) -> [Habit] {
-        allHabits.filter { RecurrenceEngine.isScheduled($0.recurrenceRule, on: date, calendar: calendar) }
+        let scheduled = allHabits.filter { RecurrenceEngine.isScheduled($0.recurrenceRule, on: date, calendar: calendar) }
+        return HabitDisplayOrdering.sortedForDay(scheduled, calendar: calendar)
     }
 
     private func toDosForDay(_ date: Date) -> [ToDo] {
@@ -120,6 +121,16 @@ private struct WeekDayRow: View {
         return formatter.string(from: date)
     }
 
+    private func habitLabelText(_ habit: Habit) -> String {
+        guard let session = habit.focusSession else { return habit.title }
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "de_DE")
+        formatter.dateStyle = .none
+        formatter.timeStyle = .short
+        let start = formatter.string(from: session.startTime)
+        return "\(habit.title) · \(start)"
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
@@ -146,7 +157,7 @@ private struct WeekDayRow: View {
                     ForEach(habits) { habit in
                         let completed = habit.isCompleted(on: date, calendar: calendar)
                         Label {
-                            Text(habit.title)
+                            Text(habitLabelText(habit))
                                 .strikethrough(completed)
                         } icon: {
                             Image(systemName: habit.icon)

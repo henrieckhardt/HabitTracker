@@ -3,8 +3,12 @@ import SwiftData
 
 struct FocusListView: View {
     @Environment(\.modelContext) private var modelContext
+    // Sessions owned by a Habit (`ownerHabit != nil`) are companion windows
+    // managed entirely from `HabitEditorView` — they're deliberately hidden
+    // here so there's never a second, independently-editable copy of the
+    // habit's own recurrence rule.
     @Query(
-        filter: #Predicate<FocusSession> { !$0.isArchived },
+        filter: #Predicate<FocusSession> { !$0.isArchived && $0.ownerHabit == nil },
         sort: \FocusSession.createdAt
     )
     private var sessions: [FocusSession]
@@ -39,10 +43,11 @@ struct FocusListView: View {
                     // bug as RecurrencePickerView; see its comment).
                     List {
                         ForEach(sessions) { session in
+                            let isRunning = session.id == activeSession?.id
                             Button {
                                 sessionToEdit = session
                             } label: {
-                                FocusRow(session: session, isActive: session.id == activeSession?.id)
+                                FocusRow(session: session, isActive: isRunning, now: now)
                             }
                             .buttonStyle(.plain)
                             .swipeActions {
@@ -57,6 +62,25 @@ struct FocusListView: View {
                                     FocusBlockingScheduler.stop(session)
                                     modelContext.delete(session)
                                     try? modelContext.save()
+                                }
+                            }
+                            .swipeActions(edge: .leading) {
+                                if session.isOnDemand {
+                                    if isRunning {
+                                        Button("Stop", systemImage: "stop.fill") {
+                                            FocusBlockingScheduler.stopNow(session)
+                                            session.activeUntil = nil
+                                            try? modelContext.save()
+                                        }
+                                        .tint(.red)
+                                    } else {
+                                        Button("Start", systemImage: "play.fill") {
+                                            session.activeUntil = Date.now.addingTimeInterval(TimeInterval(session.durationMinutes * 60))
+                                            try? modelContext.save()
+                                            FocusBlockingScheduler.startNow(session)
+                                        }
+                                        .tint(.green)
+                                    }
                                 }
                             }
                         }
@@ -104,6 +128,12 @@ private func timeText(_ date: Date) -> String {
 private struct ActiveFocusBanner: View {
     let session: FocusSession
 
+    private var endText: String {
+        let endDate = session.isOnDemand ? session.activeUntil : session.endTime
+        guard let endDate else { return "" }
+        return "Bis \(timeText(endDate)) Uhr"
+    }
+
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: "timer")
@@ -112,7 +142,7 @@ private struct ActiveFocusBanner: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text("Gerade aktiv: \(session.title)")
                     .font(.subheadline.weight(.semibold))
-                Text("Bis \(timeText(session.endTime)) Uhr")
+                Text(endText)
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -124,10 +154,22 @@ private struct ActiveFocusBanner: View {
 private struct FocusRow: View {
     let session: FocusSession
     let isActive: Bool
+    let now: Date
+
+    private var subtitle: String {
+        guard session.isOnDemand else {
+            return "\(timeText(session.startTime))–\(timeText(session.endTime)) · \(session.recurrenceRule.summaryText)"
+        }
+        if isActive, let activeUntil = session.activeUntil {
+            let remainingMinutes = max(0, Int(activeUntil.timeIntervalSince(now) / 60))
+            return "Läuft noch \(remainingMinutes) Min"
+        }
+        return "\(session.durationMinutes) Min · Manuell"
+    }
 
     var body: some View {
         HStack(spacing: 12) {
-            Image(systemName: "timer")
+            Image(systemName: session.isOnDemand ? "play.circle" : "timer")
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundStyle(isActive ? Color.white : Color.accentColor)
                 .frame(width: 36, height: 36)
@@ -136,7 +178,7 @@ private struct FocusRow: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(session.title)
                     .foregroundStyle(.primary)
-                Text("\(timeText(session.startTime))–\(timeText(session.endTime)) · \(session.recurrenceRule.summaryText)")
+                Text(subtitle)
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }

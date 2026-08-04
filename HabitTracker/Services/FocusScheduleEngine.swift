@@ -7,6 +7,11 @@ enum FocusScheduleEngine {
     /// the recurrence rule is always checked against the day the window
     /// *started* on, not the calendar day `date` happens to fall on.
     static func isActive(_ session: FocusSession, at date: Date = .now, calendar: Calendar = .current) -> Bool {
+        if session.isOnDemand {
+            guard let activeUntil = session.activeUntil else { return false }
+            return date < activeUntil
+        }
+
         let currentMinutes = minutesSinceMidnight(of: date, calendar: calendar)
         let startMinutes = minutesSinceMidnight(of: session.startTime, calendar: calendar)
         let endMinutes = minutesSinceMidnight(of: session.endTime, calendar: calendar)

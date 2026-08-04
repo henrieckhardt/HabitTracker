@@ -34,12 +34,19 @@ struct HabitListView: View {
                                 Button("Archivieren", systemImage: "archivebox") {
                                     habit.isArchived = true
                                     NotificationService.cancelReminders(for: habit)
+                                    if let session = habit.focusSession {
+                                        session.isArchived = true
+                                        FocusBlockingScheduler.stop(session)
+                                    }
                                     try? modelContext.save()
                                 }
                                 .tint(.orange)
 
                                 Button("Löschen", systemImage: "trash", role: .destructive) {
                                     NotificationService.cancelReminders(for: habit)
+                                    if let session = habit.focusSession {
+                                        FocusBlockingScheduler.stop(session)
+                                    }
                                     modelContext.delete(habit)
                                     try? modelContext.save()
                                 }

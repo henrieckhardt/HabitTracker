@@ -38,4 +38,34 @@ enum FocusBlockingScheduler {
     static func stop(_ session: FocusSession) {
         DeviceActivityCenter().stopMonitoring([activityName(for: session)])
     }
+
+    /// Starts an on-demand session (`session.isOnDemand == true`) right now
+    /// for `session.durationMinutes`. Unlike `reschedule`, this builds a
+    /// one-off, non-repeating interval from the current moment — the caller
+    /// is responsible for also setting `session.activeUntil` and saving, so
+    /// `FocusScheduleEngine.isActive`/the UI agree with what's actually
+    /// being monitored.
+    static func startNow(_ session: FocusSession) {
+        let center = DeviceActivityCenter()
+        let name = activityName(for: session)
+        center.stopMonitoring([name])
+
+        guard session.isBlockingEnabled else { return }
+
+        let calendar = Calendar.current
+        let now = Date.now
+        let end = now.addingTimeInterval(TimeInterval(session.durationMinutes * 60))
+        let schedule = DeviceActivitySchedule(
+            intervalStart: calendar.dateComponents([.hour, .minute, .second], from: now),
+            intervalEnd: calendar.dateComponents([.hour, .minute, .second], from: end),
+            repeats: false
+        )
+        try? center.startMonitoring(name, during: schedule)
+    }
+
+    /// Ends an on-demand session early. The caller is responsible for
+    /// clearing `session.activeUntil` and saving.
+    static func stopNow(_ session: FocusSession) {
+        stop(session)
+    }
 }

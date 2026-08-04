@@ -13,6 +13,8 @@ struct FocusEditorView: View {
     @State private var startTime: Date
     @State private var endTime: Date
     @State private var recurrenceState: RecurrenceEditorState
+    @State private var isOnDemand: Bool
+    @State private var durationMinutes: Int
     @State private var blockingEnabled: Bool
     @State private var appSelection: FamilyActivitySelection
     @State private var showingActivityPicker = false
@@ -33,6 +35,8 @@ struct FocusEditorView: View {
         _startTime = State(initialValue: session?.startTime ?? Self.defaultStartTime)
         _endTime = State(initialValue: session?.endTime ?? Self.defaultEndTime)
         _recurrenceState = State(initialValue: RecurrenceEditorState.from(session?.recurrenceRule ?? .daily))
+        _isOnDemand = State(initialValue: session?.isOnDemand ?? false)
+        _durationMinutes = State(initialValue: session?.durationMinutes ?? 30)
         _blockingEnabled = State(initialValue: session?.isBlockingEnabled ?? false)
         _appSelection = State(initialValue: session?.blockedSelection ?? FamilyActivitySelection())
     }
@@ -62,22 +66,46 @@ struct FocusEditorView: View {
                     TextField("z.B. Deep Work", text: $title)
                 }
 
-                Section("Zeitraum") {
-                    DatePicker("Start", selection: $startTime, displayedComponents: .hourAndMinute)
-                    DatePicker("Ende", selection: $endTime, displayedComponents: .hourAndMinute)
-                    if !isTimeRangeValid {
-                        Text("Start- und Endzeit dürfen nicht gleich sein.")
-                            .font(.caption)
-                            .foregroundStyle(.red)
-                    } else if isOvernight {
-                        Text("Läuft über Mitternacht bis zum nächsten Tag.")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                Section {
+                    Picker("Art", selection: $isOnDemand) {
+                        Text("Fester Zeitplan").tag(false)
+                        Text("Manuell starten").tag(true)
                     }
+                    .pickerStyle(.segmented)
+                } footer: {
+                    Text(isOnDemand
+                        ? "Läuft für eine feste Dauer, sobald du ihn manuell startest."
+                        : "Läuft automatisch in einem wiederkehrenden Zeitfenster.")
                 }
 
-                Section("Wiederholung") {
-                    RecurrencePickerView(state: $recurrenceState)
+                if isOnDemand {
+                    Section("Dauer") {
+                        Picker("Dauer", selection: $durationMinutes) {
+                            Text("15 Min").tag(15)
+                            Text("30 Min").tag(30)
+                            Text("45 Min").tag(45)
+                            Text("60 Min").tag(60)
+                            Text("90 Min").tag(90)
+                        }
+                    }
+                } else {
+                    Section("Zeitraum") {
+                        DatePicker("Start", selection: $startTime, displayedComponents: .hourAndMinute)
+                        DatePicker("Ende", selection: $endTime, displayedComponents: .hourAndMinute)
+                        if !isTimeRangeValid {
+                            Text("Start- und Endzeit dürfen nicht gleich sein.")
+                                .font(.caption)
+                                .foregroundStyle(.red)
+                        } else if isOvernight {
+                            Text("Läuft über Mitternacht bis zum nächsten Tag.")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+
+                    Section("Wiederholung") {
+                        RecurrencePickerView(state: $recurrenceState)
+                    }
                 }
 
                 Section {
@@ -118,8 +146,7 @@ struct FocusEditorView: View {
                     Button("Sichern") { save() }
                         .disabled(
                             title.trimmingCharacters(in: .whitespaces).isEmpty
-                                || !recurrenceState.isValid
-                                || !isTimeRangeValid
+                                || (!isOnDemand && (!recurrenceState.isValid || !isTimeRangeValid))
                         )
                 }
             }
@@ -163,6 +190,8 @@ struct FocusEditorView: View {
             existing.endTime = endTime
             existing.recurrenceRule = rule
             existing.blockedSelection = selection
+            existing.isOnDemand = isOnDemand
+            existing.durationMinutes = durationMinutes
             session = existing
         } else {
             session = FocusSession(
@@ -170,12 +199,22 @@ struct FocusEditorView: View {
                 startTime: startTime,
                 endTime: endTime,
                 recurrenceRule: rule,
-                blockedSelection: selection
+                blockedSelection: selection,
+                isOnDemand: isOnDemand,
+                durationMinutes: durationMinutes
             )
             modelContext.insert(session)
         }
         try? modelContext.save()
-        FocusBlockingScheduler.reschedule(session)
+        // On-demand sessions only start monitoring when the user explicitly
+        // taps "Start" (see FocusListView) — saving the template itself must
+        // not begin blocking, and must clear out any leftover recurring
+        // schedule if a session was switched from scheduled to on-demand.
+        if isOnDemand {
+            FocusBlockingScheduler.stop(session)
+        } else {
+            FocusBlockingScheduler.reschedule(session)
+        }
         dismiss()
     }
 }

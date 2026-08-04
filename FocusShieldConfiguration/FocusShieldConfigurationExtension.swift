@@ -27,8 +27,13 @@ final class FocusShieldConfigurationExtension: ShieldConfigurationDataSource {
     private func makeConfiguration() -> ShieldConfiguration {
         let subtitleText: String
         if let session = currentlyActiveSession() {
-            let endText = Self.timeFormatter.string(from: session.endTime)
-            subtitleText = "\(session.title) · bis \(endText) Uhr"
+            let endDate = session.isOnDemand ? session.activeUntil : session.endTime
+            if let endDate {
+                let endText = Self.timeFormatter.string(from: endDate)
+                subtitleText = "\(session.title) · bis \(endText) Uhr"
+            } else {
+                subtitleText = session.title
+            }
         } else {
             subtitleText = "Diese App ist während deines Fokus-Zeitraums blockiert."
         }

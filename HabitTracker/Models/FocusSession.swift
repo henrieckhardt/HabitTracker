@@ -36,6 +36,24 @@ final class FocusSession {
         return !selection.applicationTokens.isEmpty || !selection.categoryTokens.isEmpty
     }
 
+    /// Set only via `Habit.focusSession`'s inverse relationship when this
+    /// session is a habit's companion window; `nil` for standalone sessions
+    /// managed directly in `FocusListView`.
+    var ownerHabit: Habit?
+
+    /// When `true`, this session is a manually-started template with a fixed
+    /// duration (see `durationMinutes`/`activeUntil`) instead of a recurring
+    /// daily time window — `startTime`/`endTime`/`recurrenceRule` are unused
+    /// in this mode.
+    var isOnDemand: Bool = false
+    var durationMinutes: Int = 30
+
+    /// Runtime state for an on-demand session: set to `now + duration` when
+    /// manually started, `nil` when not currently running. Scheduled
+    /// sessions never use this — their "active" state is derived purely from
+    /// `startTime`/`endTime`/`recurrenceRule` (see `FocusScheduleEngine`).
+    var activeUntil: Date?
+
     init(
         title: String,
         startTime: Date,
@@ -43,7 +61,9 @@ final class FocusSession {
         recurrenceRule: RecurrenceRule = .daily,
         createdAt: Date = .now,
         isArchived: Bool = false,
-        blockedSelection: FamilyActivitySelection? = nil
+        blockedSelection: FamilyActivitySelection? = nil,
+        isOnDemand: Bool = false,
+        durationMinutes: Int = 30
     ) {
         self.id = UUID()
         self.title = title
@@ -53,6 +73,8 @@ final class FocusSession {
         self.createdAt = createdAt
         self.isArchived = isArchived
         self.blockedSelectionData = blockedSelection.flatMap(FocusSession.encodeSelection)
+        self.isOnDemand = isOnDemand
+        self.durationMinutes = durationMinutes
     }
 
     private static func encode(_ rule: RecurrenceRule) -> Data {

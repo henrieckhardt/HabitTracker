@@ -24,6 +24,14 @@ final class Habit {
     @Relationship(deleteRule: .cascade, inverse: \HabitCompletion.habit)
     var completions: [HabitCompletion] = []
 
+    /// Optional companion `FocusSession` mirroring this habit's own title
+    /// and recurrence — lets a habit have a time window (and optional app
+    /// blocking) without duplicating the recurrence rule as a second,
+    /// independently-editable entity. Managed entirely from
+    /// `HabitEditorView`; never shown/edited standalone in `FocusListView`.
+    @Relationship(deleteRule: .cascade, inverse: \FocusSession.ownerHabit)
+    var focusSession: FocusSession?
+
     init(
         title: String,
         icon: String = "checkmark.circle",

@@ -32,7 +32,8 @@ struct DayContentView: View {
     }
 
     private var habitsForDay: [Habit] {
-        allHabits.filter { RecurrenceEngine.isScheduled($0.recurrenceRule, on: selectedDate, calendar: calendar) }
+        let scheduled = allHabits.filter { RecurrenceEngine.isScheduled($0.recurrenceRule, on: selectedDate, calendar: calendar) }
+        return HabitDisplayOrdering.sortedForDay(scheduled, calendar: calendar)
     }
 
     private var toDosForDay: [ToDo] {
@@ -273,6 +274,14 @@ private struct MoveToDoDateSheet: View {
     }
 }
 
+private func habitTimeText(_ date: Date) -> String {
+    let formatter = DateFormatter()
+    formatter.locale = Locale(identifier: "de_DE")
+    formatter.dateStyle = .none
+    formatter.timeStyle = .short
+    return formatter.string(from: date)
+}
+
 private struct HabitCompletionRow: View {
     @Environment(\.modelContext) private var modelContext
     let habit: Habit
@@ -297,6 +306,11 @@ private struct HabitCompletionRow: View {
                     .strikethrough(isCompleted)
                     .foregroundStyle(isCompleted ? .secondary : .primary)
                 Spacer()
+                if let session = habit.focusSession {
+                    Text("\(habitTimeText(session.startTime))–\(habitTimeText(session.endTime))")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
             .contentShape(Rectangle())
         }

@@ -134,4 +134,42 @@ final class FocusScheduleEngineTests: XCTestCase {
         let now = date(2026, 8, 3, 9, 0)
         XCTAssertFalse(FocusScheduleEngine.isActive(session, at: now, calendar: calendar))
     }
+
+    // MARK: - On-demand sessions (manually started, fixed duration)
+
+    private func makeOnDemandSession(activeUntil: Date?) -> FocusSession {
+        let session = FocusSession(
+            title: "Deep Work",
+            startTime: timeOnly(9, 0),
+            endTime: timeOnly(10, 0),
+            isOnDemand: true,
+            durationMinutes: 60
+        )
+        session.activeUntil = activeUntil
+        return session
+    }
+
+    func testOnDemandActiveWhileBeforeActiveUntil() {
+        let now = date(2026, 8, 3, 12, 0)
+        let session = makeOnDemandSession(activeUntil: date(2026, 8, 3, 13, 0))
+        XCTAssertTrue(FocusScheduleEngine.isActive(session, at: now, calendar: calendar))
+    }
+
+    func testOnDemandNotActiveExactlyAtActiveUntil() {
+        let now = date(2026, 8, 3, 13, 0)
+        let session = makeOnDemandSession(activeUntil: date(2026, 8, 3, 13, 0))
+        XCTAssertFalse(FocusScheduleEngine.isActive(session, at: now, calendar: calendar))
+    }
+
+    func testOnDemandNotActiveAfterActiveUntil() {
+        let now = date(2026, 8, 3, 14, 0)
+        let session = makeOnDemandSession(activeUntil: date(2026, 8, 3, 13, 0))
+        XCTAssertFalse(FocusScheduleEngine.isActive(session, at: now, calendar: calendar))
+    }
+
+    func testOnDemandNotActiveWhenNeverStarted() {
+        let now = date(2026, 8, 3, 9, 30) // would be "active" for a scheduled 9-10 window
+        let session = makeOnDemandSession(activeUntil: nil)
+        XCTAssertFalse(FocusScheduleEngine.isActive(session, at: now, calendar: calendar))
+    }
 }

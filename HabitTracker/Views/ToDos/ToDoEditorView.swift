@@ -14,8 +14,21 @@ struct ToDoEditorView: View {
     @State private var reminderEnabled: Bool
     @State private var reminderTime: Date
 
+    @State private var timeEnabled: Bool
+    @State private var startTime: Date
+    @State private var endTimeEnabled: Bool
+    @State private var endTime: Date
+
     private static var defaultReminderTime: Date {
         Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: .now) ?? .now
+    }
+
+    private static var defaultStartTime: Date {
+        Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: .now) ?? .now
+    }
+
+    private static var defaultEndTime: Date {
+        Calendar.current.date(bySettingHour: 10, minute: 0, second: 0, of: .now) ?? .now
     }
 
     init(toDo: ToDo? = nil, defaultDate: Date = Calendar.current.startOfDay(for: .now)) {
@@ -25,6 +38,11 @@ struct ToDoEditorView: View {
         _scheduledDate = State(initialValue: toDo?.scheduledDate ?? defaultDate)
         _reminderEnabled = State(initialValue: toDo?.reminderTime != nil)
         _reminderTime = State(initialValue: toDo?.reminderTime ?? Self.defaultReminderTime)
+
+        _timeEnabled = State(initialValue: toDo?.startTime != nil)
+        _startTime = State(initialValue: toDo?.startTime ?? Self.defaultStartTime)
+        _endTimeEnabled = State(initialValue: toDo?.endTime != nil)
+        _endTime = State(initialValue: toDo?.endTime ?? Self.defaultEndTime)
     }
 
     var body: some View {
@@ -42,6 +60,50 @@ struct ToDoEditorView: View {
                 }
 
                 ReminderToggleSection(isEnabled: $reminderEnabled, time: $reminderTime)
+
+                Section {
+                    Button {
+                        timeEnabled.toggle()
+                    } label: {
+                        HStack {
+                            Text("Uhrzeit festlegen")
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            Toggle("", isOn: $timeEnabled)
+                                .labelsHidden()
+                                .allowsHitTesting(false)
+                        }
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+
+                    if timeEnabled {
+                        DatePicker("Start", selection: $startTime, displayedComponents: .hourAndMinute)
+
+                        Button {
+                            endTimeEnabled.toggle()
+                        } label: {
+                            HStack {
+                                Text("Endzeit festlegen")
+                                    .foregroundStyle(.primary)
+                                Spacer()
+                                Toggle("", isOn: $endTimeEnabled)
+                                    .labelsHidden()
+                                    .allowsHitTesting(false)
+                            }
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+
+                        if endTimeEnabled {
+                            DatePicker("Ende", selection: $endTime, displayedComponents: .hourAndMinute)
+                        }
+                    }
+                } header: {
+                    Text("Uhrzeit")
+                } footer: {
+                    Text("Rein informativ, keine Erinnerung oder App-Blockierung.")
+                }
             }
             .navigationTitle(toDoToEdit == nil ? "Neues ToDo" : "ToDo bearbeiten")
             .navigationBarTitleDisplayMode(.inline)
@@ -77,6 +139,8 @@ struct ToDoEditorView: View {
             modelContext.insert(toDo)
         }
         toDo.reminderTime = newReminderTime
+        toDo.startTime = timeEnabled ? startTime : nil
+        toDo.endTime = (timeEnabled && endTimeEnabled) ? endTime : nil
 
         if newReminderTime != nil {
             NotificationService.scheduleReminder(for: toDo)

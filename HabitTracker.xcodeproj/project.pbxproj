@@ -79,7 +79,9 @@
 		DBBEC621A77332FA179F0BD2 /* FocusShieldMonitorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D70D86BA3678F134DEB547D /* FocusShieldMonitorExtension.swift */; };
 		DE12831EA16BD8A1399D0B2B /* RecurrenceEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DE77127A2CFCC34F55BD00 /* RecurrenceEngineTests.swift */; };
 		DFC4E104929FAA11578AE64B /* FocusScheduleEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC40D6421982FC4F52C6A557 /* FocusScheduleEngine.swift */; };
+		E7021724C066ABFB6D7085C1 /* HabitDisplayOrderingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC26A00D3B0B955B78554C8 /* HabitDisplayOrderingTests.swift */; };
 		E79F1CC7705F6A84B168D3AC /* RecurrenceEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D806678F8172CF38BA7A78E8 /* RecurrenceEngine.swift */; };
+		E9CC65BBF43495A398021B56 /* HabitDisplayOrdering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 953FA2DFA644FEEBE280650E /* HabitDisplayOrdering.swift */; };
 		EA98341D44B7F7B69684C6B0 /* HabitCompletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946E6209E086DEC58E7D5BF1 /* HabitCompletion.swift */; };
 		EAA33138B3F10D2A5B72CEA6 /* ToDo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745E1E4C0F363E51E7241BC8 /* ToDo.swift */; };
 		EB830DABA0E825D6B0E702BF /* Weekday.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB6375487A04DF9F68E955F /* Weekday.swift */; };
@@ -138,6 +140,7 @@
 /* Begin PBXFileReference section */
 		014B24A6799466357380EC3F /* RolloverService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RolloverService.swift; sourceTree = "<group>"; };
 		0ABFADBE1397278CC5A2E920 /* HabitTracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HabitTracker.entitlements; sourceTree = "<group>"; };
+		0EC26A00D3B0B955B78554C8 /* HabitDisplayOrderingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDisplayOrderingTests.swift; sourceTree = "<group>"; };
 		1CDCEFED00DEDE430332289C /* FocusShieldMonitor.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = FocusShieldMonitor.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D43C794243615BD12D73A2B /* ManagedSettingsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ManagedSettingsUI.framework; path = System/Library/Frameworks/ManagedSettingsUI.framework; sourceTree = SDKROOT; };
 		1EA330085B77C76D00AED076 /* WeekdaySelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekdaySelector.swift; sourceTree = "<group>"; };
@@ -164,6 +167,7 @@
 		928F7AE2905E094D35349379 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		934C18A7F2EB31512CEB4A4E /* HabitTracker.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = HabitTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		946E6209E086DEC58E7D5BF1 /* HabitCompletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitCompletion.swift; sourceTree = "<group>"; };
+		953FA2DFA644FEEBE280650E /* HabitDisplayOrdering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDisplayOrdering.swift; sourceTree = "<group>"; };
 		98D914890A5E6D0547398053 /* FocusListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusListView.swift; sourceTree = "<group>"; };
 		9FB478B9D1F76F95510D0804 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		A23F8410FFD146F6B134A267 /* HabitTrackerTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = HabitTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -252,6 +256,7 @@
 			isa = PBXGroup;
 			children = (
 				CCDD184D3F2BFEC3C4FE1683 /* FocusScheduleEngineTests.swift */,
+				0EC26A00D3B0B955B78554C8 /* HabitDisplayOrderingTests.swift */,
 				51DE77127A2CFCC34F55BD00 /* RecurrenceEngineTests.swift */,
 				D50BD2B73001619495CF21EF /* RolloverServiceTests.swift */,
 				DD4F9090466EA890C4BF98B0 /* StreakEngineTests.swift */,
@@ -403,6 +408,7 @@
 				8AFF0F0D973401BA1712F320 /* FamilyControlsService.swift */,
 				7E7A7503A51307877B3536AC /* FocusBlockingScheduler.swift */,
 				FC40D6421982FC4F52C6A557 /* FocusScheduleEngine.swift */,
+				953FA2DFA644FEEBE280650E /* HabitDisplayOrdering.swift */,
 				BEC653A32D3ABE164A1B0B52 /* NotificationDelegate.swift */,
 				CEE09BE65A43EAAC056D676D /* NotificationService.swift */,
 				D806678F8172CF38BA7A78E8 /* RecurrenceEngine.swift */,
@@ -625,6 +631,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF76F3964B838D40D4AF8E17 /* FocusScheduleEngineTests.swift in Sources */,
+				E7021724C066ABFB6D7085C1 /* HabitDisplayOrderingTests.swift in Sources */,
 				DE12831EA16BD8A1399D0B2B /* RecurrenceEngineTests.swift in Sources */,
 				784C2B3695187B5FD94B2CC4 /* RolloverServiceTests.swift in Sources */,
 				D9B7E8B008CA3B5662B45A0A /* StreakEngineTests.swift in Sources */,
@@ -679,6 +686,7 @@
 				96F5E318B45A058525A70DF7 /* FocusSession.swift in Sources */,
 				AC0CC1C935707A7C84BC7118 /* Habit.swift in Sources */,
 				EA98341D44B7F7B69684C6B0 /* HabitCompletion.swift in Sources */,
+				E9CC65BBF43495A398021B56 /* HabitDisplayOrdering.swift in Sources */,
 				84B48B5D11DF4F84EE07573B /* HabitEditorView.swift in Sources */,
 				A6A78DC48ABD8248EE7108BA /* HabitListView.swift in Sources */,
 				24BAD097D640501F3D0E4A68 /* HabitTrackerApp.swift in Sources */,

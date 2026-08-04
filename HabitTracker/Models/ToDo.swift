@@ -12,6 +12,13 @@ final class ToDo {
     var completedAt: Date?
     var reminderTime: Date?
 
+    /// Optional, purely informational time window — only hour/minute matter,
+    /// same convention as `FocusSession.startTime`/`endTime`. Never touches
+    /// `NotificationService` or any app-blocking mechanism; ToDos are one-off
+    /// (no recurrence), unlike `Habit`/`FocusSession`.
+    var startTime: Date?
+    var endTime: Date?
+
     init(
         title: String,
         notes: String? = nil,
@@ -19,7 +26,9 @@ final class ToDo {
         createdAt: Date = .now,
         isCompleted: Bool = false,
         completedAt: Date? = nil,
-        reminderTime: Date? = nil
+        reminderTime: Date? = nil,
+        startTime: Date? = nil,
+        endTime: Date? = nil
     ) {
         self.id = UUID()
         self.title = title
@@ -29,5 +38,7 @@ final class ToDo {
         self.isCompleted = isCompleted
         self.completedAt = completedAt
         self.reminderTime = reminderTime
+        self.startTime = startTime
+        self.endTime = endTime
     }
 }
