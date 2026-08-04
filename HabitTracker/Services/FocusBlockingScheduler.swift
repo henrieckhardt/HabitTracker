@@ -48,7 +48,11 @@ enum FocusBlockingScheduler {
             intervalEnd: calendar.dateComponents([.hour, .minute], from: session.endTime),
             repeats: true
         )
-        try? center.startMonitoring(name, during: schedule)
+        do {
+            try center.startMonitoring(name, during: schedule)
+        } catch {
+            print("⚠️ FocusBlockingScheduler.reschedule: startMonitoring failed for '\(session.title)' (\(name.rawValue)): \(error)")
+        }
 
         if FocusScheduleEngine.isActive(session, at: .now, calendar: calendar) {
             applyShieldNow(for: session)
@@ -87,7 +91,11 @@ enum FocusBlockingScheduler {
             intervalEnd: calendar.dateComponents([.hour, .minute, .second], from: end),
             repeats: false
         )
-        try? center.startMonitoring(name, during: schedule)
+        do {
+            try center.startMonitoring(name, during: schedule)
+        } catch {
+            print("⚠️ FocusBlockingScheduler.startNow: startMonitoring failed for '\(session.title)' (\(name.rawValue)): \(error)")
+        }
         // Registering a schedule starting exactly "now" has the same
         // retroactive-firing gap described above — apply immediately
         // instead of waiting on `intervalDidStart`.
