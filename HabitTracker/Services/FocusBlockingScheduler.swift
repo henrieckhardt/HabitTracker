@@ -8,6 +8,10 @@ import DeviceActivity
 /// and `FocusShieldMonitorExtension.intervalDidStart` decides at runtime
 /// (via `RecurrenceEngine.isScheduled`) whether today is actually a
 /// scheduled day before applying the shield.
+///
+/// If `intervalEnd` is earlier than `intervalStart`, the framework itself
+/// extends the interval into the next day — so an overnight window like
+/// 22:00–08:00 needs no special-casing here at all.
 enum FocusBlockingScheduler {
     static func activityName(for session: FocusSession) -> DeviceActivityName {
         DeviceActivityName(session.id.uuidString)

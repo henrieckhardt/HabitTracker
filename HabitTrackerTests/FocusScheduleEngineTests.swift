@@ -78,4 +78,60 @@ final class FocusScheduleEngineTests: XCTestCase {
 
         XCTAssertNil(FocusScheduleEngine.currentlyActiveSession(in: [inactive], at: now, calendar: calendar))
     }
+
+    // MARK: - Overnight windows (end earlier than start, e.g. 22:00–08:00)
+
+    func testOvernightActiveShortlyAfterStart() {
+        let session = makeSession(start: (22, 0), end: (8, 0))
+        let now = date(2026, 8, 3, 23, 0) // Monday night
+        XCTAssertTrue(FocusScheduleEngine.isActive(session, at: now, calendar: calendar))
+    }
+
+    func testOvernightActiveExactlyAtStart() {
+        let session = makeSession(start: (22, 0), end: (8, 0))
+        let now = date(2026, 8, 3, 22, 0)
+        XCTAssertTrue(FocusScheduleEngine.isActive(session, at: now, calendar: calendar))
+    }
+
+    func testOvernightActiveShortlyBeforeEndNextDay() {
+        let session = makeSession(start: (22, 0), end: (8, 0))
+        let now = date(2026, 8, 4, 3, 0) // Tuesday early morning, still "Monday's" window
+        XCTAssertTrue(FocusScheduleEngine.isActive(session, at: now, calendar: calendar))
+    }
+
+    func testOvernightNotActiveExactlyAtEndNextDay() {
+        let session = makeSession(start: (22, 0), end: (8, 0))
+        let now = date(2026, 8, 4, 8, 0)
+        XCTAssertFalse(FocusScheduleEngine.isActive(session, at: now, calendar: calendar))
+    }
+
+    func testOvernightNotActiveBetweenEndAndStart() {
+        let session = makeSession(start: (22, 0), end: (8, 0))
+        let now = date(2026, 8, 3, 12, 0) // Monday noon
+        XCTAssertFalse(FocusScheduleEngine.isActive(session, at: now, calendar: calendar))
+    }
+
+    /// The pre-midnight segment of an overnight window must be checked
+    /// against the day the window *started* on (Monday), not the calendar
+    /// day `date` falls on (Tuesday) — this session only recurs Tuesdays,
+    /// so a window that started Monday night must not be active.
+    func testOvernightPreMidnightSegmentChecksStartDayNotCurrentDay() {
+        let session = makeSession(start: (22, 0), end: (8, 0), rule: .weekdays([.tuesday]))
+        let now = date(2026, 8, 4, 3, 0) // Tuesday 03:00 — window started Monday, not scheduled
+        XCTAssertFalse(FocusScheduleEngine.isActive(session, at: now, calendar: calendar))
+    }
+
+    /// Same setup, but the window starts on a scheduled Tuesday night, so
+    /// the pre-midnight segment on Wednesday morning should be active.
+    func testOvernightPreMidnightSegmentActiveWhenStartDayWasScheduled() {
+        let session = makeSession(start: (22, 0), end: (8, 0), rule: .weekdays([.tuesday]))
+        let now = date(2026, 8, 5, 3, 0) // Wednesday 03:00 — window started Tuesday, scheduled
+        XCTAssertTrue(FocusScheduleEngine.isActive(session, at: now, calendar: calendar))
+    }
+
+    func testZeroLengthWindowIsNeverActive() {
+        let session = makeSession(start: (9, 0), end: (9, 0))
+        let now = date(2026, 8, 3, 9, 0)
+        XCTAssertFalse(FocusScheduleEngine.isActive(session, at: now, calendar: calendar))
+    }
 }

@@ -37,13 +37,22 @@ struct FocusEditorView: View {
         _appSelection = State(initialValue: session?.blockedSelection ?? FamilyActivitySelection())
     }
 
-    /// Only the hour/minute of `startTime`/`endTime` matter; MVP doesn't
-    /// support windows that span midnight.
+    /// Only the hour/minute of `startTime`/`endTime` matter. An end time
+    /// earlier than the start time is valid — it's a window spanning
+    /// midnight into the next day (e.g. 22:00–08:00), handled by
+    /// `FocusScheduleEngine`/`FocusShieldMonitor`. Only an exactly
+    /// zero-length window (start == end) is rejected.
     private var isTimeRangeValid: Bool {
+        minutes(of: startTime) != minutes(of: endTime)
+    }
+
+    private var isOvernight: Bool {
+        minutes(of: endTime) < minutes(of: startTime)
+    }
+
+    private func minutes(of date: Date) -> Int {
         let calendar = Calendar.current
-        let startMinutes = calendar.component(.hour, from: startTime) * 60 + calendar.component(.minute, from: startTime)
-        let endMinutes = calendar.component(.hour, from: endTime) * 60 + calendar.component(.minute, from: endTime)
-        return endMinutes > startMinutes
+        return calendar.component(.hour, from: date) * 60 + calendar.component(.minute, from: date)
     }
 
     var body: some View {
@@ -57,9 +66,13 @@ struct FocusEditorView: View {
                     DatePicker("Start", selection: $startTime, displayedComponents: .hourAndMinute)
                     DatePicker("Ende", selection: $endTime, displayedComponents: .hourAndMinute)
                     if !isTimeRangeValid {
-                        Text("Die Endzeit muss nach der Startzeit liegen.")
+                        Text("Start- und Endzeit dürfen nicht gleich sein.")
                             .font(.caption)
                             .foregroundStyle(.red)
+                    } else if isOvernight {
+                        Text("Läuft über Mitternacht bis zum nächsten Tag.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                     }
                 }
 
