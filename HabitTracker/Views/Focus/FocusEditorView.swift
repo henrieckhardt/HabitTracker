@@ -139,51 +139,6 @@ struct FocusEditorView: View {
                         }
                         .pickerStyle(.wheel)
                     }
-
-                    if let session = sessionToEdit {
-                        Section("Steuerung") {
-                            if isRunning, let activeUntil = session.activeUntil {
-                                HStack {
-                                    Text("Läuft noch")
-                                    Spacer()
-                                    Text("\(remainingMinutes(until: activeUntil)) Min")
-                                        .foregroundStyle(.secondary)
-                                }
-                                Button("Stop", role: .destructive) {
-                                    stopOrCancel(session)
-                                }
-                            } else if isPending, let pendingStart = session.pendingStart {
-                                HStack {
-                                    Text("Startet um")
-                                    Spacer()
-                                    Text("\(timeText(pendingStart)) Uhr (in \(remainingMinutes(until: pendingStart)) Min)")
-                                        .foregroundStyle(.secondary)
-                                }
-                                Button("Geplanten Start abbrechen", role: .destructive) {
-                                    stopOrCancel(session)
-                                }
-                            } else {
-                                Button {
-                                    startSessionNow(session)
-                                } label: {
-                                    Label("Jetzt starten", systemImage: "play.fill")
-                                }
-
-                                Picker("Start in", selection: $startDelayMinutes) {
-                                    ForEach(Self.delayOptions, id: \.self) { minutes in
-                                        Text(formattedMinutes(minutes)).tag(minutes)
-                                    }
-                                }
-
-                                Button {
-                                    scheduleFutureStart(session, delayMinutes: startDelayMinutes)
-                                } label: {
-                                    Label("Später starten planen", systemImage: "clock")
-                                }
-                            }
-                        }
-                        .onReceive(controlTimer) { date in now = date }
-                    }
                 } else {
                     Section("Zeitraum") {
                         DatePicker("Start", selection: $startTime, displayedComponents: .hourAndMinute)
@@ -231,6 +186,16 @@ struct FocusEditorView: View {
                 } footer: {
                     Text("Die ausgewählten Apps werden während des Fokus-Zeitraums blockiert und zeigen einen Sperrbildschirm.")
                 }
+
+                if isOnDemand, let session = sessionToEdit {
+                    Section("Steuerung") {
+                        controlContent(for: session)
+                            .padding(.vertical, 6)
+                            .listRowInsets(EdgeInsets())
+                            .listRowBackground(Color.clear)
+                    }
+                    .onReceive(controlTimer) { date in now = date }
+                }
             }
             .navigationTitle(sessionToEdit == nil ? "Neuer Fokus" : "Fokus bearbeiten")
             .navigationBarTitleDisplayMode(.inline)
@@ -253,6 +218,84 @@ struct FocusEditorView: View {
                 Text("Ohne Bildschirmzeit-Zugriff können keine Apps blockiert werden. Du kannst das in den Einstellungen unter Bildschirmzeit erlauben.")
             }
         }
+    }
+
+    @ViewBuilder
+    private func controlContent(for session: FocusSession) -> some View {
+        VStack(spacing: 14) {
+            if isRunning, let activeUntil = session.activeUntil {
+                statCard(icon: "timer", title: "Läuft noch", value: "\(remainingMinutes(until: activeUntil)) Min", tint: .accentColor)
+                actionButton("Stop", icon: "stop.fill", tint: .red, role: .destructive) {
+                    stopOrCancel(session)
+                }
+            } else if isPending, let pendingStart = session.pendingStart {
+                statCard(icon: "clock", title: "Startet um \(timeText(pendingStart)) Uhr", value: "in \(remainingMinutes(until: pendingStart)) Min", tint: .orange)
+                actionButton("Geplanten Start abbrechen", icon: "xmark", tint: .red, role: .destructive) {
+                    stopOrCancel(session)
+                }
+            } else {
+                actionButton("Jetzt starten", icon: "play.fill", tint: .green) {
+                    startSessionNow(session)
+                }
+
+                VStack(spacing: 12) {
+                    HStack {
+                        Label("Start in", systemImage: "clock")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Picker("", selection: $startDelayMinutes) {
+                            ForEach(Self.delayOptions, id: \.self) { minutes in
+                                Text(formattedMinutes(minutes)).tag(minutes)
+                            }
+                        }
+                        .labelsHidden()
+                        .pickerStyle(.menu)
+                        .tint(.orange)
+                    }
+                    actionButton("Später starten planen", icon: "clock.badge", tint: .orange) {
+                        scheduleFutureStart(session, delayMinutes: startDelayMinutes)
+                    }
+                }
+                .padding(12)
+                .background(Color(.secondarySystemBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            }
+        }
+    }
+
+    private func statCard(icon: String, title: String, value: String, tint: Color) -> some View {
+        HStack(spacing: 14) {
+            Image(systemName: icon)
+                .font(.title2)
+                .foregroundStyle(tint)
+                .frame(width: 48, height: 48)
+                .background(tint.opacity(0.15))
+                .clipShape(Circle())
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Text(value)
+                    .font(.title2.weight(.semibold))
+            }
+            Spacer()
+        }
+        .padding(14)
+        .background(tint.opacity(0.1))
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+    }
+
+    private func actionButton(_ title: String, icon: String, tint: Color, role: ButtonRole? = nil, action: @escaping () -> Void) -> some View {
+        Button(role: role, action: action) {
+            Label(title, systemImage: icon)
+                .font(.headline)
+                .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(.borderedProminent)
+        .buttonBorderShape(.roundedRectangle(radius: 14))
+        .tint(tint)
+        .controlSize(.large)
     }
 
     private var selectionSummary: String {
@@ -314,14 +357,12 @@ struct FocusEditorView: View {
         dismiss()
     }
 
-    /// These three deliberately don't `dismiss()` — staying on screen lets
-    /// the "Steuerung" section immediately reflect the new running/pending/
-    /// idle state instead of just closing the sheet with no feedback.
     private func startSessionNow(_ session: FocusSession) {
         session.pendingStart = nil
         session.activeUntil = Date.now.addingTimeInterval(TimeInterval(session.durationMinutes * 60))
         try? modelContext.save()
         FocusBlockingScheduler.startNow(session)
+        dismiss()
     }
 
     private func scheduleFutureStart(_ session: FocusSession, delayMinutes: Int) {
@@ -330,6 +371,7 @@ struct FocusEditorView: View {
         session.activeUntil = start.addingTimeInterval(TimeInterval(session.durationMinutes * 60))
         try? modelContext.save()
         FocusBlockingScheduler.scheduleStart(session, delayMinutes: delayMinutes)
+        dismiss()
     }
 
     private func stopOrCancel(_ session: FocusSession) {
