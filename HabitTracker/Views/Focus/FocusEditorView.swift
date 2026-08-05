@@ -290,6 +290,7 @@ struct FocusEditorView: View {
         Button(role: role, action: action) {
             Label(title, systemImage: icon)
                 .font(.headline)
+                .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
         }
         .buttonStyle(.borderedProminent)
