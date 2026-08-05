@@ -21,6 +21,14 @@ struct FocusEditorView: View {
     @State private var isRequestingAuthorization = false
     @State private var authorizationDeniedAlert = false
 
+    /// Only used for the "Später starten" control on an already-saved
+    /// on-demand session — how far in the future to schedule the start.
+    @State private var startDelayMinutes = 10
+    /// Ticks so "Läuft noch X Min"/"Startet in X Min" stay current while
+    /// this screen is open, same pattern as `FocusListView`.
+    @State private var now: Date = .now
+    private let controlTimer = Timer.publish(every: 15, on: .main, in: .common).autoconnect()
+
     private static var defaultStartTime: Date {
         Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: .now) ?? .now
     }
@@ -28,6 +36,9 @@ struct FocusEditorView: View {
     private static var defaultEndTime: Date {
         Calendar.current.date(bySettingHour: 10, minute: 0, second: 0, of: .now) ?? .now
     }
+
+    private static let durationOptions: [Int] = Array(stride(from: 15, through: 480, by: 15))
+    private static let delayOptions: [Int] = Array(stride(from: 5, through: 240, by: 5))
 
     init(session: FocusSession? = nil) {
         self.sessionToEdit = session
@@ -68,6 +79,38 @@ struct FocusEditorView: View {
         return calendar.component(.hour, from: date) * 60 + calendar.component(.minute, from: date)
     }
 
+    private func formattedMinutes(_ minutes: Int) -> String {
+        let hours = minutes / 60
+        let mins = minutes % 60
+        switch (hours, mins) {
+        case (0, _): return "\(mins) Min"
+        case (_, 0): return "\(hours) Std"
+        default: return "\(hours) Std \(mins) Min"
+        }
+    }
+
+    private func timeText(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "de_DE")
+        formatter.dateStyle = .none
+        formatter.timeStyle = .short
+        return formatter.string(from: date)
+    }
+
+    private func remainingMinutes(until date: Date) -> Int {
+        max(0, Int(date.timeIntervalSince(now) / 60))
+    }
+
+    private var isRunning: Bool {
+        guard let session = sessionToEdit else { return false }
+        return FocusScheduleEngine.isActive(session, at: now)
+    }
+
+    private var isPending: Bool {
+        guard let session = sessionToEdit, !isRunning, let pendingStart = session.pendingStart else { return false }
+        return pendingStart > now
+    }
+
     var body: some View {
         NavigationStack {
             Form {
@@ -90,12 +133,56 @@ struct FocusEditorView: View {
                 if isOnDemand {
                     Section("Dauer") {
                         Picker("Dauer", selection: $durationMinutes) {
-                            Text("15 Min").tag(15)
-                            Text("30 Min").tag(30)
-                            Text("45 Min").tag(45)
-                            Text("60 Min").tag(60)
-                            Text("90 Min").tag(90)
+                            ForEach(Self.durationOptions, id: \.self) { minutes in
+                                Text(formattedMinutes(minutes)).tag(minutes)
+                            }
                         }
+                        .pickerStyle(.wheel)
+                    }
+
+                    if let session = sessionToEdit {
+                        Section("Steuerung") {
+                            if isRunning, let activeUntil = session.activeUntil {
+                                HStack {
+                                    Text("Läuft noch")
+                                    Spacer()
+                                    Text("\(remainingMinutes(until: activeUntil)) Min")
+                                        .foregroundStyle(.secondary)
+                                }
+                                Button("Stop", role: .destructive) {
+                                    stopOrCancel(session)
+                                }
+                            } else if isPending, let pendingStart = session.pendingStart {
+                                HStack {
+                                    Text("Startet um")
+                                    Spacer()
+                                    Text("\(timeText(pendingStart)) Uhr (in \(remainingMinutes(until: pendingStart)) Min)")
+                                        .foregroundStyle(.secondary)
+                                }
+                                Button("Geplanten Start abbrechen", role: .destructive) {
+                                    stopOrCancel(session)
+                                }
+                            } else {
+                                Button {
+                                    startSessionNow(session)
+                                } label: {
+                                    Label("Jetzt starten", systemImage: "play.fill")
+                                }
+
+                                Picker("Start in", selection: $startDelayMinutes) {
+                                    ForEach(Self.delayOptions, id: \.self) { minutes in
+                                        Text(formattedMinutes(minutes)).tag(minutes)
+                                    }
+                                }
+
+                                Button {
+                                    scheduleFutureStart(session, delayMinutes: startDelayMinutes)
+                                } label: {
+                                    Label("Später starten planen", systemImage: "clock")
+                                }
+                            }
+                        }
+                        .onReceive(controlTimer) { date in now = date }
                     }
                 } else {
                     Section("Zeitraum") {
@@ -225,5 +312,30 @@ struct FocusEditorView: View {
             FocusBlockingScheduler.reschedule(session)
         }
         dismiss()
+    }
+
+    /// These three deliberately don't `dismiss()` — staying on screen lets
+    /// the "Steuerung" section immediately reflect the new running/pending/
+    /// idle state instead of just closing the sheet with no feedback.
+    private func startSessionNow(_ session: FocusSession) {
+        session.pendingStart = nil
+        session.activeUntil = Date.now.addingTimeInterval(TimeInterval(session.durationMinutes * 60))
+        try? modelContext.save()
+        FocusBlockingScheduler.startNow(session)
+    }
+
+    private func scheduleFutureStart(_ session: FocusSession, delayMinutes: Int) {
+        let start = Date.now.addingTimeInterval(TimeInterval(delayMinutes * 60))
+        session.pendingStart = start
+        session.activeUntil = start.addingTimeInterval(TimeInterval(session.durationMinutes * 60))
+        try? modelContext.save()
+        FocusBlockingScheduler.scheduleStart(session, delayMinutes: delayMinutes)
+    }
+
+    private func stopOrCancel(_ session: FocusSession) {
+        FocusBlockingScheduler.stopNow(session)
+        session.activeUntil = nil
+        session.pendingStart = nil
+        try? modelContext.save()
     }
 }

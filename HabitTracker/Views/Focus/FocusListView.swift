@@ -44,10 +44,11 @@ struct FocusListView: View {
                     List {
                         ForEach(sessions) { session in
                             let isRunning = session.id == activeSession?.id
+                            let isPending = session.isOnDemand && !isRunning && (session.pendingStart.map { $0 > now } ?? false)
                             Button {
                                 sessionToEdit = session
                             } label: {
-                                FocusRow(session: session, isActive: isRunning, now: now)
+                                FocusRow(session: session, isActive: isRunning, isPending: isPending, now: now)
                             }
                             .buttonStyle(.plain)
                             .swipeActions {
@@ -70,11 +71,21 @@ struct FocusListView: View {
                                         Button("Stop", systemImage: "stop.fill") {
                                             FocusBlockingScheduler.stopNow(session)
                                             session.activeUntil = nil
+                                            session.pendingStart = nil
                                             try? modelContext.save()
                                         }
                                         .tint(.red)
+                                    } else if isPending {
+                                        Button("Abbrechen", systemImage: "xmark") {
+                                            FocusBlockingScheduler.stopNow(session)
+                                            session.activeUntil = nil
+                                            session.pendingStart = nil
+                                            try? modelContext.save()
+                                        }
+                                        .tint(.orange)
                                     } else {
                                         Button("Start", systemImage: "play.fill") {
+                                            session.pendingStart = nil
                                             session.activeUntil = Date.now.addingTimeInterval(TimeInterval(session.durationMinutes * 60))
                                             try? modelContext.save()
                                             FocusBlockingScheduler.startNow(session)
@@ -154,6 +165,7 @@ private struct ActiveFocusBanner: View {
 private struct FocusRow: View {
     let session: FocusSession
     let isActive: Bool
+    let isPending: Bool
     let now: Date
 
     private var subtitle: String {
@@ -164,12 +176,16 @@ private struct FocusRow: View {
             let remainingMinutes = max(0, Int(activeUntil.timeIntervalSince(now) / 60))
             return "Läuft noch \(remainingMinutes) Min"
         }
+        if isPending, let pendingStart = session.pendingStart {
+            let remainingMinutes = max(0, Int(pendingStart.timeIntervalSince(now) / 60))
+            return "Startet in \(remainingMinutes) Min (\(timeText(pendingStart)) Uhr)"
+        }
         return "\(session.durationMinutes) Min · Manuell"
     }
 
     var body: some View {
         HStack(spacing: 12) {
-            Image(systemName: session.isOnDemand ? "play.circle" : "timer")
+            Image(systemName: session.isOnDemand ? (isPending ? "clock" : "play.circle") : "timer")
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundStyle(isActive ? Color.white : Color.accentColor)
                 .frame(width: 36, height: 36)

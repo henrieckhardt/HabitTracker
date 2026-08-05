@@ -8,8 +8,12 @@ enum FocusScheduleEngine {
     /// *started* on, not the calendar day `date` happens to fall on.
     static func isActive(_ session: FocusSession, at date: Date = .now, calendar: Calendar = .current) -> Bool {
         if session.isOnDemand {
-            guard let activeUntil = session.activeUntil else { return false }
-            return date < activeUntil
+            guard let activeUntil = session.activeUntil, date < activeUntil else { return false }
+            // A future-scheduled start ("Später starten") isn't active yet
+            // even though activeUntil is already set — only once `date`
+            // reaches pendingStart does the window actually begin.
+            if let pendingStart = session.pendingStart, date < pendingStart { return false }
+            return true
         }
 
         let currentMinutes = minutesSinceMidnight(of: date, calendar: calendar)

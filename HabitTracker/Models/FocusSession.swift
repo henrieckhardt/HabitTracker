@@ -48,11 +48,19 @@ final class FocusSession {
     var isOnDemand: Bool = false
     var durationMinutes: Int = 30
 
-    /// Runtime state for an on-demand session: set to `now + duration` when
-    /// manually started, `nil` when not currently running. Scheduled
-    /// sessions never use this — their "active" state is derived purely from
-    /// `startTime`/`endTime`/`recurrenceRule` (see `FocusScheduleEngine`).
+    /// Runtime state for an on-demand session: set to the window's end
+    /// (`start + duration`) when started or scheduled, `nil` when idle.
+    /// Scheduled sessions never use this — their "active" state is derived
+    /// purely from `startTime`/`endTime`/`recurrenceRule` (see
+    /// `FocusScheduleEngine`).
     var activeUntil: Date?
+
+    /// Non-nil while an on-demand session has been scheduled to start in
+    /// the future but hasn't begun yet ("Später starten"). `nil` for an
+    /// immediate start, or once the window has actually begun — from that
+    /// point "active" is purely `date < activeUntil`, same as before this
+    /// field existed.
+    var pendingStart: Date?
 
     init(
         title: String,

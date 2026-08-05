@@ -86,6 +86,33 @@ enum FocusBlockingScheduler {
     /// `FocusScheduleEngine.isActive`/the UI agree with what's actually
     /// being monitored.
     static func startNow(_ session: FocusSession) {
+        registerOneOffSchedule(for: session, delayMinutes: 0)
+        // Registering a schedule starting exactly "now" has the same
+        // retroactive-firing gap described above — apply immediately
+        // instead of waiting on `intervalDidStart`.
+        applyShieldNow(for: session)
+    }
+
+    /// Schedules an on-demand session to begin `delayMinutes` from now
+    /// ("Später starten"), for `session.durationMinutes`. Unlike
+    /// `startNow`, the shield is deliberately left alone — the window
+    /// hasn't begun yet, so nothing should be blocked until
+    /// `intervalDidStart` fires (or `resyncAll` catches up once the start
+    /// time has passed while the app happens to be foregrounded). The
+    /// caller is responsible for setting `session.pendingStart`/
+    /// `session.activeUntil` and saving.
+    static func scheduleStart(_ session: FocusSession, delayMinutes: Int) {
+        registerOneOffSchedule(for: session, delayMinutes: delayMinutes)
+    }
+
+    /// Ends an on-demand session early, or cancels a pending future start.
+    /// The caller is responsible for clearing `session.activeUntil`/
+    /// `session.pendingStart` and saving.
+    static func stopNow(_ session: FocusSession) {
+        stop(session)
+    }
+
+    private static func registerOneOffSchedule(for session: FocusSession, delayMinutes: Int) {
         let center = DeviceActivityCenter()
         let name = activityName(for: session)
         center.stopMonitoring([name])
@@ -93,28 +120,18 @@ enum FocusBlockingScheduler {
         guard session.isBlockingEnabled else { return }
 
         let calendar = Calendar.current
-        let now = Date.now
-        let end = now.addingTimeInterval(TimeInterval(session.durationMinutes * 60))
+        let start = Date.now.addingTimeInterval(TimeInterval(delayMinutes * 60))
+        let end = start.addingTimeInterval(TimeInterval(session.durationMinutes * 60))
         let schedule = DeviceActivitySchedule(
-            intervalStart: calendar.dateComponents([.hour, .minute, .second], from: now),
+            intervalStart: calendar.dateComponents([.hour, .minute, .second], from: start),
             intervalEnd: calendar.dateComponents([.hour, .minute, .second], from: end),
             repeats: false
         )
         do {
             try center.startMonitoring(name, during: schedule)
         } catch {
-            print("⚠️ FocusBlockingScheduler.startNow: startMonitoring failed for '\(session.title)' (\(name.rawValue)): \(error)")
+            print("⚠️ FocusBlockingScheduler: startMonitoring failed for '\(session.title)' (\(name.rawValue)): \(error)")
         }
-        // Registering a schedule starting exactly "now" has the same
-        // retroactive-firing gap described above — apply immediately
-        // instead of waiting on `intervalDidStart`.
-        applyShieldNow(for: session)
-    }
-
-    /// Ends an on-demand session early. The caller is responsible for
-    /// clearing `session.activeUntil` and saving.
-    static func stopNow(_ session: FocusSession) {
-        stop(session)
     }
 
     /// Self-healing safety net: call whenever the app becomes active to

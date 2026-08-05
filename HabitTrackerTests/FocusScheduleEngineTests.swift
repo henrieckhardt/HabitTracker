@@ -137,7 +137,7 @@ final class FocusScheduleEngineTests: XCTestCase {
 
     // MARK: - On-demand sessions (manually started, fixed duration)
 
-    private func makeOnDemandSession(activeUntil: Date?) -> FocusSession {
+    private func makeOnDemandSession(activeUntil: Date?, pendingStart: Date? = nil) -> FocusSession {
         let session = FocusSession(
             title: "Deep Work",
             startTime: timeOnly(9, 0),
@@ -146,6 +146,7 @@ final class FocusScheduleEngineTests: XCTestCase {
             durationMinutes: 60
         )
         session.activeUntil = activeUntil
+        session.pendingStart = pendingStart
         return session
     }
 
@@ -170,6 +171,32 @@ final class FocusScheduleEngineTests: XCTestCase {
     func testOnDemandNotActiveWhenNeverStarted() {
         let now = date(2026, 8, 3, 9, 30) // would be "active" for a scheduled 9-10 window
         let session = makeOnDemandSession(activeUntil: nil)
+        XCTAssertFalse(FocusScheduleEngine.isActive(session, at: now, calendar: calendar))
+    }
+
+    // MARK: - On-demand sessions scheduled to start in the future ("Später starten")
+
+    func testOnDemandNotActiveBeforePendingStart() {
+        let now = date(2026, 8, 3, 12, 0)
+        let session = makeOnDemandSession(activeUntil: date(2026, 8, 3, 13, 0), pendingStart: date(2026, 8, 3, 12, 30))
+        XCTAssertFalse(FocusScheduleEngine.isActive(session, at: now, calendar: calendar))
+    }
+
+    func testOnDemandActiveExactlyAtPendingStart() {
+        let now = date(2026, 8, 3, 12, 30)
+        let session = makeOnDemandSession(activeUntil: date(2026, 8, 3, 13, 0), pendingStart: date(2026, 8, 3, 12, 30))
+        XCTAssertTrue(FocusScheduleEngine.isActive(session, at: now, calendar: calendar))
+    }
+
+    func testOnDemandActiveAfterPendingStartPasses() {
+        let now = date(2026, 8, 3, 12, 45)
+        let session = makeOnDemandSession(activeUntil: date(2026, 8, 3, 13, 0), pendingStart: date(2026, 8, 3, 12, 30))
+        XCTAssertTrue(FocusScheduleEngine.isActive(session, at: now, calendar: calendar))
+    }
+
+    func testOnDemandNotActiveAfterActiveUntilEvenWithPendingStartInPast() {
+        let now = date(2026, 8, 3, 14, 0)
+        let session = makeOnDemandSession(activeUntil: date(2026, 8, 3, 13, 0), pendingStart: date(2026, 8, 3, 12, 30))
         XCTAssertFalse(FocusScheduleEngine.isActive(session, at: now, calendar: calendar))
     }
 }
