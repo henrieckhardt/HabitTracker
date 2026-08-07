@@ -17,9 +17,9 @@ struct HabitListView: View {
             Group {
                 if habits.isEmpty {
                     ContentUnavailableView(
-                        "Keine Habits",
+                        "No Habits",
                         systemImage: "checkmark.circle",
-                        description: Text("Lege deinen ersten Habit an.", comment: "Empty state description on the Habits list")
+                        description: Text("Create your first habit.", comment: "Empty state description on the Habits list")
                     )
                 } else {
                     List {
@@ -31,7 +31,7 @@ struct HabitListView: View {
                             }
                             .buttonStyle(.plain)
                             .swipeActions {
-                                Button("Archivieren", systemImage: "archivebox") {
+                                Button("Archive", systemImage: "archivebox") {
                                     habit.isArchived = true
                                     NotificationService.cancelReminders(for: habit)
                                     if let session = habit.focusSession {
@@ -42,7 +42,7 @@ struct HabitListView: View {
                                 }
                                 .tint(.orange)
 
-                                Button("Löschen", systemImage: "trash", role: .destructive) {
+                                Button("Delete", systemImage: "trash", role: .destructive) {
                                     NotificationService.cancelReminders(for: habit)
                                     if let session = habit.focusSession {
                                         FocusBlockingScheduler.stop(session)

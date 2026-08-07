@@ -10,9 +10,9 @@ struct StatsView: View {
             Group {
                 if habits.isEmpty {
                     ContentUnavailableView(
-                        "Keine Habits",
+                        "No Habits",
                         systemImage: "chart.bar",
-                        description: Text("Lege Habits an, um Statistiken zu sehen.")
+                        description: Text("Add habits to see statistics.")
                     )
                 } else {
                     List(habits) { habit in
@@ -20,7 +20,7 @@ struct StatsView: View {
                     }
                 }
             }
-            .navigationTitle("Statistik")
+            .navigationTitle("Statistics")
         }
     }
 }
@@ -46,9 +46,9 @@ private struct HabitStatsRow: View {
                 Spacer()
             }
             HStack(spacing: 0) {
-                StatTile(value: "\(currentStreak)", label: "Aktuell", systemImage: "flame.fill", tint: .orange)
-                StatTile(value: "\(longestStreak)", label: "Bester", systemImage: "trophy.fill", tint: .yellow)
-                StatTile(value: "\(Int((completionRate * 100).rounded()))%", label: "30 Tage", systemImage: "chart.bar.fill", tint: .accentColor)
+                StatTile(value: "\(currentStreak)", label: "Current", systemImage: "flame.fill", tint: .orange)
+                StatTile(value: "\(longestStreak)", label: "Best", systemImage: "trophy.fill", tint: .yellow)
+                StatTile(value: "\(Int((completionRate * 100).rounded()))%", label: "30 Days", systemImage: "chart.bar.fill", tint: .accentColor)
             }
         }
         .padding(.vertical, 6)

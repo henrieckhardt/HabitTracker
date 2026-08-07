@@ -48,14 +48,14 @@ struct ToDoEditorView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Titel") {
-                    TextField("z.B. Auto zur Inspektion bringen", text: $title)
+                Section("Title") {
+                    TextField("e.g. Take the car in for inspection", text: $title)
                 }
-                Section("Notizen") {
+                Section("Notes") {
                     TextField("Optional", text: $notes, axis: .vertical)
                 }
-                Section("Fällig am") {
-                    DatePicker("Datum", selection: $scheduledDate, displayedComponents: .date)
+                Section("Due On") {
+                    DatePicker("Date", selection: $scheduledDate, displayedComponents: .date)
                         .datePickerStyle(.graphical)
                 }
 
@@ -66,7 +66,7 @@ struct ToDoEditorView: View {
                         timeEnabled.toggle()
                     } label: {
                         HStack {
-                            Text("Uhrzeit festlegen")
+                            Text("Set Time")
                                 .foregroundStyle(.primary)
                             Spacer()
                             Toggle("", isOn: $timeEnabled)
@@ -84,7 +84,7 @@ struct ToDoEditorView: View {
                             endTimeEnabled.toggle()
                         } label: {
                             HStack {
-                                Text("Endzeit festlegen")
+                                Text("Set End Time")
                                     .foregroundStyle(.primary)
                                 Spacer()
                                 Toggle("", isOn: $endTimeEnabled)
@@ -96,23 +96,23 @@ struct ToDoEditorView: View {
                         .buttonStyle(.plain)
 
                         if endTimeEnabled {
-                            DatePicker("Ende", selection: $endTime, displayedComponents: .hourAndMinute)
+                            DatePicker("End", selection: $endTime, displayedComponents: .hourAndMinute)
                         }
                     }
                 } header: {
-                    Text("Uhrzeit")
+                    Text("Time")
                 } footer: {
-                    Text("Rein informativ, keine Erinnerung oder App-Blockierung.")
+                    Text("Informational only — no reminder or app blocking.")
                 }
             }
-            .navigationTitle(toDoToEdit == nil ? Text("Neues ToDo") : Text("ToDo bearbeiten"))
+            .navigationTitle(toDoToEdit == nil ? Text("New To-Do") : Text("Edit To-Do"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Abbrechen") { dismiss() }
+                    Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Sichern") { save() }
+                    Button("Save") { save() }
                         .disabled(title.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
             }

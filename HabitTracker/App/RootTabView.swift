@@ -10,11 +10,11 @@ struct RootTabView: View {
         TabView {
             DayView()
                 .tabItem {
-                    Label("Heute", systemImage: "calendar")
+                    Label("Today", systemImage: "calendar")
                 }
             WeekView()
                 .tabItem {
-                    Label("Woche", systemImage: "calendar.day.timeline.left")
+                    Label("Week", systemImage: "calendar.day.timeline.left")
                 }
             HabitListView()
                 .tabItem {
@@ -22,11 +22,11 @@ struct RootTabView: View {
                 }
             FocusListView()
                 .tabItem {
-                    Label("Fokus", systemImage: "timer")
+                    Label("Focus", systemImage: "timer")
                 }
             StatsView()
                 .tabItem {
-                    Label("Statistik", systemImage: "chart.bar.fill")
+                    Label("Statistics", systemImage: "chart.bar.fill")
                 }
         }
         .onChange(of: scenePhase) { _, newPhase in

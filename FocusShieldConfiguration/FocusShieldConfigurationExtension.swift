@@ -30,19 +30,19 @@ final class FocusShieldConfigurationExtension: ShieldConfigurationDataSource {
             let endDate = session.isOnDemand ? session.activeUntil : session.endTime
             if let endDate {
                 let endText = Self.timeFormatter.string(from: endDate)
-                subtitleText = String(localized: "\(session.title) · bis \(endText) Uhr")
+                subtitleText = String(localized: "\(session.title) · until \(endText)")
             } else {
                 subtitleText = session.title
             }
         } else {
-            subtitleText = String(localized: "Diese App ist während deines Fokus-Zeitraums blockiert.")
+            subtitleText = String(localized: "This app is blocked during your focus period.")
         }
 
         return ShieldConfiguration(
             backgroundBlurStyle: .systemMaterialDark,
-            title: ShieldConfiguration.Label(text: String(localized: "Fokus aktiv"), color: .white),
+            title: ShieldConfiguration.Label(text: String(localized: "Focus Active"), color: .white),
             subtitle: ShieldConfiguration.Label(text: subtitleText, color: .white.withAlphaComponent(0.8)),
-            primaryButtonLabel: ShieldConfiguration.Label(text: String(localized: "Schließen"), color: .white),
+            primaryButtonLabel: ShieldConfiguration.Label(text: String(localized: "Close"), color: .white),
             primaryButtonBackgroundColor: .systemBlue
         )
     }

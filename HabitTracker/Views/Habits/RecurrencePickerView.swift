@@ -11,9 +11,9 @@ enum RecurrencePreset: String, CaseIterable, Identifiable {
     /// actual user-facing text, resolved through the string catalog.
     var displayName: String {
         switch self {
-        case .daily: return String(localized: "Täglich")
-        case .weekly: return String(localized: "Wöchentlich")
-        case .custom: return String(localized: "Individuell")
+        case .daily: return String(localized: "Daily")
+        case .weekly: return String(localized: "Weekly")
+        case .custom: return String(localized: "Custom")
         }
     }
 }
@@ -26,8 +26,8 @@ enum CustomRecurrenceKind: String, CaseIterable, Identifiable {
 
     var displayName: String {
         switch self {
-        case .weekdays: return String(localized: "Wochentage")
-        case .monthly: return String(localized: "Tag im Monat")
+        case .weekdays: return String(localized: "Weekdays")
+        case .monthly: return String(localized: "Day of Month")
         }
     }
 }
@@ -109,7 +109,7 @@ struct RecurrencePickerView: View {
 
     var body: some View {
         Group {
-            Picker("Turnus", selection: $state.preset) {
+            Picker("Frequency", selection: $state.preset) {
                 ForEach(RecurrencePreset.allCases) { preset in
                     Text(preset.displayName).tag(preset)
                 }
@@ -123,7 +123,7 @@ struct RecurrencePickerView: View {
                 WeekdaySelector(selection: $state.selectedWeekdays, allowsMultiple: false)
                     .onAppear { ensureExactlyOneWeekday() }
             case .custom:
-                Picker("Art", selection: $state.customKind) {
+                Picker("Type", selection: $state.customKind) {
                     ForEach(CustomRecurrenceKind.allCases) { kind in
                         Text(kind.displayName).tag(kind)
                     }

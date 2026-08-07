@@ -83,9 +83,9 @@ struct FocusEditorView: View {
         let hours = minutes / 60
         let mins = minutes % 60
         switch (hours, mins) {
-        case (0, _): return String(localized: "\(mins) Min")
-        case (_, 0): return String(localized: "\(hours) Std")
-        default: return String(localized: "\(hours) Std \(mins) Min")
+        case (0, _): return String(localized: "\(mins) min")
+        case (_, 0): return String(localized: "\(hours) hr")
+        default: return String(localized: "\(hours) hr \(mins) min")
         }
     }
 
@@ -115,24 +115,24 @@ struct FocusEditorView: View {
         NavigationStack {
             Form {
                 Section("Name") {
-                    TextField("z.B. Deep Work", text: $title)
+                    TextField("e.g. Deep Work", text: $title)
                 }
 
                 Section {
-                    Picker("Art", selection: $isOnDemand) {
-                        Text("Fester Zeitplan").tag(false)
-                        Text("Manuell starten").tag(true)
+                    Picker("Type", selection: $isOnDemand) {
+                        Text("Fixed Schedule").tag(false)
+                        Text("Start Manually").tag(true)
                     }
                     .pickerStyle(.segmented)
                 } footer: {
                     Text(isOnDemand
-                        ? "Läuft für eine feste Dauer, sobald du ihn manuell startest."
-                        : "Läuft automatisch in einem wiederkehrenden Zeitfenster.")
+                        ? "Runs for a fixed duration once you start it manually."
+                        : "Runs automatically in a recurring time window.")
                 }
 
                 if isOnDemand {
-                    Section("Dauer") {
-                        Picker("Dauer", selection: $durationMinutes) {
+                    Section("Duration") {
+                        Picker("Duration", selection: $durationMinutes) {
                             ForEach(Self.durationOptions, id: \.self) { minutes in
                                 Text(formattedMinutes(minutes)).tag(minutes)
                             }
@@ -140,27 +140,27 @@ struct FocusEditorView: View {
                         .pickerStyle(.wheel)
                     }
                 } else {
-                    Section("Zeitraum") {
+                    Section("Time Range") {
                         DatePicker("Start", selection: $startTime, displayedComponents: .hourAndMinute)
-                        DatePicker("Ende", selection: $endTime, displayedComponents: .hourAndMinute)
+                        DatePicker("End", selection: $endTime, displayedComponents: .hourAndMinute)
                         if !isTimeRangeValid {
-                            Text("Das Zeitfenster muss mindestens \(FocusBlockingScheduler.minimumWindowMinutes) Minuten lang sein.")
+                            Text("The time window must be at least \(FocusBlockingScheduler.minimumWindowMinutes) minutes long.")
                                 .font(.caption)
                                 .foregroundStyle(.red)
                         } else if isOvernight {
-                            Text("Läuft über Mitternacht bis zum nächsten Tag.")
+                            Text("Runs past midnight into the next day.")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
                     }
 
-                    Section("Wiederholung") {
+                    Section("Repeat") {
                         RecurrencePickerView(state: $recurrenceState)
                     }
                 }
 
                 Section {
-                    Toggle("Apps blockieren", isOn: $blockingEnabled)
+                    Toggle("Block Apps", isOn: $blockingEnabled)
                         .onChange(of: blockingEnabled) { _, enabled in
                             guard enabled else { return }
                             if FamilyControlsService.isAuthorized {
@@ -174,7 +174,7 @@ struct FocusEditorView: View {
                             showingActivityPicker = true
                         } label: {
                             HStack {
-                                Text("Ausgewählte Apps")
+                                Text("Selected Apps")
                                 Spacer()
                                 Text(selectionSummary)
                                     .foregroundStyle(.secondary)
@@ -182,13 +182,13 @@ struct FocusEditorView: View {
                         }
                     }
                 } header: {
-                    Text("App-Blockierung")
+                    Text("App Blocking")
                 } footer: {
-                    Text("Die ausgewählten Apps werden während des Fokus-Zeitraums blockiert und zeigen einen Sperrbildschirm.")
+                    Text("The selected apps are blocked during the focus period and show a lock screen.")
                 }
 
                 if isOnDemand, let session = sessionToEdit {
-                    Section("Steuerung") {
+                    Section("Controls") {
                         controlContent(for: session)
                             .padding(.vertical, 6)
                             .listRowInsets(EdgeInsets())
@@ -197,14 +197,14 @@ struct FocusEditorView: View {
                     .onReceive(controlTimer) { date in now = date }
                 }
             }
-            .navigationTitle(sessionToEdit == nil ? Text("Neuer Fokus") : Text("Fokus bearbeiten"))
+            .navigationTitle(sessionToEdit == nil ? Text("New Focus") : Text("Edit Focus"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Abbrechen") { dismiss() }
+                    Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Sichern") { save() }
+                    Button("Save") { save() }
                         .disabled(
                             title.trimmingCharacters(in: .whitespaces).isEmpty
                                 || (!isOnDemand && (!recurrenceState.isValid || !isTimeRangeValid))
@@ -212,10 +212,10 @@ struct FocusEditorView: View {
                 }
             }
             .familyActivityPicker(isPresented: $showingActivityPicker, selection: $appSelection)
-            .alert("Zugriff nicht erlaubt", isPresented: $authorizationDeniedAlert) {
+            .alert("Access Not Granted", isPresented: $authorizationDeniedAlert) {
                 Button("OK", role: .cancel) {}
             } message: {
-                Text("Ohne Bildschirmzeit-Zugriff können keine Apps blockiert werden. Du kannst das in den Einstellungen unter Bildschirmzeit erlauben.")
+                Text("Without Screen Time access, apps can't be blocked. You can allow this in Settings under Screen Time.")
             }
         }
     }
@@ -224,17 +224,17 @@ struct FocusEditorView: View {
     private func controlContent(for session: FocusSession) -> some View {
         VStack(spacing: 14) {
             if isRunning, let activeUntil = session.activeUntil {
-                statCard(icon: "timer", title: "Läuft noch", value: "\(remainingMinutes(until: activeUntil)) Min", tint: .accentColor)
+                statCard(icon: "timer", title: "Time Remaining", value: "\(remainingMinutes(until: activeUntil)) min", tint: .accentColor)
                 actionButton("Stop", icon: "stop.fill", tint: .red, role: .destructive) {
                     stopOrCancel(session)
                 }
             } else if isPending, let pendingStart = session.pendingStart {
-                statCard(icon: "clock", title: "Startet um \(timeText(pendingStart)) Uhr", value: "in \(remainingMinutes(until: pendingStart)) Min", tint: .orange)
-                actionButton("Geplanten Start abbrechen", icon: "xmark", tint: .red, role: .destructive) {
+                statCard(icon: "clock", title: "Starts at \(timeText(pendingStart))", value: "in \(remainingMinutes(until: pendingStart)) min", tint: .orange)
+                actionButton("Cancel Scheduled Start", icon: "xmark", tint: .red, role: .destructive) {
                     stopOrCancel(session)
                 }
             } else {
-                actionButton("Jetzt starten", icon: "play.fill", tint: .green) {
+                actionButton("Start Now", icon: "play.fill", tint: .green) {
                     startSessionNow(session)
                 }
 
@@ -253,7 +253,7 @@ struct FocusEditorView: View {
                         .pickerStyle(.menu)
                         .tint(.orange)
                     }
-                    actionButton("Später starten planen", icon: "clock.badge", tint: .orange) {
+                    actionButton("Schedule Later Start", icon: "clock.badge", tint: .orange) {
                         scheduleFutureStart(session, delayMinutes: startDelayMinutes)
                     }
                 }
@@ -301,7 +301,7 @@ struct FocusEditorView: View {
 
     private var selectionSummary: String {
         let count = appSelection.applicationTokens.count + appSelection.categoryTokens.count
-        return count == 0 ? String(localized: "Keine ausgewählt") : String(localized: "\(count) ausgewählt")
+        return count == 0 ? String(localized: "None selected") : String(localized: "\(count) selected")
     }
 
     private func requestAuthorizationThenShowPicker() {

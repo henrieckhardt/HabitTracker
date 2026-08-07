@@ -65,13 +65,13 @@ struct WeekView: View {
                             quickAddDate = date
                             showingQuickAdd = true
                         } label: {
-                            Label("Hinzufügen", systemImage: "note.text.badge.plus")
+                            Label("Add", systemImage: "note.text.badge.plus")
                         }
                         .tint(.blue)
                     }
                 }
             }
-            .navigationTitle("Woche")
+            .navigationTitle("Week")
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     HStack(spacing: 16) {
@@ -138,7 +138,7 @@ private struct WeekDayRow: View {
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(isToday ? Color.accentColor : .primary)
                 if isToday {
-                    Text("Heute")
+                    Text("Today")
                         .font(.caption2.weight(.semibold))
                         .padding(.horizontal, 6)
                         .padding(.vertical, 2)
@@ -149,7 +149,7 @@ private struct WeekDayRow: View {
             }
 
             if habits.isEmpty && toDos.isEmpty {
-                Text("Nichts geplant")
+                Text("Nothing planned")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             } else {

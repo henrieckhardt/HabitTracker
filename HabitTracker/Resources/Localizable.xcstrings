@@ -1,419 +1,469 @@
 {
-  "sourceLanguage": "de",
+  "sourceLanguage": "en",
   "strings": {
-    "%@ · bis %@ Uhr": {
+    "%@ · until %@": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ · until %@"
+            "value": "%@ · bis %@ Uhr"
           }
         }
       }
     },
-    "%lld Min": {
+    "%lld hr": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld min"
+            "value": "%lld Std"
           }
         }
       }
     },
-    "%lld Min · Manuell": {
+    "%lld hr %lld min": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld min · Manual"
+            "value": "%lld Std %lld Min"
           }
         }
       }
     },
-    "%lld Std": {
+    "%lld min": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld hr"
+            "value": "%lld Min"
           }
         }
       }
     },
-    "%lld Std %lld Min": {
+    "%lld min remaining": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld hr %lld min"
+            "value": "Läuft noch %lld Min"
           }
         }
       }
     },
-    "%lld ausgewählt": {
+    "%lld min · Manual": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld selected"
+            "value": "%lld Min · Manuell"
           }
         }
       }
     },
-    "+%lld weitere": {
+    "%lld selected": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "+%lld more"
+            "value": "%lld ausgewählt"
           }
         }
       }
     },
-    "30 Tage": {
+    "+%lld more": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "30 Days"
+            "value": "+%lld weitere"
           }
         }
       }
     },
-    "Abbrechen": {
+    "30 Days": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cancel"
+            "value": "30 Tage"
           }
         }
       }
     },
-    "Aktuell": {
+    "Access Not Granted": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Current"
+            "value": "Zugriff nicht erlaubt"
           }
         }
       }
     },
-    "App-Blockierung": {
+    "Add": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "App Blocking"
+            "value": "Hinzufügen"
           }
         }
       }
     },
-    "Apps blockieren": {
+    "Add habits to see statistics.": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Block Apps"
+            "value": "Lege Habits an, um Statistiken zu sehen."
           }
         }
       }
     },
-    "Archivieren": {
+    "App Blocking": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Archive"
+            "value": "App-Blockierung"
           }
         }
       }
     },
-    "Art": {
+    "Archive": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Type"
+            "value": "Archivieren"
           }
         }
       }
     },
-    "Ausgewählte Apps": {
+    "Best": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Selected Apps"
+            "value": "Bester"
           }
         }
       }
     },
-    "Bester": {
+    "Block Apps": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Best"
+            "value": "Apps blockieren"
           }
         }
       }
     },
-    "Bis %@ Uhr": {
+    "Cancel": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Until %@"
+            "value": "Abbrechen"
           }
         }
       }
     },
-    "Das Zeitfenster muss mindestens %lld Minuten lang sein.": {
+    "Cancel Scheduled Start": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "The time window must be at least %lld minutes long."
+            "value": "Geplanten Start abbrechen"
           }
         }
       }
     },
-    "Datum": {
+    "Choose Date": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Date"
+            "value": "Datum wählen"
           }
         }
       }
     },
-    "Datum wählen": {
+    "Close": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose Date"
+            "value": "Schließen"
           }
         }
       }
     },
-    "Dauer": {
+    "Complete": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Duration"
+            "value": "Erledigt"
           }
         }
       }
     },
-    "Die ausgewählten Apps werden während des Fokus-Zeitraums blockiert und zeigen einen Sperrbildschirm.": {
+    "Controls": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "The selected apps are blocked during the focus period and show a lock screen."
+            "value": "Steuerung"
           }
         }
       }
     },
-    "Die ausgewählten Apps werden während des Zeitfensters blockiert und zeigen einen Sperrbildschirm.": {
+    "Create your first focus session.": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "The selected apps are blocked during the time window and show a lock screen."
+            "value": "Lege deinen ersten Fokus-Zeitraum an."
           }
         }
       }
     },
-    "Diese App ist während deines Fokus-Zeitraums blockiert.": {
+    "Create your first habit.": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "This app is blocked during your focus period."
+            "value": "Lege deinen ersten Habit an."
           }
         }
       }
     },
-    "Ein ToDo pro Zeile, z.B.\nEinkaufen\nWäsche waschen\nAuto waschen": {
+    "Current": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "One to-do per line, e.g.\nGroceries\nDo laundry\nWash the car"
+            "value": "Aktuell"
           }
         }
       }
     },
-    "Ende": {
+    "Currently active: %@": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "End"
+            "value": "Gerade aktiv: %@"
           }
         }
       }
     },
-    "Endzeit festlegen": {
+    "Custom": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Set End Time"
+            "value": "Individuell"
           }
         }
       }
     },
-    "Erinnerung": {
+    "Daily": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reminder"
+            "value": "Täglich"
           }
         }
       }
     },
-    "Erinnerung aktivieren": {
+    "Date": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enable Reminder"
+            "value": "Datum"
           }
         }
       }
     },
-    "Erledigt": {
+    "Day of Month": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Done"
+            "value": "Tag im Monat"
           }
         }
       }
     },
-    "Fertig": {
+    "Delete": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Done"
+            "value": "Löschen"
           }
         }
       }
     },
-    "Fester Zeitplan": {
+    "Done": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Fixed Schedule"
+            "value": "Fertig"
           }
         }
       }
     },
-    "Fokus": {
+    "Due On": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Focus"
+            "value": "Fällig am"
           }
         }
       }
     },
-    "Fokus aktiv": {
+    "Due today": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Focus Active"
+            "value": "Fällig heute"
           }
         }
       }
     },
-    "Fokus bearbeiten": {
+    "Duration": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Edit Focus"
+            "value": "Dauer"
           }
         }
       }
     },
-    "Fällig am": {
+    "Edit Focus": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Due On"
+            "value": "Fokus bearbeiten"
           }
         }
       }
     },
-    "Fällig heute": {
+    "Edit Habit": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Due today"
+            "value": "Habit bearbeiten"
           }
         }
       }
     },
-    "Für diesen Tag stehen keine Habits oder ToDos an.": {
+    "Edit To-Do": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "There are no habits or to-dos scheduled for this day."
+            "value": "ToDo bearbeiten"
           }
         }
       }
     },
-    "Geplanten Start abbrechen": {
+    "Enable Reminder": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cancel Scheduled Start"
+            "value": "Erinnerung aktivieren"
           }
         }
       }
     },
-    "Gerade aktiv: %@": {
+    "Enable Time Window": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Currently active: %@"
+            "value": "Zeitfenster aktivieren"
           }
         }
       }
     },
-    "Habit bearbeiten": {
+    "End": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Edit Habit"
+            "value": "Ende"
+          }
+        }
+      }
+    },
+    "Every %@ of the month": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jeden %@ im Monat"
+          }
+        }
+      }
+    },
+    "Fixed Schedule": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fester Zeitplan"
+          }
+        }
+      }
+    },
+    "Focus": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fokus"
+          }
+        }
+      }
+    },
+    "Focus Active": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fokus aktiv"
+          }
+        }
+      }
+    },
+    "Frequency": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnus"
           }
         }
       }
     },
     "Habits": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Habits"
@@ -421,319 +471,269 @@
         }
       }
     },
-    "Heute": {
+    "Informational only — no reminder or app blocking.": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Today"
+            "value": "Rein informativ, keine Erinnerung oder App-Blockierung."
           }
         }
       }
     },
-    "Hinzufügen": {
+    "Move": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Add"
+            "value": "Verschieben"
           }
         }
       }
     },
-    "Individuell": {
+    "New Focus": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Custom"
+            "value": "Neuer Fokus"
           }
         }
       }
     },
-    "Jeden %@ im Monat": {
+    "New Habit": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Every %@ of the month"
+            "value": "Neuer Habit"
           }
         }
       }
     },
-    "Jetzt starten": {
+    "New To-Do": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start Now"
+            "value": "Neues ToDo"
           }
         }
       }
     },
-    "Keine Fokus-Zeiträume": {
+    "No Focus Sessions": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "No Focus Sessions"
+            "value": "Keine Fokus-Zeiträume"
           }
         }
       }
     },
-    "Keine Habits": {
+    "No Habits": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "No Habits"
+            "value": "Keine Habits"
           }
         }
       }
     },
-    "Keine ToDos für diesen Tag.": {
+    "No to-dos for this day.": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "No to-dos for this day."
+            "value": "Keine ToDos für diesen Tag."
           }
         }
       }
     },
-    "Keine ausgewählt": {
+    "None selected": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "None selected"
+            "value": "Keine ausgewählt"
           }
         }
       }
     },
-    "Lege Habits an, um Statistiken zu sehen.": {
+    "Notes": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Add habits to see statistics."
+            "value": "Notizen"
           }
         }
       }
     },
-    "Lege deinen ersten Fokus-Zeitraum an.": {
+    "Nothing planned": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create your first focus session."
+            "value": "Nichts geplant"
           }
         }
       }
     },
-    "Lege deinen ersten Habit an.": {
+    "One to-do per line, e.g.\nGroceries\nDo laundry\nWash the car": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create your first habit."
+            "value": "Ein ToDo pro Zeile, z.B.\nEinkaufen\nWäsche waschen\nAuto waschen"
           }
         }
       }
     },
-    "Läuft automatisch in einem wiederkehrenden Zeitfenster.": {
+    "Optional: the time this habit takes place. Shown in the Day/Week view, and can additionally block apps during the time window.": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Runs automatically in a recurring time window."
+            "value": "Optional: Uhrzeit, zu der dieser Habit ausgeführt wird. Wird in Tages-/Wochenansicht angezeigt und kann zusätzlich Apps während des Zeitfensters blockieren."
           }
         }
       }
     },
-    "Läuft für eine feste Dauer, sobald du ihn manuell startest.": {
+    "Reminder": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Runs for a fixed duration once you start it manually."
+            "value": "Erinnerung"
           }
         }
       }
     },
-    "Läuft noch": {
+    "Repeat": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Time Remaining"
+            "value": "Wiederholung"
           }
         }
       }
     },
-    "Läuft noch %lld Min": {
+    "Runs automatically in a recurring time window.": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld min remaining"
+            "value": "Läuft automatisch in einem wiederkehrenden Zeitfenster."
           }
         }
       }
     },
-    "Läuft über Mitternacht bis zum nächsten Tag.": {
+    "Runs for a fixed duration once you start it manually.": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Runs past midnight into the next day."
+            "value": "Läuft für eine feste Dauer, sobald du ihn manuell startest."
           }
         }
       }
     },
-    "Löschen": {
+    "Runs past midnight into the next day.": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Delete"
+            "value": "Läuft über Mitternacht bis zum nächsten Tag."
           }
         }
       }
     },
-    "Manuell starten": {
+    "Save": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start Manually"
+            "value": "Sichern"
           }
         }
       }
     },
-    "Morgen": {
+    "Schedule Later Start": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tomorrow"
+            "value": "Später starten planen"
           }
         }
       }
     },
-    "Neuer Fokus": {
+    "Selected Apps": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "New Focus"
+            "value": "Ausgewählte Apps"
           }
         }
       }
     },
-    "Neuer Habit": {
+    "Set End Time": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "New Habit"
+            "value": "Endzeit festlegen"
           }
         }
       }
     },
-    "Neues ToDo": {
+    "Set Time": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "New To-Do"
+            "value": "Uhrzeit festlegen"
           }
         }
       }
     },
-    "Nichts geplant": {
+    "Shows your habits and to-dos for today.": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nothing planned"
+            "value": "Zeigt deine heutigen Habits und ToDos."
           }
         }
       }
     },
-    "Notizen": {
+    "Start Manually": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Notes"
+            "value": "Manuell starten"
           }
         }
       }
     },
-    "Ohne Bildschirmzeit-Zugriff können keine Apps blockiert werden. Du kannst das in den Einstellungen unter Bildschirmzeit erlauben.": {
+    "Start Now": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Without Screen Time access, apps can't be blocked. You can allow this in Settings under Screen Time."
-          }
-        }
-      }
-    },
-    "Optional: Uhrzeit, zu der dieser Habit ausgeführt wird. Wird in Tages-/Wochenansicht angezeigt und kann zusätzlich Apps während des Zeitfensters blockieren.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Optional: the time this habit takes place. Shown in the Day/Week view, and can additionally block apps during the time window."
-          }
-        }
-      }
-    },
-    "Rein informativ, keine Erinnerung oder App-Blockierung.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Informational only — no reminder or app blocking."
-          }
-        }
-      }
-    },
-    "Schließen": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Close"
-          }
-        }
-      }
-    },
-    "Sichern": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Save"
-          }
-        }
-      }
-    },
-    "Später starten planen": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Schedule Later Start"
+            "value": "Jetzt starten"
           }
         }
       }
     },
     "Start in": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Start in"
@@ -741,272 +741,272 @@
         }
       }
     },
-    "Startet in %lld Min (%@ Uhr)": {
+    "Starts at %@": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Starts in %lld min (%@)"
+            "value": "Startet um %@ Uhr"
           }
         }
       }
     },
-    "Startet um %@ Uhr": {
+    "Starts in %lld min (%@)": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Starts at %@"
+            "value": "Startet in %lld Min (%@ Uhr)"
           }
         }
       }
     },
-    "Statistik": {
+    "Statistics": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Statistics"
+            "value": "Statistik"
           }
         }
       }
     },
-    "Steuerung": {
+    "The selected apps are blocked during the focus period and show a lock screen.": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Controls"
+            "value": "Die ausgewählten Apps werden während des Fokus-Zeitraums blockiert und zeigen einen Sperrbildschirm."
           }
         }
       }
     },
-    "Tag im Monat": {
+    "The selected apps are blocked during the time window and show a lock screen.": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Day of Month"
+            "value": "Die ausgewählten Apps werden während des Zeitfensters blockiert und zeigen einen Sperrbildschirm."
           }
         }
       }
     },
-    "Titel": {
+    "The time window must be at least %lld minutes long.": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Title"
+            "value": "Das Zeitfenster muss mindestens %lld Minuten lang sein."
           }
         }
       }
     },
-    "ToDo bearbeiten": {
+    "There are no habits or to-dos scheduled for this day.": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Edit To-Do"
+            "value": "Für diesen Tag stehen keine Habits oder ToDos an."
           }
         }
       }
     },
-    "ToDos": {
+    "This app is blocked during your focus period.": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "To-Dos"
+            "value": "Diese App ist während deines Fokus-Zeitraums blockiert."
           }
         }
       }
     },
-    "Turnus": {
+    "Time": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Frequency"
+            "value": "Uhrzeit"
           }
         }
       }
     },
-    "Täglich": {
+    "Time Range": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Daily"
+            "value": "Zeitraum"
           }
         }
       }
     },
-    "Uhrzeit": {
+    "Time Remaining": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Time"
+            "value": "Läuft noch"
           }
         }
       }
     },
-    "Uhrzeit festlegen": {
+    "Time Window": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Set Time"
+            "value": "Zeitfenster"
           }
         }
       }
     },
-    "Verschieben": {
+    "Time for your habit": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Move"
+            "value": "Zeit für deinen Habit"
           }
         }
       }
     },
-    "Wiederholung": {
+    "Title": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Repeat"
+            "value": "Titel"
           }
         }
       }
     },
-    "Woche": {
+    "To-Dos": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Week"
+            "value": "ToDos"
           }
         }
       }
     },
-    "Wochentage": {
+    "Today": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Weekdays"
+            "value": "Heute"
           }
         }
       }
     },
-    "Wöchentlich": {
+    "Tomorrow": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Weekly"
+            "value": "Morgen"
           }
         }
       }
     },
-    "Zeigt deine heutigen Habits und ToDos.": {
+    "Type": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Shows your habits and to-dos for today."
+            "value": "Art"
           }
         }
       }
     },
-    "Zeit für deinen Habit": {
+    "Until %@": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Time for your habit"
+            "value": "Bis %@ Uhr"
           }
         }
       }
     },
-    "Zeitfenster": {
+    "Week": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Time Window"
+            "value": "Woche"
           }
         }
       }
     },
-    "Zeitfenster aktivieren": {
+    "Weekdays": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enable Time Window"
+            "value": "Wochentage"
           }
         }
       }
     },
-    "Zeitraum": {
+    "Weekly": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Time Range"
+            "value": "Wöchentlich"
           }
         }
       }
     },
-    "Zugriff nicht erlaubt": {
+    "Without Screen Time access, apps can't be blocked. You can allow this in Settings under Screen Time.": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Access Not Granted"
+            "value": "Ohne Bildschirmzeit-Zugriff können keine Apps blockiert werden. Du kannst das in den Einstellungen unter Bildschirmzeit erlauben."
           }
         }
       }
     },
-    "in %lld Min": {
+    "e.g. Clean the bathroom": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "in %lld min"
+            "value": "z.B. Bad putzen"
           }
         }
       }
     },
-    "z.B. Auto zur Inspektion bringen": {
+    "e.g. Deep Work": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "e.g. Take the car in for inspection"
+            "value": "z.B. Deep Work"
           }
         }
       }
     },
-    "z.B. Bad putzen": {
+    "e.g. Take the car in for inspection": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "e.g. Clean the bathroom"
+            "value": "z.B. Auto zur Inspektion bringen"
           }
         }
       }
     },
-    "z.B. Deep Work": {
+    "in %lld min": {
       "localizations": {
-        "en": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "e.g. Deep Work"
+            "value": "in %lld Min"
           }
         }
       }

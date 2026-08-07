@@ -38,7 +38,7 @@ struct QuickAddToDosView: View {
                     .padding(12)
 
                 if text.isEmpty {
-                    Text("Ein ToDo pro Zeile, z.B.\nEinkaufen\nWäsche waschen\nAuto waschen")
+                    Text("One to-do per line, e.g.\nGroceries\nDo laundry\nWash the car")
                         .foregroundStyle(.secondary)
                         .padding(.horizontal, 16)
                         .padding(.vertical, 20)
@@ -49,10 +49,10 @@ struct QuickAddToDosView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Abbrechen") { dismiss() }
+                    Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Hinzufügen") { addAll() }
+                    Button("Add") { addAll() }
                         .disabled(lines.isEmpty)
                 }
             }

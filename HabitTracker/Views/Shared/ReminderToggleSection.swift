@@ -14,12 +14,12 @@ struct ReminderToggleSection: View {
     @Binding var time: Date
 
     var body: some View {
-        Section("Erinnerung") {
+        Section("Reminder") {
             Button {
                 isEnabled.toggle()
             } label: {
                 HStack {
-                    Text("Erinnerung aktivieren")
+                    Text("Enable Reminder")
                         .foregroundStyle(.primary)
                     Spacer()
                     Toggle("", isOn: $isEnabled)
@@ -36,7 +36,7 @@ struct ReminderToggleSection: View {
             }
 
             if isEnabled {
-                DatePicker("Uhrzeit", selection: $time, displayedComponents: .hourAndMinute)
+                DatePicker("Time", selection: $time, displayedComponents: .hourAndMinute)
             }
         }
     }

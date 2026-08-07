@@ -14,14 +14,14 @@ extension RecurrenceRule {
     var summaryText: String {
         switch self {
         case .daily:
-            return String(localized: "Täglich")
+            return String(localized: "Daily")
         case .weekdays(let days):
             let ordered = Weekday.orderedForDisplay.filter { days.contains($0) }
             return ordered.map(\.shortLabel).joined(separator: ", ")
         case .monthly(let days):
             let ordered = days.sorted()
             let dayList = ordered.map { "\($0)." }.joined(separator: ", ")
-            return String(localized: "Jeden \(dayList) im Monat")
+            return String(localized: "Every \(dayList) of the month")
         }
     }
 }

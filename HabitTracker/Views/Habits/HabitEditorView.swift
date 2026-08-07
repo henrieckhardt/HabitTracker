@@ -86,7 +86,7 @@ struct HabitEditorView: View {
 
     private var selectionSummary: String {
         let count = appSelection.applicationTokens.count + appSelection.categoryTokens.count
-        return count == 0 ? String(localized: "Keine ausgewählt") : String(localized: "\(count) ausgewählt")
+        return count == 0 ? String(localized: "None selected") : String(localized: "\(count) selected")
     }
 
     private func requestAuthorizationThenShowPicker() {
@@ -107,7 +107,7 @@ struct HabitEditorView: View {
         NavigationStack {
             Form {
                 Section("Name") {
-                    TextField("z.B. Bad putzen", text: $title)
+                    TextField("e.g. Clean the bathroom", text: $title)
                 }
 
                 Section("Icon") {
@@ -124,7 +124,7 @@ struct HabitEditorView: View {
                     .padding(.vertical, 4)
                 }
 
-                Section("Wiederholung") {
+                Section("Repeat") {
                     RecurrencePickerView(state: $recurrenceState)
                 }
 
@@ -135,7 +135,7 @@ struct HabitEditorView: View {
                         windowEnabled.toggle()
                     } label: {
                         HStack {
-                            Text("Zeitfenster aktivieren")
+                            Text("Enable Time Window")
                                 .foregroundStyle(.primary)
                             Spacer()
                             Toggle("", isOn: $windowEnabled)
@@ -148,26 +148,26 @@ struct HabitEditorView: View {
 
                     if windowEnabled {
                         DatePicker("Start", selection: $startTime, displayedComponents: .hourAndMinute)
-                        DatePicker("Ende", selection: $endTime, displayedComponents: .hourAndMinute)
+                        DatePicker("End", selection: $endTime, displayedComponents: .hourAndMinute)
                         if !isTimeRangeValid {
-                            Text("Das Zeitfenster muss mindestens \(FocusBlockingScheduler.minimumWindowMinutes) Minuten lang sein.")
+                            Text("The time window must be at least \(FocusBlockingScheduler.minimumWindowMinutes) minutes long.")
                                 .font(.caption)
                                 .foregroundStyle(.red)
                         } else if isOvernight {
-                            Text("Läuft über Mitternacht bis zum nächsten Tag.")
+                            Text("Runs past midnight into the next day.")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
                     }
                 } header: {
-                    Text("Zeitfenster")
+                    Text("Time Window")
                 } footer: {
-                    Text("Optional: Uhrzeit, zu der dieser Habit ausgeführt wird. Wird in Tages-/Wochenansicht angezeigt und kann zusätzlich Apps während des Zeitfensters blockieren.")
+                    Text("Optional: the time this habit takes place. Shown in the Day/Week view, and can additionally block apps during the time window.")
                 }
 
                 if windowEnabled {
                     Section {
-                        Toggle("Apps blockieren", isOn: $blockingEnabled)
+                        Toggle("Block Apps", isOn: $blockingEnabled)
                             .onChange(of: blockingEnabled) { _, enabled in
                                 guard enabled else { return }
                                 if FamilyControlsService.isAuthorized {
@@ -181,7 +181,7 @@ struct HabitEditorView: View {
                                 showingActivityPicker = true
                             } label: {
                                 HStack {
-                                    Text("Ausgewählte Apps")
+                                    Text("Selected Apps")
                                     Spacer()
                                     Text(selectionSummary)
                                         .foregroundStyle(.secondary)
@@ -189,20 +189,20 @@ struct HabitEditorView: View {
                             }
                         }
                     } header: {
-                        Text("App-Blockierung")
+                        Text("App Blocking")
                     } footer: {
-                        Text("Die ausgewählten Apps werden während des Zeitfensters blockiert und zeigen einen Sperrbildschirm.")
+                        Text("The selected apps are blocked during the time window and show a lock screen.")
                     }
                 }
             }
-            .navigationTitle(habitToEdit == nil ? Text("Neuer Habit") : Text("Habit bearbeiten"))
+            .navigationTitle(habitToEdit == nil ? Text("New Habit") : Text("Edit Habit"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Abbrechen") { dismiss() }
+                    Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Sichern") { save() }
+                    Button("Save") { save() }
                         .disabled(
                             title.trimmingCharacters(in: .whitespaces).isEmpty
                                 || !recurrenceState.isValid
@@ -211,10 +211,10 @@ struct HabitEditorView: View {
                 }
             }
             .familyActivityPicker(isPresented: $showingActivityPicker, selection: $appSelection)
-            .alert("Zugriff nicht erlaubt", isPresented: $authorizationDeniedAlert) {
+            .alert("Access Not Granted", isPresented: $authorizationDeniedAlert) {
                 Button("OK", role: .cancel) {}
             } message: {
-                Text("Ohne Bildschirmzeit-Zugriff können keine Apps blockiert werden. Du kannst das in den Einstellungen unter Bildschirmzeit erlauben.")
+                Text("Without Screen Time access, apps can't be blocked. You can allow this in Settings under Screen Time.")
             }
         }
     }

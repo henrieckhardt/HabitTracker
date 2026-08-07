@@ -30,9 +30,9 @@ struct FocusListView: View {
             Group {
                 if sessions.isEmpty {
                     ContentUnavailableView(
-                        "Keine Fokus-Zeiträume",
+                        "No Focus Sessions",
                         systemImage: "timer",
-                        description: Text("Lege deinen ersten Fokus-Zeitraum an.")
+                        description: Text("Create your first focus session.")
                     )
                 } else {
                     // The active-session banner is deliberately kept out of
@@ -52,14 +52,14 @@ struct FocusListView: View {
                             }
                             .buttonStyle(.plain)
                             .swipeActions {
-                                Button("Archivieren", systemImage: "archivebox") {
+                                Button("Archive", systemImage: "archivebox") {
                                     session.isArchived = true
                                     try? modelContext.save()
                                     FocusBlockingScheduler.stop(session)
                                 }
                                 .tint(.orange)
 
-                                Button("Löschen", systemImage: "trash", role: .destructive) {
+                                Button("Delete", systemImage: "trash", role: .destructive) {
                                     FocusBlockingScheduler.stop(session)
                                     modelContext.delete(session)
                                     try? modelContext.save()
@@ -76,7 +76,7 @@ struct FocusListView: View {
                                         }
                                         .tint(.red)
                                     } else if isPending {
-                                        Button("Abbrechen", systemImage: "xmark") {
+                                        Button("Cancel", systemImage: "xmark") {
                                             FocusBlockingScheduler.stopNow(session)
                                             session.activeUntil = nil
                                             session.pendingStart = nil
@@ -105,7 +105,7 @@ struct FocusListView: View {
                     }
                 }
             }
-            .navigationTitle("Fokus")
+            .navigationTitle("Focus")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
@@ -142,7 +142,7 @@ private struct ActiveFocusBanner: View {
     private var endText: String {
         let endDate = session.isOnDemand ? session.activeUntil : session.endTime
         guard let endDate else { return "" }
-        return String(localized: "Bis \(timeText(endDate)) Uhr")
+        return String(localized: "Until \(timeText(endDate))")
     }
 
     var body: some View {
@@ -151,7 +151,7 @@ private struct ActiveFocusBanner: View {
                 .font(.title3)
                 .foregroundStyle(Color.accentColor)
             VStack(alignment: .leading, spacing: 2) {
-                Text("Gerade aktiv: \(session.title)")
+                Text("Currently active: \(session.title)")
                     .font(.subheadline.weight(.semibold))
                 Text(endText)
                     .font(.caption)
@@ -174,13 +174,13 @@ private struct FocusRow: View {
         }
         if isActive, let activeUntil = session.activeUntil {
             let remainingMinutes = max(0, Int(activeUntil.timeIntervalSince(now) / 60))
-            return String(localized: "Läuft noch \(remainingMinutes) Min")
+            return String(localized: "\(remainingMinutes) min remaining")
         }
         if isPending, let pendingStart = session.pendingStart {
             let remainingMinutes = max(0, Int(pendingStart.timeIntervalSince(now) / 60))
-            return String(localized: "Startet in \(remainingMinutes) Min (\(timeText(pendingStart)) Uhr)")
+            return String(localized: "Starts in \(remainingMinutes) min (\(timeText(pendingStart)))")
         }
-        return String(localized: "\(session.durationMinutes) Min · Manuell")
+        return String(localized: "\(session.durationMinutes) min · Manual")
     }
 
     var body: some View {

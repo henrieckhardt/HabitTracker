@@ -57,9 +57,9 @@ struct DayContentView: View {
                 }
             }
 
-            Section("ToDos") {
+            Section("To-Dos") {
                 if toDosForDay.isEmpty {
-                    Text("Keine ToDos für diesen Tag.")
+                    Text("No to-dos for this day.")
                         .foregroundStyle(.secondary)
                 }
                 ForEach(toDosForDay) { toDo in
@@ -68,20 +68,20 @@ struct DayContentView: View {
                             Button(role: .destructive) {
                                 deleteToDo(toDo)
                             } label: {
-                                Label("Löschen", systemImage: "trash")
+                                Label("Delete", systemImage: "trash")
                             }
 
                             Button {
                                 moveToTomorrow(toDo)
                             } label: {
-                                Label("Morgen", systemImage: "arrow.right")
+                                Label("Tomorrow", systemImage: "arrow.right")
                             }
                             .tint(.orange)
 
                             Button {
                                 toDoToMove = toDo
                             } label: {
-                                Label("Verschieben", systemImage: "calendar")
+                                Label("Move", systemImage: "calendar")
                             }
                             .tint(.blue)
                         }
@@ -90,14 +90,14 @@ struct DayContentView: View {
 
             if habitsForDay.isEmpty && toDosForDay.isEmpty {
                 ContentUnavailableView(
-                    "Nichts geplant",
+                    "Nothing planned",
                     systemImage: "checkmark.circle",
-                    description: Text("Für diesen Tag stehen keine Habits oder ToDos an.")
+                    description: Text("There are no habits or to-dos scheduled for this day.")
                 )
                 .listRowSeparator(.hidden)
             }
         }
-        .navigationTitle("Heute")
+        .navigationTitle("Today")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
@@ -177,7 +177,7 @@ private struct DateHeader: View {
             } label: {
                 Group {
                     if isToday {
-                        Text("Heute")
+                        Text("Today")
                     } else {
                         Text(formatted)
                     }
@@ -215,23 +215,23 @@ private struct DatePickerSheet: View {
     var body: some View {
         NavigationStack {
             DatePicker(
-                "Datum",
+                "Date",
                 selection: normalizedSelection,
                 displayedComponents: .date
             )
             .datePickerStyle(.graphical)
             .padding()
-            .navigationTitle("Datum wählen")
+            .navigationTitle("Choose Date")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Heute") {
+                    Button("Today") {
                         selectedDate = Calendar.current.startOfDay(for: .now)
                         dismiss()
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Fertig") { dismiss() }
+                    Button("Done") { dismiss() }
                 }
             }
         }
@@ -257,16 +257,16 @@ private struct MoveToDoDateSheet: View {
     var body: some View {
         NavigationStack {
             Form {
-                DatePicker("Datum", selection: $selectedDate, displayedComponents: .date)
+                DatePicker("Date", selection: $selectedDate, displayedComponents: .date)
             }
-            .navigationTitle("Verschieben")
+            .navigationTitle("Move")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Abbrechen") { dismiss() }
+                    Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Fertig") {
+                    Button("Done") {
                         move(to: selectedDate)
                         dismiss()
                     }

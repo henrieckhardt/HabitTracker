@@ -17,8 +17,8 @@ struct HabitTrackerWidgetEntry: TimelineEntry {
 struct HabitTrackerWidgetProvider: TimelineProvider {
     func placeholder(in context: Context) -> HabitTrackerWidgetEntry {
         HabitTrackerWidgetEntry(date: .now, items: [
-            WidgetItem(id: UUID(), title: "Laufen", icon: "figure.run", isCompleted: false),
-            WidgetItem(id: UUID(), title: "Einkaufen", icon: "checklist", isCompleted: true)
+            WidgetItem(id: UUID(), title: "Run", icon: "figure.run", isCompleted: false),
+            WidgetItem(id: UUID(), title: "Groceries", icon: "checklist", isCompleted: true)
         ])
     }
 
@@ -90,11 +90,11 @@ struct HabitTrackerWidgetEntryView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Heute")
+            Text("Today")
                 .font(.headline)
 
             if entry.items.isEmpty {
-                Text("Nichts geplant")
+                Text("Nothing planned")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             } else {
@@ -111,7 +111,7 @@ struct HabitTrackerWidgetEntryView: View {
                     .font(.caption)
                 }
                 if entry.items.count > visibleItems.count {
-                    Text("+\(entry.items.count - visibleItems.count) weitere")
+                    Text("+\(entry.items.count - visibleItems.count) more")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                 }
@@ -131,8 +131,8 @@ struct HabitTrackerWidget: Widget {
             HabitTrackerWidgetEntryView(entry: entry)
                 .containerBackground(.background, for: .widget)
         }
-        .configurationDisplayName("Heute")
-        .description("Zeigt deine heutigen Habits und ToDos.")
+        .configurationDisplayName("Today")
+        .description("Shows your habits and to-dos for today.")
         .supportedFamilies([.systemSmall, .systemMedium])
     }
 }
