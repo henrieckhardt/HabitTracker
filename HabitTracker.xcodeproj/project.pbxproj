@@ -31,6 +31,7 @@
 		41F08B4027265B2B7693F6E6 /* RecurrenceEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D806678F8172CF38BA7A78E8 /* RecurrenceEngine.swift */; };
 		428E6915B055981FA017F7A3 /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 587E83514D32CE4A425AC064 /* ManagedSettings.framework */; };
 		45895B7756F94A07C6D4C95A /* RecurrenceRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63777F15EA648AC4D87F18AF /* RecurrenceRule.swift */; };
+		49F3FD74D5A6DEA6C8970556 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 9E2B0A6EF8CDEC4EDD91841A /* Localizable.xcstrings */; };
 		4AAB4AF8353ACE80C6E1EF32 /* FocusShieldConfiguration.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 4D4C525344D1CE660C9F15C5 /* FocusShieldConfiguration.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		4D77F973A94205A2123F5B4A /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 587E83514D32CE4A425AC064 /* ManagedSettings.framework */; };
 		62E2D3FD08B76A4A701585B0 /* HabitTrackerWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD3FF37B0FF8587EE08CEE9 /* HabitTrackerWidgetBundle.swift */; };
@@ -50,6 +51,7 @@
 		850AF8E028F64F1696379775 /* FamilyControls.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 371571CDFA9AE634FC04F59D /* FamilyControls.framework */; };
 		8798A3CB32A8A639578ECE4C /* Weekday.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB6375487A04DF9F68E955F /* Weekday.swift */; };
 		8DFE1D22A5532300DF453C5A /* ToDoEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD2C2579DB6A373C5347CD7 /* ToDoEditorView.swift */; };
+		8FCA93A2F7EADC4F5D44660E /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 9E2B0A6EF8CDEC4EDD91841A /* Localizable.xcstrings */; };
 		92B8C4DFE5D6A7477354E4F0 /* Weekday.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB6375487A04DF9F68E955F /* Weekday.swift */; };
 		96F5E318B45A058525A70DF7 /* FocusSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB76B67E667A2BA36D3BAE1 /* FocusSession.swift */; };
 		9A417BFF0907812DBE1F78EF /* MonthDaySelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7524BCC44507CB4B57E59A9A /* MonthDaySelector.swift */; };
@@ -57,12 +59,14 @@
 		9D8D5967743A202ED967A5EE /* RecurrenceEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D806678F8172CF38BA7A78E8 /* RecurrenceEngine.swift */; };
 		9E250E1A040EBA53879360F7 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B0D9D8E170506613A74C49 /* AppGroup.swift */; };
 		9E693C06309A4DDF08D6D246 /* FamilyControls.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 371571CDFA9AE634FC04F59D /* FamilyControls.framework */; };
+		A3457606E68302E288C3A696 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 9E2B0A6EF8CDEC4EDD91841A /* Localizable.xcstrings */; };
 		A6A78DC48ABD8248EE7108BA /* HabitListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF3E6BE07F9FB7C10D61993 /* HabitListView.swift */; };
 		A814FA11645DFC239CACCA77 /* Habit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757134E23848D6632FD1EA11 /* Habit.swift */; };
 		A8CB5D0AA8755ACC890CB2FD /* RecurrencePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93789DB634C41D94F7DCF78 /* RecurrencePickerView.swift */; };
 		A9CE582473EE0E505E5B6FAF /* FocusShieldMonitor.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 1CDCEFED00DEDE430332289C /* FocusShieldMonitor.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		AC0CC1C935707A7C84BC7118 /* Habit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757134E23848D6632FD1EA11 /* Habit.swift */; };
 		AD46DB286ABE4AF3C8393763 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C4BCEFC3DD5733BBFAA70E /* StatsView.swift */; };
+		BD36066519DEB8B7FB3F1439 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 9E2B0A6EF8CDEC4EDD91841A /* Localizable.xcstrings */; };
 		BD65489B6ABBF565ED2CE04A /* Habit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757134E23848D6632FD1EA11 /* Habit.swift */; };
 		BF428FC7BA2832A06890F9CF /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B0D9D8E170506613A74C49 /* AppGroup.swift */; };
 		C24E56AA325F665AFC094F01 /* DayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E0EB92AE9E9404755F136D /* DayView.swift */; };
@@ -169,6 +173,7 @@
 		946E6209E086DEC58E7D5BF1 /* HabitCompletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitCompletion.swift; sourceTree = "<group>"; };
 		953FA2DFA644FEEBE280650E /* HabitDisplayOrdering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDisplayOrdering.swift; sourceTree = "<group>"; };
 		98D914890A5E6D0547398053 /* FocusListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusListView.swift; sourceTree = "<group>"; };
+		9E2B0A6EF8CDEC4EDD91841A /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		9FB478B9D1F76F95510D0804 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		A23F8410FFD146F6B134A267 /* HabitTrackerTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = HabitTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2B0D9D8E170506613A74C49 /* AppGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroup.swift; sourceTree = "<group>"; };
@@ -295,6 +300,7 @@
 				E563461ADB59303758A5A6A6 /* Assets.xcassets */,
 				0ABFADBE1397278CC5A2E920 /* HabitTracker.entitlements */,
 				3E76BAA37AAE86C749C7AC17 /* Info.plist */,
+				9E2B0A6EF8CDEC4EDD91841A /* Localizable.xcstrings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -470,6 +476,7 @@
 			buildConfigurationList = 610C8B5194FB4F167F00A624 /* Build configuration list for PBXNativeTarget "FocusShieldConfiguration" */;
 			buildPhases = (
 				2A444909333AAE13CC8982DA /* Sources */,
+				0ED32D6AE91CE6B0B5BA3689 /* Resources */,
 				CC2063D5D1262EA70DF4AA2D /* Frameworks */,
 			);
 			buildRules = (
@@ -488,6 +495,7 @@
 			buildConfigurationList = 2DD2A7526B4EDD6FA7B424E4 /* Build configuration list for PBXNativeTarget "FocusShieldMonitor" */;
 			buildPhases = (
 				EE4B49CE74676BC4E137BB1E /* Sources */,
+				309DBE5FF9CD559FEFF26C15 /* Resources */,
 				A1687975F3AB7E94499C6ACC /* Frameworks */,
 			);
 			buildRules = (
@@ -547,6 +555,7 @@
 			buildConfigurationList = D6363D343C8AD599040D6819 /* Build configuration list for PBXNativeTarget "HabitTrackerWidget" */;
 			buildPhases = (
 				D0854E463B9AD8A738F28A07 /* Sources */,
+				0F4EBEA897A34B4121A15D2D /* Resources */,
 				04F3DB64C7E2354C57EBC6B6 /* Frameworks */,
 			);
 			buildRules = (
@@ -592,10 +601,11 @@
 				};
 			};
 			buildConfigurationList = 0C4671CC9F1D8325FB71B481 /* Build configuration list for PBXProject "HabitTracker" */;
-			developmentRegion = en;
+			developmentRegion = de;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				Base,
+				de,
 				en,
 			);
 			mainGroup = D6ECF9B08F98D87F6F44C8AD;
@@ -615,11 +625,36 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		0ED32D6AE91CE6B0B5BA3689 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49F3FD74D5A6DEA6C8970556 /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0F4EBEA897A34B4121A15D2D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8FCA93A2F7EADC4F5D44660E /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		309DBE5FF9CD559FEFF26C15 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD36066519DEB8B7FB3F1439 /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7FC83F90F2F600B7D101FA7B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				28AF11CE69A90159D01496C6 /* Assets.xcassets in Resources */,
+				A3457606E68302E288C3A696 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

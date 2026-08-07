@@ -83,15 +83,15 @@ struct FocusEditorView: View {
         let hours = minutes / 60
         let mins = minutes % 60
         switch (hours, mins) {
-        case (0, _): return "\(mins) Min"
-        case (_, 0): return "\(hours) Std"
-        default: return "\(hours) Std \(mins) Min"
+        case (0, _): return String(localized: "\(mins) Min")
+        case (_, 0): return String(localized: "\(hours) Std")
+        default: return String(localized: "\(hours) Std \(mins) Min")
         }
     }
 
     private func timeText(_ date: Date) -> String {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "de_DE")
+        formatter.locale = .autoupdatingCurrent
         formatter.dateStyle = .none
         formatter.timeStyle = .short
         return formatter.string(from: date)
@@ -197,7 +197,7 @@ struct FocusEditorView: View {
                     .onReceive(controlTimer) { date in now = date }
                 }
             }
-            .navigationTitle(sessionToEdit == nil ? "Neuer Fokus" : "Fokus bearbeiten")
+            .navigationTitle(sessionToEdit == nil ? Text("Neuer Fokus") : Text("Fokus bearbeiten"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -264,7 +264,7 @@ struct FocusEditorView: View {
         }
     }
 
-    private func statCard(icon: String, title: String, value: String, tint: Color) -> some View {
+    private func statCard(icon: String, title: LocalizedStringKey, value: LocalizedStringKey, tint: Color) -> some View {
         HStack(spacing: 14) {
             Image(systemName: icon)
                 .font(.title2)
@@ -286,7 +286,7 @@ struct FocusEditorView: View {
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
 
-    private func actionButton(_ title: String, icon: String, tint: Color, role: ButtonRole? = nil, action: @escaping () -> Void) -> some View {
+    private func actionButton(_ title: LocalizedStringKey, icon: String, tint: Color, role: ButtonRole? = nil, action: @escaping () -> Void) -> some View {
         Button(role: role, action: action) {
             Label(title, systemImage: icon)
                 .font(.headline)
@@ -301,7 +301,7 @@ struct FocusEditorView: View {
 
     private var selectionSummary: String {
         let count = appSelection.applicationTokens.count + appSelection.categoryTokens.count
-        return count == 0 ? "Keine ausgewählt" : "\(count) ausgewählt"
+        return count == 0 ? String(localized: "Keine ausgewählt") : String(localized: "\(count) ausgewählt")
     }
 
     private func requestAuthorizationThenShowPicker() {

@@ -16,16 +16,12 @@ enum Weekday: Int, Codable, CaseIterable, Identifiable {
         self = Weekday(rawValue: calendarWeekday) ?? .sunday
     }
 
+    /// Locale-adaptive short weekday abbreviation (e.g. "Mo" in German,
+    /// "Mon" in English) — derived from `Calendar` instead of a hardcoded
+    /// German switch, so it stays correct as more languages are added
+    /// without touching this file again.
     var shortLabel: String {
-        switch self {
-        case .sunday: "So"
-        case .monday: "Mo"
-        case .tuesday: "Di"
-        case .wednesday: "Mi"
-        case .thursday: "Do"
-        case .friday: "Fr"
-        case .saturday: "Sa"
-        }
+        Calendar.autoupdatingCurrent.shortStandaloneWeekdaySymbols[rawValue - 1]
     }
 
     /// Monday-first ordering for UI display.

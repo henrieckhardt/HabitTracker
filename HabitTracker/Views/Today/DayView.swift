@@ -153,13 +153,14 @@ private struct DateHeader: View {
     @State private var showingDatePicker = false
     private let calendar = Calendar.current
 
+    private var isToday: Bool {
+        calendar.isDateInToday(selectedDate)
+    }
+
     private var formatted: String {
-        if calendar.isDateInToday(selectedDate) {
-            return "Heute"
-        }
         let formatter = DateFormatter()
         formatter.setLocalizedDateFormatFromTemplate("EEE d. MMM")
-        formatter.locale = Locale(identifier: "de_DE")
+        formatter.locale = .autoupdatingCurrent
         return formatter.string(from: selectedDate)
     }
 
@@ -174,9 +175,15 @@ private struct DateHeader: View {
             Button {
                 showingDatePicker = true
             } label: {
-                Text(formatted)
-                    .font(.headline)
-                    .frame(minWidth: 100)
+                Group {
+                    if isToday {
+                        Text("Heute")
+                    } else {
+                        Text(formatted)
+                    }
+                }
+                .font(.headline)
+                .frame(minWidth: 100)
             }
             .buttonStyle(.plain)
 
@@ -281,7 +288,7 @@ private struct MoveToDoDateSheet: View {
 
 private func habitTimeText(_ date: Date) -> String {
     let formatter = DateFormatter()
-    formatter.locale = Locale(identifier: "de_DE")
+    formatter.locale = .autoupdatingCurrent
     formatter.dateStyle = .none
     formatter.timeStyle = .short
     return formatter.string(from: date)

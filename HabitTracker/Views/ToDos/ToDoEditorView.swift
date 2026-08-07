@@ -105,7 +105,7 @@ struct ToDoEditorView: View {
                     Text("Rein informativ, keine Erinnerung oder App-Blockierung.")
                 }
             }
-            .navigationTitle(toDoToEdit == nil ? "Neues ToDo" : "ToDo bearbeiten")
+            .navigationTitle(toDoToEdit == nil ? Text("Neues ToDo") : Text("ToDo bearbeiten"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

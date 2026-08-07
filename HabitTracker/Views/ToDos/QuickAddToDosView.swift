@@ -25,7 +25,7 @@ struct QuickAddToDosView: View {
 
     private var dayLabel: String {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "de_DE")
+        formatter.locale = .autoupdatingCurrent
         formatter.setLocalizedDateFormatFromTemplate("EEEE, d. MMM")
         return formatter.string(from: date)
     }

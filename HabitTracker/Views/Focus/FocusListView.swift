@@ -130,7 +130,7 @@ struct FocusListView: View {
 
 private func timeText(_ date: Date) -> String {
     let formatter = DateFormatter()
-    formatter.locale = Locale(identifier: "de_DE")
+    formatter.locale = .autoupdatingCurrent
     formatter.dateStyle = .none
     formatter.timeStyle = .short
     return formatter.string(from: date)
@@ -142,7 +142,7 @@ private struct ActiveFocusBanner: View {
     private var endText: String {
         let endDate = session.isOnDemand ? session.activeUntil : session.endTime
         guard let endDate else { return "" }
-        return "Bis \(timeText(endDate)) Uhr"
+        return String(localized: "Bis \(timeText(endDate)) Uhr")
     }
 
     var body: some View {
@@ -174,13 +174,13 @@ private struct FocusRow: View {
         }
         if isActive, let activeUntil = session.activeUntil {
             let remainingMinutes = max(0, Int(activeUntil.timeIntervalSince(now) / 60))
-            return "Läuft noch \(remainingMinutes) Min"
+            return String(localized: "Läuft noch \(remainingMinutes) Min")
         }
         if isPending, let pendingStart = session.pendingStart {
             let remainingMinutes = max(0, Int(pendingStart.timeIntervalSince(now) / 60))
-            return "Startet in \(remainingMinutes) Min (\(timeText(pendingStart)) Uhr)"
+            return String(localized: "Startet in \(remainingMinutes) Min (\(timeText(pendingStart)) Uhr)")
         }
-        return "\(session.durationMinutes) Min · Manuell"
+        return String(localized: "\(session.durationMinutes) Min · Manuell")
     }
 
     var body: some View {

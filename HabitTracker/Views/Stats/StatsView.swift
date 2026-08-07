@@ -57,7 +57,7 @@ private struct HabitStatsRow: View {
 
 private struct StatTile: View {
     let value: String
-    let label: String
+    let label: LocalizedStringKey
     let systemImage: String
     let tint: Color
 

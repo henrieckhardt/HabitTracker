@@ -86,7 +86,7 @@ struct HabitEditorView: View {
 
     private var selectionSummary: String {
         let count = appSelection.applicationTokens.count + appSelection.categoryTokens.count
-        return count == 0 ? "Keine ausgewählt" : "\(count) ausgewählt"
+        return count == 0 ? String(localized: "Keine ausgewählt") : String(localized: "\(count) ausgewählt")
     }
 
     private func requestAuthorizationThenShowPicker() {
@@ -195,7 +195,7 @@ struct HabitEditorView: View {
                     }
                 }
             }
-            .navigationTitle(habitToEdit == nil ? "Neuer Habit" : "Habit bearbeiten")
+            .navigationTitle(habitToEdit == nil ? Text("Neuer Habit") : Text("Habit bearbeiten"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

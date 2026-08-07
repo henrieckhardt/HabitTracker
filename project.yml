@@ -3,6 +3,7 @@ options:
   bundleIdPrefix: com.henrieckhardt.habittracker
   deploymentTarget:
     iOS: "17.0"
+  developmentLanguage: de
 settings:
   base:
     SWIFT_VERSION: "5.0"
@@ -18,7 +19,13 @@ targets:
       path: HabitTracker/Resources/Info.plist
       properties:
         UILaunchScreen: {}
-        CFBundleDisplayName: Habit Tracker
+        CFBundleDisplayName: Habiz
+        UIStatusBarStyle: ""
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
     entitlements:
       path: HabitTracker/Resources/HabitTracker.entitlements
       properties:
@@ -66,6 +73,7 @@ targets:
       - path: HabitTracker/Models/RecurrenceRule.swift
       - path: HabitTracker/Models/Weekday.swift
       - path: HabitTracker/Services/RecurrenceEngine.swift
+      - path: HabitTracker/Resources/Localizable.xcstrings
     info:
       path: FocusShieldMonitor/Info.plist
       properties:
@@ -101,6 +109,7 @@ targets:
       - path: HabitTracker/Models/Weekday.swift
       - path: HabitTracker/Services/RecurrenceEngine.swift
       - path: HabitTracker/Services/FocusScheduleEngine.swift
+      - path: HabitTracker/Resources/Localizable.xcstrings
     info:
       path: FocusShieldConfiguration/Info.plist
       properties:
@@ -135,6 +144,7 @@ targets:
       - path: HabitTracker/Models/RecurrenceRule.swift
       - path: HabitTracker/Models/Weekday.swift
       - path: HabitTracker/Services/RecurrenceEngine.swift
+      - path: HabitTracker/Resources/Localizable.xcstrings
     info:
       path: HabitTrackerWidget/Info.plist
       properties:

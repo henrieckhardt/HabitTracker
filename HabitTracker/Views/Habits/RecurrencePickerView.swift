@@ -6,6 +6,16 @@ enum RecurrencePreset: String, CaseIterable, Identifiable {
     case custom = "Individuell"
 
     var id: String { rawValue }
+
+    /// `rawValue` is only a stable German internal identifier — this is the
+    /// actual user-facing text, resolved through the string catalog.
+    var displayName: String {
+        switch self {
+        case .daily: return String(localized: "Täglich")
+        case .weekly: return String(localized: "Wöchentlich")
+        case .custom: return String(localized: "Individuell")
+        }
+    }
 }
 
 enum CustomRecurrenceKind: String, CaseIterable, Identifiable {
@@ -13,6 +23,13 @@ enum CustomRecurrenceKind: String, CaseIterable, Identifiable {
     case monthly = "Tag im Monat"
 
     var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .weekdays: return String(localized: "Wochentage")
+        case .monthly: return String(localized: "Tag im Monat")
+        }
+    }
 }
 
 /// Editable state backing the 3 user-facing recurrence presets. Converts
@@ -94,7 +111,7 @@ struct RecurrencePickerView: View {
         Group {
             Picker("Turnus", selection: $state.preset) {
                 ForEach(RecurrencePreset.allCases) { preset in
-                    Text(preset.rawValue).tag(preset)
+                    Text(preset.displayName).tag(preset)
                 }
             }
             .pickerStyle(.segmented)
@@ -108,7 +125,7 @@ struct RecurrencePickerView: View {
             case .custom:
                 Picker("Art", selection: $state.customKind) {
                     ForEach(CustomRecurrenceKind.allCases) { kind in
-                        Text(kind.rawValue).tag(kind)
+                        Text(kind.displayName).tag(kind)
                     }
                 }
                 .pickerStyle(.segmented)

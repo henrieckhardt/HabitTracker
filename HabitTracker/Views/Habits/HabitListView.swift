@@ -19,7 +19,7 @@ struct HabitListView: View {
                     ContentUnavailableView(
                         "Keine Habits",
                         systemImage: "checkmark.circle",
-                        description: Text("Lege deinen ersten Habit an.")
+                        description: Text("Lege deinen ersten Habit an.", comment: "Empty state description on the Habits list")
                     )
                 } else {
                     List {

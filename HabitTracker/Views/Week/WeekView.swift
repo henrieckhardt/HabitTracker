@@ -24,7 +24,7 @@ struct WeekView: View {
     private var weekRangeText: String {
         guard let first = daysInWeek.first, let last = daysInWeek.last else { return "" }
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "de_DE")
+        formatter.locale = .autoupdatingCurrent
         formatter.setLocalizedDateFormatFromTemplate("d. MMM")
         return "\(formatter.string(from: first)) – \(formatter.string(from: last))"
     }
@@ -116,7 +116,7 @@ private struct WeekDayRow: View {
 
     private var weekdayLabel: String {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "de_DE")
+        formatter.locale = .autoupdatingCurrent
         formatter.setLocalizedDateFormatFromTemplate("EEEE, d. MMM")
         return formatter.string(from: date)
     }
@@ -124,7 +124,7 @@ private struct WeekDayRow: View {
     private func habitLabelText(_ habit: Habit) -> String {
         guard let session = habit.focusSession else { return habit.title }
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "de_DE")
+        formatter.locale = .autoupdatingCurrent
         formatter.dateStyle = .none
         formatter.timeStyle = .short
         let start = formatter.string(from: session.startTime)

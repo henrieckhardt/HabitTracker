@@ -14,7 +14,7 @@ enum NotificationService {
     static func registerCategories() {
         let completeHabitAction = UNNotificationAction(
             identifier: completeHabitActionIdentifier,
-            title: "Erledigt",
+            title: String(localized: "Erledigt"),
             options: []
         )
         let habitCategory = UNNotificationCategory(
@@ -26,7 +26,7 @@ enum NotificationService {
 
         let completeToDoAction = UNNotificationAction(
             identifier: completeToDoActionIdentifier,
-            title: "Erledigt",
+            title: String(localized: "Erledigt"),
             options: []
         )
         let toDoCategory = UNNotificationCategory(
@@ -53,7 +53,7 @@ enum NotificationService {
         let timeComponents = calendar.dateComponents([.hour, .minute], from: time)
         let content = UNMutableNotificationContent()
         content.title = habit.title
-        content.body = "Zeit für deinen Habit"
+        content.body = String(localized: "Zeit für deinen Habit")
         content.sound = .default
         content.categoryIdentifier = habitCategoryIdentifier
         content.userInfo = [habitIDKey: habit.id.uuidString]
@@ -103,7 +103,7 @@ enum NotificationService {
 
         let content = UNMutableNotificationContent()
         content.title = toDo.title
-        content.body = "Fällig heute"
+        content.body = String(localized: "Fällig heute")
         content.sound = .default
         content.categoryIdentifier = toDoCategoryIdentifier
         content.userInfo = [toDoIDKey: toDo.id.uuidString]
