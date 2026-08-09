@@ -119,7 +119,14 @@ struct DayContentView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             if allowsDateNavigation {
-                ToolbarItem(placement: .principal) {
+                // `.navigationBarLeading` instead of `.principal`: a
+                // `.principal` item is centered in the *remaining* bar
+                // width after the leading/trailing items, so it visibly
+                // drifted depending on how many trailing buttons were
+                // showing (e.g. the pencil button disappearing on an empty
+                // day) — pinning to the leading edge keeps it in a fixed
+                // spot regardless of what else is in the toolbar.
+                ToolbarItem(placement: .navigationBarLeading) {
                     HStack(spacing: 16) {
                         Button {
                             selectedDate = calendar.date(byAdding: .day, value: -1, to: selectedDate) ?? selectedDate
