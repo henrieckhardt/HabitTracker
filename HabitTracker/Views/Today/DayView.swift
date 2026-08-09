@@ -24,6 +24,7 @@ struct DayContentView: View {
     @State private var showingAddToDo = false
     @State private var showingQuickAdd = false
     @State private var toDoToMove: ToDo?
+    @State private var editMode: EditMode = .inactive
 
     private let calendar = Calendar.current
 
@@ -55,6 +56,34 @@ struct DayContentView: View {
     }
 
     var body: some View {
+        // The day-paging swipe only attaches while not reordering. It's a
+        // second gesture recognizer on the same List; verified via
+        // `.simultaneousGesture` that it coexists fine with `.swipeActions`,
+        // but paging and drag-reordering aren't something a user does at
+        // the same time anyway, so gating this on `editMode` sidesteps any
+        // risk of it interfering with the system reorder-handle gesture
+        // without giving up either feature.
+        if editMode == .active {
+            listContent
+        } else {
+            listContent.simultaneousGesture(daySwipeGesture)
+        }
+    }
+
+    private var daySwipeGesture: some Gesture {
+        DragGesture(minimumDistance: 80)
+            .onEnded { value in
+                let horizontal = value.translation.width
+                let vertical = value.translation.height
+                guard abs(horizontal) > abs(vertical), abs(horizontal) > 150 else { return }
+                let dayOffset = horizontal < 0 ? 1 : -1
+                withAnimation {
+                    selectedDate = calendar.date(byAdding: .day, value: dayOffset, to: selectedDate) ?? selectedDate
+                }
+            }
+    }
+
+    private var listContent: some View {
         List {
             if dayItems.isEmpty {
                 ContentUnavailableView(
@@ -66,12 +95,12 @@ struct DayContentView: View {
             } else {
                 ForEach(dayItems) { item in
                     DayItemRow(item: item, date: selectedDate)
-                        .contextMenu {
+                        .swipeActions(edge: .trailing) {
                             if case .toDo(let toDo) = item {
-                                Button {
-                                    toDoToMove = toDo
+                                Button(role: .destructive) {
+                                    deleteToDo(toDo)
                                 } label: {
-                                    Label("Move", systemImage: "calendar")
+                                    Label("Delete", systemImage: "trash")
                                 }
 
                                 Button {
@@ -79,36 +108,37 @@ struct DayContentView: View {
                                 } label: {
                                     Label("Tomorrow", systemImage: "arrow.right")
                                 }
+                                .tint(.orange)
 
-                                Button(role: .destructive) {
-                                    deleteToDo(toDo)
+                                Button {
+                                    toDoToMove = toDo
                                 } label: {
-                                    Label("Delete", systemImage: "trash")
+                                    Label("Move", systemImage: "calendar")
                                 }
+                                .tint(.blue)
                             }
                         }
                 }
                 .onMove(perform: moveDayItems)
             }
         }
-        .environment(\.editMode, .constant(.active))
+        .environment(\.editMode, $editMode)
         .navigationTitle("Today")
         .navigationBarTitleDisplayMode(.inline)
-        .gesture(
-            DragGesture(minimumDistance: 40)
-                .onEnded { value in
-                    let horizontal = value.translation.width
-                    let vertical = value.translation.height
-                    guard abs(horizontal) > abs(vertical), abs(horizontal) > 60 else { return }
-                    let dayOffset = horizontal < 0 ? 1 : -1
-                    withAnimation {
-                        selectedDate = calendar.date(byAdding: .day, value: dayOffset, to: selectedDate) ?? selectedDate
-                    }
-                }
-        )
         .toolbar {
             ToolbarItem(placement: .principal) {
                 DateHeader(selectedDate: $selectedDate)
+            }
+            ToolbarItem(placement: .primaryAction) {
+                if !dayItems.isEmpty {
+                    Button {
+                        withAnimation {
+                            editMode = editMode == .active ? .inactive : .active
+                        }
+                    } label: {
+                        Image(systemName: editMode == .active ? "checkmark" : "pencil")
+                    }
+                }
             }
             ToolbarItem(placement: .primaryAction) {
                 Button {
@@ -157,16 +187,13 @@ struct DayContentView: View {
     /// Persists a drag-and-drop reorder by giving the moved item a
     /// `sortOrder` between its new neighbors — see `DisplayOrderReordering`.
     /// Works across the habit/to-do boundary since both share the same
-    /// numeric `sortOrder` space. Uses the system `.onMove` reorder (which
-    /// needs edit mode active to show drag handles/respond to drag
-    /// gestures on rows with their own tap-consuming Buttons) rather than
-    /// `.onDrag`/`.onDrop`, since the latter's drag-lift gesture never got
-    /// a chance to start on rows whose whole surface is covered by Buttons
-    /// (same root cause as the original EditButton-era finding). Edit mode
-    /// being active also disables trailing `.swipeActions`, so the
-    /// per-ToDo Delete/Tomorrow/Move actions live in a `.contextMenu`
-    /// (long-press) instead — that interaction isn't blocked by edit mode
-    /// or by the row's Buttons.
+    /// numeric `sortOrder` space. Uses the system `.onMove` reorder, which
+    /// needs edit mode active to show drag handles/respond to drag gestures
+    /// on rows with their own tap-consuming Buttons — driven here by the
+    /// icon-only toolbar button toggling `editMode`, rather than a
+    /// permanently-active edit mode, since edit mode disables trailing
+    /// `.swipeActions` (the per-ToDo Delete/Tomorrow/Move actions), so the
+    /// list needs to leave edit mode again for those to be reachable.
     private func moveDayItems(from source: IndexSet, to destination: Int) {
         let currentItems = dayItems
         guard let originalIndex = source.first else { return }
