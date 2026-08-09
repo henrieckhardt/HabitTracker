@@ -43,16 +43,28 @@ struct DayContentView: View {
         allToDos.filter { calendar.isDate($0.scheduledDate, inSameDayAs: selectedDate) }
     }
 
-    /// Habits and to-dos merged into one manually-orderable list. Sorted by
-    /// `sortOrder` first (the user's drag-and-drop order, shared across both
-    /// types), then completed items are stably sunk to the bottom, keeping
-    /// their relative order otherwise.
+    /// Habits and to-dos merged into one list, sorted by `sortOrder` (the
+    /// user's drag-and-drop order, shared across both types). `listContent`
+    /// below splits this into `incompleteItems`/`completedItems` as two
+    /// separate `ForEach`s — completed items always render last and never
+    /// get a `.onMove`, so they can neither be dragged themselves nor be a
+    /// drop target for an incomplete item dragged past the end of the
+    /// incomplete group (previously, with one merged+re-sorted list,
+    /// dragging an incomplete item to the very bottom put it after the
+    /// completed items only for the completed-sink sort to immediately snap
+    /// it back above them, which looked like the drag silently failing).
     private var dayItems: [DayItem] {
         let habits = scheduledHabits.map { DayItem.habit($0, isCompleted: $0.isCompleted(on: selectedDate, calendar: calendar)) }
         let toDos = scheduledToDos.map { DayItem.toDo($0) }
-        return (habits + toDos)
-            .sorted { $0.sortOrder < $1.sortOrder }
-            .sorted { !$0.isCompleted && $1.isCompleted }
+        return (habits + toDos).sorted { $0.sortOrder < $1.sortOrder }
+    }
+
+    private var incompleteItems: [DayItem] {
+        dayItems.filter { !$0.isCompleted }
+    }
+
+    private var completedItems: [DayItem] {
+        dayItems.filter { $0.isCompleted }
     }
 
     var body: some View {
@@ -93,33 +105,19 @@ struct DayContentView: View {
                 )
                 .listRowSeparator(.hidden)
             } else {
-                ForEach(dayItems) { item in
-                    DayItemRow(item: item, date: selectedDate)
-                        .swipeActions(edge: .trailing) {
-                            if case .toDo(let toDo) = item {
-                                Button(role: .destructive) {
-                                    deleteToDo(toDo)
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
-                                }
-
-                                Button {
-                                    moveToTomorrow(toDo)
-                                } label: {
-                                    Label("Tomorrow", systemImage: "arrow.right")
-                                }
-                                .tint(.orange)
-
-                                Button {
-                                    toDoToMove = toDo
-                                } label: {
-                                    Label("Move", systemImage: "calendar")
-                                }
-                                .tint(.blue)
-                            }
-                        }
+                ForEach(incompleteItems) { item in
+                    row(for: item)
                 }
-                .onMove(perform: moveDayItems)
+                .onMove(perform: moveIncompleteItems)
+
+                // Separate, non-reorderable `ForEach`: no `.onMove` means no
+                // drag handle and no drag gesture at all for these rows, and
+                // they can never be a destination for an incomplete item
+                // dragged past the end of the section above — completed
+                // items just stay put at the bottom.
+                ForEach(completedItems) { item in
+                    row(for: item)
+                }
             }
         }
         .environment(\.editMode, $editMode)
@@ -184,18 +182,50 @@ struct DayContentView: View {
         try? modelContext.save()
     }
 
+    @ViewBuilder
+    private func row(for item: DayItem) -> some View {
+        DayItemRow(item: item, date: selectedDate)
+            .swipeActions(edge: .trailing) {
+                if case .toDo(let toDo) = item {
+                    Button(role: .destructive) {
+                        deleteToDo(toDo)
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                    }
+
+                    Button {
+                        moveToTomorrow(toDo)
+                    } label: {
+                        Label("Tomorrow", systemImage: "arrow.right")
+                    }
+                    .tint(.orange)
+
+                    Button {
+                        toDoToMove = toDo
+                    } label: {
+                        Label("Move", systemImage: "calendar")
+                    }
+                    .tint(.blue)
+                }
+            }
+    }
+
     /// Persists a drag-and-drop reorder by giving the moved item a
     /// `sortOrder` between its new neighbors — see `DisplayOrderReordering`.
     /// Works across the habit/to-do boundary since both share the same
-    /// numeric `sortOrder` space. Uses the system `.onMove` reorder, which
-    /// needs edit mode active to show drag handles/respond to drag gestures
-    /// on rows with their own tap-consuming Buttons — driven here by the
-    /// icon-only toolbar button toggling `editMode`, rather than a
-    /// permanently-active edit mode, since edit mode disables trailing
-    /// `.swipeActions` (the per-ToDo Delete/Tomorrow/Move actions), so the
-    /// list needs to leave edit mode again for those to be reachable.
-    private func moveDayItems(from source: IndexSet, to destination: Int) {
-        let currentItems = dayItems
+    /// numeric `sortOrder` space. Operates only on `incompleteItems` (see
+    /// its `ForEach` in `listContent`), so there's no completed-items
+    /// boundary to bounce off of — the moved item's neighbors are always
+    /// other incomplete items, or nothing at either end of the section.
+    /// Uses the system `.onMove` reorder, which needs edit mode active to
+    /// show drag handles/respond to drag gestures on rows with their own
+    /// tap-consuming Buttons — driven here by the icon-only toolbar button
+    /// toggling `editMode`, rather than a permanently-active edit mode,
+    /// since edit mode disables trailing `.swipeActions` (the per-ToDo
+    /// Delete/Tomorrow/Move actions), so the list needs to leave edit mode
+    /// again for those to be reachable.
+    private func moveIncompleteItems(from source: IndexSet, to destination: Int) {
+        let currentItems = incompleteItems
         guard let originalIndex = source.first else { return }
         let movedID = currentItems[originalIndex].id
 
