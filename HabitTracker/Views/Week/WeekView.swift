@@ -170,7 +170,7 @@ private struct WeekDayRow: View {
                             Text(toDo.title)
                                 .strikethrough(toDo.isCompleted)
                         } icon: {
-                            Image(systemName: "checklist")
+                            Image(systemName: toDo.isCompleted ? "checkmark.circle" : "circle")
                         }
                         .font(.caption)
                         .foregroundStyle(toDo.isCompleted ? .secondary : .primary)
