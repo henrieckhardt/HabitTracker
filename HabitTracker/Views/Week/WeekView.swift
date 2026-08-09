@@ -72,21 +72,6 @@ struct WeekView: View {
                 }
             }
             .navigationTitle("Week")
-            .simultaneousGesture(
-                // `.simultaneousGesture` so this never exclusively claims
-                // the touch ahead of a row's leading `.swipeActions`
-                // (Hinzufügen) — see DayView's equivalent gesture.
-                DragGesture(minimumDistance: 80)
-                    .onEnded { value in
-                        let horizontal = value.translation.width
-                        let vertical = value.translation.height
-                        guard abs(horizontal) > abs(vertical), abs(horizontal) > 150 else { return }
-                        let weekOffset = horizontal < 0 ? 7 : -7
-                        withAnimation {
-                            weekAnchor = calendar.date(byAdding: .day, value: weekOffset, to: weekAnchor) ?? weekAnchor
-                        }
-                    }
-            )
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     HStack(spacing: 16) {
@@ -113,7 +98,7 @@ struct WeekView: View {
                 }
             }
             .navigationDestination(for: Date.self) { date in
-                DayContentView(initialDate: date)
+                DayContentView(initialDate: date, allowsDateNavigation: false)
             }
             .sheet(isPresented: $showingQuickAdd) {
                 QuickAddToDosView(date: quickAddDate)

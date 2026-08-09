@@ -6,7 +6,7 @@ import SwiftData
 struct DayView: View {
     var body: some View {
         NavigationStack {
-            DayContentView(initialDate: Calendar.current.startOfDay(for: .now))
+            DayContentView(initialDate: Calendar.current.startOfDay(for: .now), allowsDateNavigation: true)
         }
     }
 }
@@ -23,13 +23,32 @@ struct DayContentView: View {
     @State private var selectedDate: Date
     @State private var showingAddToDo = false
     @State private var showingQuickAdd = false
+    @State private var showingDatePicker = false
     @State private var toDoToMove: ToDo?
     @State private var editMode: EditMode = .inactive
 
+    /// Whether the day can be changed at all — true for the standalone
+    /// "Heute" tab, false when this view is pushed from `WeekView` for a
+    /// specific day, which should stay fixed to that day (no chevrons, no
+    /// tappable heading, no date picker).
+    let allowsDateNavigation: Bool
+
     private let calendar = Calendar.current
 
-    init(initialDate: Date) {
+    init(initialDate: Date, allowsDateNavigation: Bool) {
         _selectedDate = State(initialValue: Calendar.current.startOfDay(for: initialDate))
+        self.allowsDateNavigation = allowsDateNavigation
+    }
+
+    private var isToday: Bool {
+        calendar.isDateInToday(selectedDate)
+    }
+
+    private var formattedSelectedDate: String {
+        let formatter = DateFormatter()
+        formatter.setLocalizedDateFormatFromTemplate("EEE d. MMM")
+        formatter.locale = .autoupdatingCurrent
+        return formatter.string(from: selectedDate)
     }
 
     /// Habits scheduled for `selectedDate`, unsorted — `dayItems` below is
@@ -68,64 +87,53 @@ struct DayContentView: View {
     }
 
     var body: some View {
-        // The day-paging swipe only attaches while not reordering. It's a
-        // second gesture recognizer on the same List; verified via
-        // `.simultaneousGesture` that it coexists fine with `.swipeActions`,
-        // but paging and drag-reordering aren't something a user does at
-        // the same time anyway, so gating this on `editMode` sidesteps any
-        // risk of it interfering with the system reorder-handle gesture
-        // without giving up either feature.
-        if editMode == .active {
-            listContent
-        } else {
-            listContent.simultaneousGesture(daySwipeGesture)
-        }
-    }
-
-    private var daySwipeGesture: some Gesture {
-        DragGesture(minimumDistance: 80)
-            .onEnded { value in
-                let horizontal = value.translation.width
-                let vertical = value.translation.height
-                guard abs(horizontal) > abs(vertical), abs(horizontal) > 150 else { return }
-                let dayOffset = horizontal < 0 ? 1 : -1
-                withAnimation {
-                    selectedDate = calendar.date(byAdding: .day, value: dayOffset, to: selectedDate) ?? selectedDate
-                }
-            }
-    }
-
-    private var listContent: some View {
         List {
-            if dayItems.isEmpty {
-                ContentUnavailableView(
-                    "Nothing planned",
-                    systemImage: "checkmark.circle",
-                    description: Text("There are no habits or to-dos scheduled for this day.")
-                )
-                .listRowSeparator(.hidden)
-            } else {
-                ForEach(incompleteItems) { item in
-                    row(for: item)
-                }
-                .onMove(perform: moveIncompleteItems)
+            Section {
+                if dayItems.isEmpty {
+                    ContentUnavailableView(
+                        "Nothing planned",
+                        systemImage: "checkmark.circle",
+                        description: Text("There are no habits or to-dos scheduled for this day.")
+                    )
+                    .listRowSeparator(.hidden)
+                } else {
+                    ForEach(incompleteItems) { item in
+                        row(for: item)
+                    }
+                    .onMove(perform: moveIncompleteItems)
 
-                // Separate, non-reorderable `ForEach`: no `.onMove` means no
-                // drag handle and no drag gesture at all for these rows, and
-                // they can never be a destination for an incomplete item
-                // dragged past the end of the section above — completed
-                // items just stay put at the bottom.
-                ForEach(completedItems) { item in
-                    row(for: item)
+                    // Separate, non-reorderable `ForEach`: no `.onMove` means no
+                    // drag handle and no drag gesture at all for these rows, and
+                    // they can never be a destination for an incomplete item
+                    // dragged past the end of the section above — completed
+                    // items just stay put at the bottom.
+                    ForEach(completedItems) { item in
+                        row(for: item)
+                    }
                 }
+            } header: {
+                dateHeading
             }
         }
         .environment(\.editMode, $editMode)
-        .navigationTitle("Today")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .principal) {
-                DateHeader(selectedDate: $selectedDate)
+            if allowsDateNavigation {
+                ToolbarItem(placement: .principal) {
+                    HStack(spacing: 16) {
+                        Button {
+                            selectedDate = calendar.date(byAdding: .day, value: -1, to: selectedDate) ?? selectedDate
+                        } label: {
+                            Image(systemName: "chevron.left")
+                        }
+
+                        Button {
+                            selectedDate = calendar.date(byAdding: .day, value: 1, to: selectedDate) ?? selectedDate
+                        } label: {
+                            Image(systemName: "chevron.right")
+                        }
+                    }
+                }
             }
             ToolbarItem(placement: .primaryAction) {
                 if !dayItems.isEmpty {
@@ -162,9 +170,45 @@ struct DayContentView: View {
         .sheet(item: $toDoToMove) { toDo in
             MoveToDoDateSheet(toDo: toDo)
         }
+        .sheet(isPresented: $showingDatePicker) {
+            DatePickerSheet(selectedDate: $selectedDate)
+        }
         .task {
             RolloverService.rolloverIfNeeded(context: modelContext)
         }
+    }
+
+    /// The list's heading — replaces what used to be a "Heute"/date label in
+    /// the navigation bar. Tappable to open the graphical date picker only
+    /// when `allowsDateNavigation` is true; fixed, non-interactive text
+    /// otherwise (the day pushed from `WeekView` never changes).
+    @ViewBuilder
+    private var dateHeading: some View {
+        let text = Group {
+            if isToday {
+                Text("Today")
+            } else {
+                Text(formattedSelectedDate)
+            }
+        }
+        .font(.largeTitle.bold())
+        .foregroundStyle(.primary)
+
+        Group {
+            if allowsDateNavigation {
+                Button {
+                    showingDatePicker = true
+                } label: {
+                    text
+                }
+                .buttonStyle(.plain)
+            } else {
+                text
+            }
+        }
+        .textCase(nil)
+        .foregroundStyle(.primary)
+        .padding(.bottom, 4)
     }
 
     private func deleteToDo(_ toDo: ToDo) {
@@ -273,57 +317,6 @@ enum DayItem: Identifiable {
         switch self {
         case .habit(_, let isCompleted): isCompleted
         case .toDo(let toDo): toDo.isCompleted
-        }
-    }
-}
-
-private struct DateHeader: View {
-    @Binding var selectedDate: Date
-    @State private var showingDatePicker = false
-    private let calendar = Calendar.current
-
-    private var isToday: Bool {
-        calendar.isDateInToday(selectedDate)
-    }
-
-    private var formatted: String {
-        let formatter = DateFormatter()
-        formatter.setLocalizedDateFormatFromTemplate("EEE d. MMM")
-        formatter.locale = .autoupdatingCurrent
-        return formatter.string(from: selectedDate)
-    }
-
-    var body: some View {
-        HStack(spacing: 16) {
-            Button {
-                selectedDate = calendar.date(byAdding: .day, value: -1, to: selectedDate) ?? selectedDate
-            } label: {
-                Image(systemName: "chevron.left")
-            }
-
-            Button {
-                showingDatePicker = true
-            } label: {
-                Group {
-                    if isToday {
-                        Text("Today")
-                    } else {
-                        Text(formatted)
-                    }
-                }
-                .font(.headline)
-                .frame(minWidth: 100)
-            }
-            .buttonStyle(.plain)
-
-            Button {
-                selectedDate = calendar.date(byAdding: .day, value: 1, to: selectedDate) ?? selectedDate
-            } label: {
-                Image(systemName: "chevron.right")
-            }
-        }
-        .sheet(isPresented: $showingDatePicker) {
-            DatePickerSheet(selectedDate: $selectedDate)
         }
     }
 }
