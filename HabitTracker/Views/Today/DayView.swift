@@ -66,12 +66,12 @@ struct DayContentView: View {
             } else {
                 ForEach(dayItems) { item in
                     DayItemRow(item: item, date: selectedDate)
-                        .swipeActions(edge: .trailing) {
+                        .contextMenu {
                             if case .toDo(let toDo) = item {
-                                Button(role: .destructive) {
-                                    deleteToDo(toDo)
+                                Button {
+                                    toDoToMove = toDo
                                 } label: {
-                                    Label("Delete", systemImage: "trash")
+                                    Label("Move", systemImage: "calendar")
                                 }
 
                                 Button {
@@ -79,30 +79,36 @@ struct DayContentView: View {
                                 } label: {
                                     Label("Tomorrow", systemImage: "arrow.right")
                                 }
-                                .tint(.orange)
 
-                                Button {
-                                    toDoToMove = toDo
+                                Button(role: .destructive) {
+                                    deleteToDo(toDo)
                                 } label: {
-                                    Label("Move", systemImage: "calendar")
+                                    Label("Delete", systemImage: "trash")
                                 }
-                                .tint(.blue)
                             }
                         }
                 }
                 .onMove(perform: moveDayItems)
             }
         }
+        .environment(\.editMode, .constant(.active))
         .navigationTitle("Today")
         .navigationBarTitleDisplayMode(.inline)
+        .gesture(
+            DragGesture(minimumDistance: 40)
+                .onEnded { value in
+                    let horizontal = value.translation.width
+                    let vertical = value.translation.height
+                    guard abs(horizontal) > abs(vertical), abs(horizontal) > 60 else { return }
+                    let dayOffset = horizontal < 0 ? 1 : -1
+                    withAnimation {
+                        selectedDate = calendar.date(byAdding: .day, value: dayOffset, to: selectedDate) ?? selectedDate
+                    }
+                }
+        )
         .toolbar {
             ToolbarItem(placement: .principal) {
                 DateHeader(selectedDate: $selectedDate)
-            }
-            ToolbarItem(placement: .primaryAction) {
-                if !dayItems.isEmpty {
-                    EditButton()
-                }
             }
             ToolbarItem(placement: .primaryAction) {
                 Button {
@@ -151,7 +157,16 @@ struct DayContentView: View {
     /// Persists a drag-and-drop reorder by giving the moved item a
     /// `sortOrder` between its new neighbors — see `DisplayOrderReordering`.
     /// Works across the habit/to-do boundary since both share the same
-    /// numeric `sortOrder` space.
+    /// numeric `sortOrder` space. Uses the system `.onMove` reorder (which
+    /// needs edit mode active to show drag handles/respond to drag
+    /// gestures on rows with their own tap-consuming Buttons) rather than
+    /// `.onDrag`/`.onDrop`, since the latter's drag-lift gesture never got
+    /// a chance to start on rows whose whole surface is covered by Buttons
+    /// (same root cause as the original EditButton-era finding). Edit mode
+    /// being active also disables trailing `.swipeActions`, so the
+    /// per-ToDo Delete/Tomorrow/Move actions live in a `.contextMenu`
+    /// (long-press) instead — that interaction isn't blocked by edit mode
+    /// or by the row's Buttons.
     private func moveDayItems(from source: IndexSet, to destination: Int) {
         let currentItems = dayItems
         guard let originalIndex = source.first else { return }

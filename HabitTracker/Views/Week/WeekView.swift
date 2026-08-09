@@ -72,6 +72,18 @@ struct WeekView: View {
                 }
             }
             .navigationTitle("Week")
+            .gesture(
+                DragGesture(minimumDistance: 40)
+                    .onEnded { value in
+                        let horizontal = value.translation.width
+                        let vertical = value.translation.height
+                        guard abs(horizontal) > abs(vertical), abs(horizontal) > 60 else { return }
+                        let weekOffset = horizontal < 0 ? 7 : -7
+                        withAnimation {
+                            weekAnchor = calendar.date(byAdding: .day, value: weekOffset, to: weekAnchor) ?? weekAnchor
+                        }
+                    }
+            )
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     HStack(spacing: 16) {
