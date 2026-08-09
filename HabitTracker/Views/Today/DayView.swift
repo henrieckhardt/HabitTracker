@@ -31,70 +31,66 @@ struct DayContentView: View {
         _selectedDate = State(initialValue: Calendar.current.startOfDay(for: initialDate))
     }
 
-    private var habitsForDay: [Habit] {
-        let scheduled = allHabits.filter { RecurrenceEngine.isScheduled($0.recurrenceRule, on: selectedDate, calendar: calendar) }
-        let ordered = HabitDisplayOrdering.sortedForDay(scheduled, calendar: calendar)
-        // Completed habits sink to the bottom, keeping their relative order
-        // (untimed-then-timed-by-time) otherwise.
-        return ordered.sorted { !$0.isCompleted(on: selectedDate, calendar: calendar) && $1.isCompleted(on: selectedDate, calendar: calendar) }
+    /// Habits scheduled for `selectedDate`, unsorted — `dayItems` below is
+    /// the single place that decides display order, merging these with
+    /// `scheduledToDos` by `sortOrder`.
+    private var scheduledHabits: [Habit] {
+        allHabits.filter { RecurrenceEngine.isScheduled($0.recurrenceRule, on: selectedDate, calendar: calendar) }
     }
 
-    private var toDosForDay: [ToDo] {
-        allToDos
-            .filter { calendar.isDate($0.scheduledDate, inSameDayAs: selectedDate) }
-            .sorted { $0.createdAt < $1.createdAt }
-            // Completed ToDos sink to the bottom, keeping creation order otherwise.
+    private var scheduledToDos: [ToDo] {
+        allToDos.filter { calendar.isDate($0.scheduledDate, inSameDayAs: selectedDate) }
+    }
+
+    /// Habits and to-dos merged into one manually-orderable list. Sorted by
+    /// `sortOrder` first (the user's drag-and-drop order, shared across both
+    /// types), then completed items are stably sunk to the bottom, keeping
+    /// their relative order otherwise.
+    private var dayItems: [DayItem] {
+        let habits = scheduledHabits.map { DayItem.habit($0, isCompleted: $0.isCompleted(on: selectedDate, calendar: calendar)) }
+        let toDos = scheduledToDos.map { DayItem.toDo($0) }
+        return (habits + toDos)
+            .sorted { $0.sortOrder < $1.sortOrder }
             .sorted { !$0.isCompleted && $1.isCompleted }
     }
 
     var body: some View {
         List {
-            if !habitsForDay.isEmpty {
-                Section("Habits") {
-                    ForEach(habitsForDay) { habit in
-                        HabitCompletionRow(habit: habit, date: selectedDate)
-                    }
-                }
-            }
-
-            Section("To-Dos") {
-                if toDosForDay.isEmpty {
-                    Text("No to-dos for this day.")
-                        .foregroundStyle(.secondary)
-                }
-                ForEach(toDosForDay) { toDo in
-                    ToDoRow(toDo: toDo)
-                        .swipeActions(edge: .trailing) {
-                            Button(role: .destructive) {
-                                deleteToDo(toDo)
-                            } label: {
-                                Label("Delete", systemImage: "trash")
-                            }
-
-                            Button {
-                                moveToTomorrow(toDo)
-                            } label: {
-                                Label("Tomorrow", systemImage: "arrow.right")
-                            }
-                            .tint(.orange)
-
-                            Button {
-                                toDoToMove = toDo
-                            } label: {
-                                Label("Move", systemImage: "calendar")
-                            }
-                            .tint(.blue)
-                        }
-                }
-            }
-
-            if habitsForDay.isEmpty && toDosForDay.isEmpty {
+            if dayItems.isEmpty {
                 ContentUnavailableView(
                     "Nothing planned",
                     systemImage: "checkmark.circle",
                     description: Text("There are no habits or to-dos scheduled for this day.")
                 )
                 .listRowSeparator(.hidden)
+            } else {
+                ForEach(dayItems) { item in
+                    DayItemRow(item: item, date: selectedDate)
+                        .swipeActions(edge: .trailing) {
+                            if case .toDo(let toDo) = item {
+                                Button(role: .destructive) {
+                                    deleteToDo(toDo)
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
+
+                                Button {
+                                    moveToTomorrow(toDo)
+                                } label: {
+                                    Label("Tomorrow", systemImage: "arrow.right")
+                                }
+                                .tint(.orange)
+
+                                Button {
+                                    toDoToMove = toDo
+                                } label: {
+                                    Label("Move", systemImage: "calendar")
+                                }
+                                .tint(.blue)
+                            }
+                        }
+                }
+                .onMove(perform: moveDayItems)
             }
         }
         .navigationTitle("Today")
@@ -102,6 +98,11 @@ struct DayContentView: View {
         .toolbar {
             ToolbarItem(placement: .principal) {
                 DateHeader(selectedDate: $selectedDate)
+            }
+            ToolbarItem(placement: .primaryAction) {
+                if !dayItems.isEmpty {
+                    EditButton()
+                }
             }
             ToolbarItem(placement: .primaryAction) {
                 Button {
@@ -145,6 +146,62 @@ struct DayContentView: View {
             NotificationService.scheduleReminder(for: toDo, calendar: calendar)
         }
         try? modelContext.save()
+    }
+
+    /// Persists a drag-and-drop reorder by giving the moved item a
+    /// `sortOrder` between its new neighbors — see `DisplayOrderReordering`.
+    /// Works across the habit/to-do boundary since both share the same
+    /// numeric `sortOrder` space.
+    private func moveDayItems(from source: IndexSet, to destination: Int) {
+        let currentItems = dayItems
+        guard let originalIndex = source.first else { return }
+        let movedID = currentItems[originalIndex].id
+
+        var reordered = currentItems
+        reordered.move(fromOffsets: source, toOffset: destination)
+        guard let newIndex = reordered.firstIndex(where: { $0.id == movedID }) else { return }
+
+        let before = newIndex > 0 ? reordered[newIndex - 1].sortOrder : nil
+        let after = newIndex < reordered.count - 1 ? reordered[newIndex + 1].sortOrder : nil
+        let newSortOrder = DisplayOrderReordering.newSortOrder(before: before, after: after)
+
+        switch reordered[newIndex] {
+        case .habit(let habit, _):
+            habit.sortOrder = newSortOrder
+        case .toDo(let toDo):
+            toDo.sortOrder = newSortOrder
+        }
+        try? modelContext.save()
+    }
+}
+
+/// A single row in `DayView`'s unified list — either a `Habit` (with its
+/// per-day completion already resolved, since that depends on `date`) or a
+/// `ToDo`. Both share one `sortOrder` namespace so they can be freely
+/// interleaved and drag-reordered together.
+enum DayItem: Identifiable {
+    case habit(Habit, isCompleted: Bool)
+    case toDo(ToDo)
+
+    var id: String {
+        switch self {
+        case .habit(let habit, _): "habit-\(habit.id)"
+        case .toDo(let toDo): "todo-\(toDo.id)"
+        }
+    }
+
+    var sortOrder: Double {
+        switch self {
+        case .habit(let habit, _): habit.sortOrder
+        case .toDo(let toDo): toDo.sortOrder
+        }
+    }
+
+    var isCompleted: Bool {
+        switch self {
+        case .habit(_, let isCompleted): isCompleted
+        case .toDo(let toDo): toDo.isCompleted
+        }
     }
 }
 
@@ -294,77 +351,67 @@ private func habitTimeText(_ date: Date) -> String {
     return formatter.string(from: date)
 }
 
-private struct HabitCompletionRow: View {
+/// Unified row for `DayView`'s merged habit/to-do list. Habits are visually
+/// distinguished only by a small "Habit" badge next to the title (and their
+/// optional time-window badge) — otherwise both types share the exact same
+/// checkbox-title-notes layout, so they read as one consistent list rather
+/// than two different row styles glued together.
+private struct DayItemRow: View {
     @Environment(\.modelContext) private var modelContext
-    let habit: Habit
+    let item: DayItem
     let date: Date
 
-    private var isCompleted: Bool {
-        habit.isCompleted(on: date)
-    }
+    @State private var showingHabitEditor = false
+    @State private var showingToDoEditor = false
 
-    var body: some View {
-        Button {
-            toggle()
-        } label: {
-            HStack(spacing: 12) {
-                Image(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
-                    .font(.title3)
-                    .foregroundStyle(isCompleted ? Color.accentColor : Color.secondary)
-                Image(systemName: habit.icon)
-                    .foregroundStyle(Color.accentColor)
-                    .frame(width: 24)
-                Text(habit.title)
-                    .strikethrough(isCompleted)
-                    .foregroundStyle(isCompleted ? .secondary : .primary)
-                Spacer()
-                if let session = habit.focusSession {
-                    Text("\(habitTimeText(session.startTime))–\(habitTimeText(session.endTime))")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-            }
-            .contentShape(Rectangle())
+    private var title: String {
+        switch item {
+        case .habit(let habit, _): habit.title
+        case .toDo(let toDo): toDo.title
         }
-        .buttonStyle(.plain)
     }
 
-    private func toggle() {
-        if let completion = habit.completion(on: date) {
-            modelContext.delete(completion)
-        } else {
-            let completion = HabitCompletion(date: date, habit: habit)
-            modelContext.insert(completion)
+    private var isCompleted: Bool { item.isCompleted }
+
+    /// Time-window badge for a habit with a focus session, or a notes
+    /// preview for a to-do — the two types happen to only ever need one
+    /// secondary line, never both.
+    private var subtitle: String? {
+        switch item {
+        case .habit(let habit, _):
+            guard let session = habit.focusSession else { return nil }
+            return "\(habitTimeText(session.startTime))–\(habitTimeText(session.endTime))"
+        case .toDo(let toDo):
+            guard let notes = toDo.notes, !notes.isEmpty else { return nil }
+            return notes
         }
-        try? modelContext.save()
     }
-}
-
-private struct ToDoRow: View {
-    @Environment(\.modelContext) private var modelContext
-    let toDo: ToDo
-    @State private var showingEditor = false
 
     var body: some View {
         HStack(spacing: 12) {
             Button {
-                toggleCompletion()
+                toggle()
             } label: {
-                Image(systemName: toDo.isCompleted ? "checkmark.circle.fill" : "circle")
+                Image(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
                     .font(.title3)
-                    .foregroundStyle(toDo.isCompleted ? Color.accentColor : Color.secondary)
+                    .foregroundStyle(isCompleted ? Color.accentColor : Color.secondary)
             }
             .buttonStyle(.plain)
 
             Button {
-                showingEditor = true
+                openEditor()
             } label: {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(toDo.title)
-                        .strikethrough(toDo.isCompleted)
-                        .foregroundStyle(toDo.isCompleted ? .secondary : .primary)
-                    if let notes = toDo.notes, !notes.isEmpty {
-                        Text(notes)
+                    HStack(spacing: 6) {
+                        Text(title)
+                            .strikethrough(isCompleted)
+                            .foregroundStyle(isCompleted ? .secondary : .primary)
+                        if case .habit = item {
+                            habitBadge
+                        }
+                    }
+                    if let subtitle {
+                        Text(subtitle)
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
@@ -375,18 +422,52 @@ private struct ToDoRow: View {
 
             Spacer()
         }
-        .sheet(isPresented: $showingEditor) {
-            ToDoEditorView(toDo: toDo)
+        .sheet(isPresented: $showingHabitEditor) {
+            if case .habit(let habit, _) = item {
+                HabitEditorView(habit: habit)
+            }
+        }
+        .sheet(isPresented: $showingToDoEditor) {
+            if case .toDo(let toDo) = item {
+                ToDoEditorView(toDo: toDo)
+            }
         }
     }
 
-    private func toggleCompletion() {
-        toDo.isCompleted.toggle()
-        toDo.completedAt = toDo.isCompleted ? .now : nil
-        if toDo.isCompleted {
-            NotificationService.cancelReminder(for: toDo)
-        } else if toDo.reminderTime != nil {
-            NotificationService.scheduleReminder(for: toDo)
+    private var habitBadge: some View {
+        Label("Habit", systemImage: "repeat")
+            .font(.caption2.weight(.semibold))
+            .padding(.horizontal, 6)
+            .padding(.vertical, 2)
+            .background(Color.accentColor.opacity(0.15))
+            .foregroundStyle(Color.accentColor)
+            .clipShape(Capsule())
+    }
+
+    private func openEditor() {
+        switch item {
+        case .habit: showingHabitEditor = true
+        case .toDo: showingToDoEditor = true
+        }
+    }
+
+    private func toggle() {
+        switch item {
+        case .habit(let habit, _):
+            if let completion = habit.completion(on: date) {
+                modelContext.delete(completion)
+            } else {
+                let completion = HabitCompletion(date: date, habit: habit)
+                modelContext.insert(completion)
+            }
+        case .toDo(let toDo):
+            toDo.isCompleted.toggle()
+            toDo.completedAt = toDo.isCompleted ? .now : nil
+            if toDo.isCompleted {
+                NotificationService.cancelReminder(for: toDo)
+            } else if toDo.reminderTime != nil {
+                NotificationService.scheduleReminder(for: toDo)
+            }
         }
         try? modelContext.save()
     }

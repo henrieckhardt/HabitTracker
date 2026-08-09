@@ -11,6 +11,14 @@ final class Habit {
     var isArchived: Bool = false
     var reminderTime: Date?
 
+    /// Manual display-order position within `DayView`'s unified habit/to-do
+    /// list, shared with `ToDo.sortOrder` in the same numeric space so the
+    /// two types can be interleaved and drag-reordered together. `0` means
+    /// "never set" (fixed up by `DisplayOrderMigration` on launch) — real
+    /// values are `timeIntervalSinceReferenceDate`-scale and never land
+    /// exactly on `0`.
+    var sortOrder: Double = 0
+
     /// `RecurrenceRule` (an enum with `Set`-valued associated data) crashes
     /// SwiftData's schema macro if stored directly, so it's persisted as
     /// encoded JSON and exposed through the computed `recurrenceRule` below.
@@ -39,7 +47,8 @@ final class Habit {
         recurrenceRule: RecurrenceRule = .daily,
         createdAt: Date = .now,
         isArchived: Bool = false,
-        reminderTime: Date? = nil
+        reminderTime: Date? = nil,
+        sortOrder: Double = Date.now.timeIntervalSinceReferenceDate
     ) {
         self.id = UUID()
         self.title = title
@@ -49,6 +58,7 @@ final class Habit {
         self.createdAt = createdAt
         self.isArchived = isArchived
         self.reminderTime = reminderTime
+        self.sortOrder = sortOrder
     }
 
     func isCompleted(on date: Date, calendar: Calendar = .current) -> Bool {

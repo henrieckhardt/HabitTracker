@@ -19,6 +19,10 @@ final class ToDo {
     var startTime: Date?
     var endTime: Date?
 
+    /// Manual display-order position within `DayView`'s unified habit/to-do
+    /// list — see `Habit.sortOrder` for the shared-numeric-space rationale.
+    var sortOrder: Double = 0
+
     init(
         title: String,
         notes: String? = nil,
@@ -28,7 +32,8 @@ final class ToDo {
         completedAt: Date? = nil,
         reminderTime: Date? = nil,
         startTime: Date? = nil,
-        endTime: Date? = nil
+        endTime: Date? = nil,
+        sortOrder: Double = Date.now.timeIntervalSinceReferenceDate
     ) {
         self.id = UUID()
         self.title = title
@@ -40,5 +45,6 @@ final class ToDo {
         self.reminderTime = reminderTime
         self.startTime = startTime
         self.endTime = endTime
+        self.sortOrder = sortOrder
     }
 }

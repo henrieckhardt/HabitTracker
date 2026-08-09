@@ -29,6 +29,9 @@ struct RootTabView: View {
                     Label("Statistics", systemImage: "chart.bar.fill")
                 }
         }
+        .task {
+            DisplayOrderMigration.run(context: modelContext)
+        }
         .onChange(of: scenePhase) { _, newPhase in
             if newPhase == .active {
                 RolloverService.rolloverIfNeeded(context: modelContext)

@@ -14,6 +14,7 @@
 		0928AA2E9723336E013F381A /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B0D9D8E170506613A74C49 /* AppGroup.swift */; };
 		0CB8E94F1C11B3528B403A42 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B0D9D8E170506613A74C49 /* AppGroup.swift */; };
 		0D50E669B431C1F5D1591291 /* FamilyControlsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFF0F0D973401BA1712F320 /* FamilyControlsService.swift */; };
+		11BEBBE203DE7891BFF56D47 /* DisplayOrderMigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7D84A363520C55FC28C760 /* DisplayOrderMigration.swift */; };
 		160CEDF138CA18568D7FDDEF /* FocusSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB76B67E667A2BA36D3BAE1 /* FocusSession.swift */; };
 		17010DD35700A4B7C8B05100 /* RecurrenceRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63777F15EA648AC4D87F18AF /* RecurrenceRule.swift */; };
 		18045C4FADF25D1D4BC00126 /* StreakEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBC4C9A0E022A89CA0F9FAA6 /* StreakEngine.swift */; };
@@ -59,6 +60,7 @@
 		9D8D5967743A202ED967A5EE /* RecurrenceEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D806678F8172CF38BA7A78E8 /* RecurrenceEngine.swift */; };
 		9E250E1A040EBA53879360F7 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B0D9D8E170506613A74C49 /* AppGroup.swift */; };
 		9E693C06309A4DDF08D6D246 /* FamilyControls.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 371571CDFA9AE634FC04F59D /* FamilyControls.framework */; };
+		A034AFE57BB9E522B8CF25FF /* DisplayOrderReordering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3589D67DEDADA94EC3A18C15 /* DisplayOrderReordering.swift */; };
 		A3457606E68302E288C3A696 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 9E2B0A6EF8CDEC4EDD91841A /* Localizable.xcstrings */; };
 		A6A78DC48ABD8248EE7108BA /* HabitListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF3E6BE07F9FB7C10D61993 /* HabitListView.swift */; };
 		A814FA11645DFC239CACCA77 /* Habit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757134E23848D6632FD1EA11 /* Habit.swift */; };
@@ -66,6 +68,7 @@
 		A9CE582473EE0E505E5B6FAF /* FocusShieldMonitor.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 1CDCEFED00DEDE430332289C /* FocusShieldMonitor.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		AC0CC1C935707A7C84BC7118 /* Habit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757134E23848D6632FD1EA11 /* Habit.swift */; };
 		AD46DB286ABE4AF3C8393763 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C4BCEFC3DD5733BBFAA70E /* StatsView.swift */; };
+		AEC60D5D33CE96609DB2ECF7 /* DisplayOrderReorderingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E9FA273696D88F0CEC5FECA /* DisplayOrderReorderingTests.swift */; };
 		BD36066519DEB8B7FB3F1439 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 9E2B0A6EF8CDEC4EDD91841A /* Localizable.xcstrings */; };
 		BD65489B6ABBF565ED2CE04A /* Habit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757134E23848D6632FD1EA11 /* Habit.swift */; };
 		BF428FC7BA2832A06890F9CF /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B0D9D8E170506613A74C49 /* AppGroup.swift */; };
@@ -150,10 +153,13 @@
 		1EA330085B77C76D00AED076 /* WeekdaySelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekdaySelector.swift; sourceTree = "<group>"; };
 		21E0EB92AE9E9404755F136D /* DayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayView.swift; sourceTree = "<group>"; };
 		26C4BCEFC3DD5733BBFAA70E /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
+		2E9FA273696D88F0CEC5FECA /* DisplayOrderReorderingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayOrderReorderingTests.swift; sourceTree = "<group>"; };
+		3589D67DEDADA94EC3A18C15 /* DisplayOrderReordering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayOrderReordering.swift; sourceTree = "<group>"; };
 		371571CDFA9AE634FC04F59D /* FamilyControls.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FamilyControls.framework; path = System/Library/Frameworks/FamilyControls.framework; sourceTree = SDKROOT; };
 		3AF3E6BE07F9FB7C10D61993 /* HabitListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitListView.swift; sourceTree = "<group>"; };
 		3E76BAA37AAE86C749C7AC17 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		4D4C525344D1CE660C9F15C5 /* FocusShieldConfiguration.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = FocusShieldConfiguration.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D7D84A363520C55FC28C760 /* DisplayOrderMigration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayOrderMigration.swift; sourceTree = "<group>"; };
 		51DE77127A2CFCC34F55BD00 /* RecurrenceEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurrenceEngineTests.swift; sourceTree = "<group>"; };
 		587E83514D32CE4A425AC064 /* ManagedSettings.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ManagedSettings.framework; path = System/Library/Frameworks/ManagedSettings.framework; sourceTree = SDKROOT; };
 		5DB6375487A04DF9F68E955F /* Weekday.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weekday.swift; sourceTree = "<group>"; };
@@ -260,6 +266,7 @@
 		205CA1387EBF37732F8D43CC /* HabitTrackerTests */ = {
 			isa = PBXGroup;
 			children = (
+				2E9FA273696D88F0CEC5FECA /* DisplayOrderReorderingTests.swift */,
 				CCDD184D3F2BFEC3C4FE1683 /* FocusScheduleEngineTests.swift */,
 				0EC26A00D3B0B955B78554C8 /* HabitDisplayOrderingTests.swift */,
 				51DE77127A2CFCC34F55BD00 /* RecurrenceEngineTests.swift */,
@@ -411,6 +418,8 @@
 		C31E65DCE16EF06192345FA0 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				4D7D84A363520C55FC28C760 /* DisplayOrderMigration.swift */,
+				3589D67DEDADA94EC3A18C15 /* DisplayOrderReordering.swift */,
 				8AFF0F0D973401BA1712F320 /* FamilyControlsService.swift */,
 				7E7A7503A51307877B3536AC /* FocusBlockingScheduler.swift */,
 				FC40D6421982FC4F52C6A557 /* FocusScheduleEngine.swift */,
@@ -665,6 +674,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AEC60D5D33CE96609DB2ECF7 /* DisplayOrderReorderingTests.swift in Sources */,
 				FF76F3964B838D40D4AF8E17 /* FocusScheduleEngineTests.swift in Sources */,
 				E7021724C066ABFB6D7085C1 /* HabitDisplayOrderingTests.swift in Sources */,
 				DE12831EA16BD8A1399D0B2B /* RecurrenceEngineTests.swift in Sources */,
@@ -713,6 +723,8 @@
 			files = (
 				BF428FC7BA2832A06890F9CF /* AppGroup.swift in Sources */,
 				C24E56AA325F665AFC094F01 /* DayView.swift in Sources */,
+				11BEBBE203DE7891BFF56D47 /* DisplayOrderMigration.swift in Sources */,
+				A034AFE57BB9E522B8CF25FF /* DisplayOrderReordering.swift in Sources */,
 				0D50E669B431C1F5D1591291 /* FamilyControlsService.swift in Sources */,
 				C8317F175BB9CAD4615D5A04 /* FocusBlockingScheduler.swift in Sources */,
 				3DD321180CB2E2C7D19D02FD /* FocusEditorView.swift in Sources */,
