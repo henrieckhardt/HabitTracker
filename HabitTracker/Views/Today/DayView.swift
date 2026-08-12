@@ -1,8 +1,18 @@
 import SwiftUI
 import SwiftData
 
+/// `DayContentView`'s two display modes — folded into one tab per the
+/// coherence plan (previously "Heute" and "Woche" were separate tabs).
+/// Only ever switchable when `allowsDateNavigation` is true: a
+/// `DayContentView` pushed from Week mode for a specific day stays in
+/// `.day` permanently, with no way back to `.week` from there — matching
+/// the old `WeekView`'s push-destination behavior exactly.
+enum DayViewMode: String, CaseIterable {
+    case day, week
+}
+
 /// Tab-root wrapper: owns the NavigationStack so the "Heute" tab has its own
-/// navigation context, separate from the Woche tab's stack.
+/// navigation context.
 struct DayView: View {
     var body: some View {
         NavigationStack {
@@ -26,6 +36,8 @@ struct DayContentView: View {
     private var allFocusSessions: [FocusSession]
 
     @State private var selectedDate: Date
+    @State private var weekAnchor: Date
+    @State private var displayMode: DayViewMode = .day
     @State private var showingAddToDo = false
     @State private var showingQuickAdd = false
     @State private var showingDatePicker = false
@@ -53,7 +65,9 @@ struct DayContentView: View {
     private let calendar = Calendar.current
 
     init(initialDate: Date, allowsDateNavigation: Bool) {
-        _selectedDate = State(initialValue: Calendar.current.startOfDay(for: initialDate))
+        let start = Calendar.current.startOfDay(for: initialDate)
+        _selectedDate = State(initialValue: start)
+        _weekAnchor = State(initialValue: start)
         self.allowsDateNavigation = allowsDateNavigation
     }
 
@@ -104,6 +118,134 @@ struct DayContentView: View {
     }
 
     var body: some View {
+        Group {
+            switch displayMode {
+            case .day:
+                dayList
+            case .week:
+                WeekContentView(weekAnchor: $weekAnchor)
+            }
+        }
+        .safeAreaInset(edge: .top) {
+            // Deliberately a `safeAreaInset` on the `List`, not a
+            // conditional `Section` inside it — see `FocusListView`'s
+            // comment on why that broke sibling-row hit testing. Same
+            // reasoning is why the Tag/Woche segmented control below lives
+            // here and not as a `Picker` in the `Section` header.
+            VStack(spacing: 0) {
+                if let activeFocusSession {
+                    ActiveFocusBanner(session: activeFocusSession)
+                        .padding()
+                        .background(.bar)
+                }
+                if allowsDateNavigation {
+                    Picker("Mode", selection: $displayMode) {
+                        Text("Day").tag(DayViewMode.day)
+                        Text("Week").tag(DayViewMode.week)
+                    }
+                    .pickerStyle(.segmented)
+                    .padding(.horizontal)
+                    .padding(.vertical, 8)
+                    .background(.bar)
+                }
+            }
+        }
+        .environment(\.editMode, $editMode)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if allowsDateNavigation {
+                // `.navigationBarLeading` instead of `.principal`: a
+                // `.principal` item is centered in the *remaining* bar
+                // width after the leading/trailing items, so it visibly
+                // drifted depending on how many trailing buttons were
+                // showing (e.g. the pencil button disappearing on an empty
+                // day) — pinning to the leading edge keeps it in a fixed
+                // spot regardless of what else is in the toolbar.
+                ToolbarItem(placement: .navigationBarLeading) {
+                    HStack(spacing: 16) {
+                        Button {
+                            stepBackward()
+                        } label: {
+                            Image(systemName: "chevron.left")
+                        }
+
+                        Button {
+                            stepForward()
+                        } label: {
+                            Image(systemName: "chevron.right")
+                        }
+                    }
+                }
+            }
+            // The edit-mode/quick-add/add buttons only make sense against a
+            // single day's list — Week mode's own quick-add is a per-row
+            // leading swipe action instead (see `WeekContentView`), matching
+            // what the standalone Woche tab already offered.
+            if displayMode == .day {
+                ToolbarItem(placement: .primaryAction) {
+                    if !dayItems.isEmpty {
+                        Button {
+                            withAnimation {
+                                editMode = editMode == .active ? .inactive : .active
+                            }
+                        } label: {
+                            Image(systemName: editMode == .active ? "checkmark" : "pencil")
+                        }
+                    }
+                }
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        showingQuickAdd = true
+                    } label: {
+                        Image(systemName: "note.text.badge.plus")
+                    }
+                }
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        showingAddToDo = true
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
+        }
+        .sheet(isPresented: $showingAddToDo) {
+            ToDoEditorView(defaultDate: selectedDate)
+        }
+        .sheet(isPresented: $showingQuickAdd) {
+            QuickAddToDosView(date: selectedDate)
+        }
+        .sheet(item: $toDoToMove) { toDo in
+            MoveToDoDateSheet(toDo: toDo)
+        }
+        .sheet(isPresented: $showingDatePicker) {
+            DatePickerSheet(selectedDate: $selectedDate)
+        }
+        .sheet(item: $startFocusItem) { item in
+            switch item {
+            case .habit(let habit, _):
+                StartFocusSheet(itemTitle: habit.title, linkedToDo: nil, linkedHabit: habit)
+            case .toDo(let toDo):
+                StartFocusSheet(itemTitle: toDo.title, linkedToDo: toDo, linkedHabit: nil)
+            }
+        }
+        // Registered once, here, so a day tapped from Week mode pushes onto
+        // this same NavigationStack regardless of which mode is currently
+        // showing. A `DayContentView` pushed this way (`allowsDateNavigation:
+        // false`) never itself shows Week mode, so it never triggers this
+        // again — re-registering it there is harmless, not recursive.
+        .navigationDestination(for: Date.self) { date in
+            DayContentView(initialDate: date, allowsDateNavigation: false)
+        }
+        .task {
+            RolloverService.rolloverIfNeeded(context: modelContext)
+        }
+        .onReceive(focusTimer) { date in
+            now = date
+        }
+    }
+
+    private var dayList: some View {
         List {
             Section {
                 if dayItems.isEmpty {
@@ -132,94 +274,23 @@ struct DayContentView: View {
                 dateHeading
             }
         }
-        .safeAreaInset(edge: .top) {
-            // Deliberately a `safeAreaInset` on the `List`, not a
-            // conditional `Section` inside it — see `FocusListView`'s
-            // comment on why that broke sibling-row hit testing.
-            if let activeFocusSession {
-                ActiveFocusBanner(session: activeFocusSession)
-                    .padding()
-                    .background(.bar)
-            }
-        }
-        .environment(\.editMode, $editMode)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            if allowsDateNavigation {
-                // `.navigationBarLeading` instead of `.principal`: a
-                // `.principal` item is centered in the *remaining* bar
-                // width after the leading/trailing items, so it visibly
-                // drifted depending on how many trailing buttons were
-                // showing (e.g. the pencil button disappearing on an empty
-                // day) — pinning to the leading edge keeps it in a fixed
-                // spot regardless of what else is in the toolbar.
-                ToolbarItem(placement: .navigationBarLeading) {
-                    HStack(spacing: 16) {
-                        Button {
-                            selectedDate = calendar.date(byAdding: .day, value: -1, to: selectedDate) ?? selectedDate
-                        } label: {
-                            Image(systemName: "chevron.left")
-                        }
+    }
 
-                        Button {
-                            selectedDate = calendar.date(byAdding: .day, value: 1, to: selectedDate) ?? selectedDate
-                        } label: {
-                            Image(systemName: "chevron.right")
-                        }
-                    }
-                }
-            }
-            ToolbarItem(placement: .primaryAction) {
-                if !dayItems.isEmpty {
-                    Button {
-                        withAnimation {
-                            editMode = editMode == .active ? .inactive : .active
-                        }
-                    } label: {
-                        Image(systemName: editMode == .active ? "checkmark" : "pencil")
-                    }
-                }
-            }
-            ToolbarItem(placement: .primaryAction) {
-                Button {
-                    showingQuickAdd = true
-                } label: {
-                    Image(systemName: "note.text.badge.plus")
-                }
-            }
-            ToolbarItem(placement: .primaryAction) {
-                Button {
-                    showingAddToDo = true
-                } label: {
-                    Image(systemName: "plus")
-                }
-            }
+    private func stepBackward() {
+        switch displayMode {
+        case .day:
+            selectedDate = calendar.date(byAdding: .day, value: -1, to: selectedDate) ?? selectedDate
+        case .week:
+            weekAnchor = calendar.date(byAdding: .day, value: -7, to: weekAnchor) ?? weekAnchor
         }
-        .sheet(isPresented: $showingAddToDo) {
-            ToDoEditorView(defaultDate: selectedDate)
-        }
-        .sheet(isPresented: $showingQuickAdd) {
-            QuickAddToDosView(date: selectedDate)
-        }
-        .sheet(item: $toDoToMove) { toDo in
-            MoveToDoDateSheet(toDo: toDo)
-        }
-        .sheet(isPresented: $showingDatePicker) {
-            DatePickerSheet(selectedDate: $selectedDate)
-        }
-        .sheet(item: $startFocusItem) { item in
-            switch item {
-            case .habit(let habit, _):
-                StartFocusSheet(itemTitle: habit.title, linkedToDo: nil, linkedHabit: habit)
-            case .toDo(let toDo):
-                StartFocusSheet(itemTitle: toDo.title, linkedToDo: toDo, linkedHabit: nil)
-            }
-        }
-        .task {
-            RolloverService.rolloverIfNeeded(context: modelContext)
-        }
-        .onReceive(focusTimer) { date in
-            now = date
+    }
+
+    private func stepForward() {
+        switch displayMode {
+        case .day:
+            selectedDate = calendar.date(byAdding: .day, value: 1, to: selectedDate) ?? selectedDate
+        case .week:
+            weekAnchor = calendar.date(byAdding: .day, value: 7, to: weekAnchor) ?? weekAnchor
         }
     }
 

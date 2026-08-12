@@ -10,7 +10,6 @@ struct HabitListView: View {
     private var habits: [Habit]
 
     @State private var showingAddHabit = false
-    @State private var habitToEdit: Habit?
 
     var body: some View {
         NavigationStack {
@@ -24,12 +23,11 @@ struct HabitListView: View {
                 } else {
                     List {
                         ForEach(habits) { habit in
-                            Button {
-                                habitToEdit = habit
+                            NavigationLink {
+                                HabitDetailView(habit: habit)
                             } label: {
                                 HabitRow(habit: habit)
                             }
-                            .buttonStyle(.plain)
                             .swipeActions {
                                 Button("Archive", systemImage: "archivebox") {
                                     habit.isArchived = true
@@ -68,15 +66,16 @@ struct HabitListView: View {
             .sheet(isPresented: $showingAddHabit) {
                 HabitEditorView()
             }
-            .sheet(item: $habitToEdit) { habit in
-                HabitEditorView(habit: habit)
-            }
         }
     }
 }
 
 private struct HabitRow: View {
     let habit: Habit
+
+    private var currentStreak: Int {
+        StreakEngine.currentStreak(for: habit)
+    }
 
     var body: some View {
         HStack(spacing: 12) {
@@ -94,6 +93,15 @@ private struct HabitRow: View {
                     .foregroundStyle(.secondary)
             }
             Spacer()
+            // Plain Label, deliberately not a Button — nesting a
+            // Button-like control inside a NavigationLink's label is the
+            // exact hit-testing hazard documented on RecurrencePickerView
+            // and FocusListView's ActiveFocusBanner extraction.
+            if currentStreak > 0 {
+                Label("\(currentStreak)", systemImage: "flame.fill")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.orange)
+            }
         }
         .contentShape(Rectangle())
     }

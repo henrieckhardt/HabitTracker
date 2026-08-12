@@ -1,12 +1,20 @@
 import SwiftUI
 import SwiftData
 
-struct WeekView: View {
+/// The week-mode content for `DayContentView` — a 7-day digest, one row per
+/// day, each row pushing `DayContentView(allowsDateNavigation: false)` for
+/// that specific day. This used to be `WeekView`'s entire body, back when
+/// Woche was its own tab with its own `NavigationStack`; it's now hosted
+/// inside the Heute tab's stack instead, switched to via `DayContentView`'s
+/// segmented control, so it owns neither a `NavigationStack` nor a toolbar
+/// of its own — both belong to the parent.
+struct WeekContentView: View {
+    @Binding var weekAnchor: Date
+
     @Query(filter: #Predicate<Habit> { !$0.isArchived }, sort: \Habit.createdAt)
     private var allHabits: [Habit]
     @Query(sort: \ToDo.createdAt) private var allToDos: [ToDo]
 
-    @State private var weekAnchor: Date = Calendar.current.startOfDay(for: .now)
     @State private var showingQuickAdd = false
     @State private var quickAddDate: Date = .now
 
@@ -37,17 +45,14 @@ struct WeekView: View {
     }
 
     var body: some View {
-        // Computed once per render and threaded down, instead of every row
-        // independently calling `calendar.isDateInToday(date)` — with 7
-        // separate calls, list rows built at slightly different times (e.g.
-        // while scrolling) could straddle a midnight rollover and each
-        // "correctly" see a different `Date()`, so two adjacent days both
-        // ended up marked "Heute". A single shared reference makes that
-        // structurally impossible.
+        // Same reasoning as DayContentView's todayStart: computed once and
+        // threaded down instead of every row calling `isDateInToday`
+        // independently, so a midnight rollover mid-render can't leave two
+        // adjacent rows both "correctly" marked as today.
         let todayStart = calendar.startOfDay(for: .now)
 
-        NavigationStack {
-            List {
+        List {
+            Section {
                 ForEach(daysInWeek, id: \.self) { date in
                     NavigationLink(value: date) {
                         WeekDayRow(
@@ -68,40 +73,33 @@ struct WeekView: View {
                         .tint(.blue)
                     }
                 }
-            }
-            .navigationTitle("Week")
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    HStack(spacing: 16) {
-                        Button {
-                            weekAnchor = calendar.date(byAdding: .day, value: -7, to: weekAnchor) ?? weekAnchor
-                        } label: {
-                            Image(systemName: "chevron.left")
-                        }
-
-                        Button {
-                            weekAnchor = calendar.startOfDay(for: .now)
-                        } label: {
-                            Text(weekRangeText)
-                                .font(.headline)
-                        }
-                        .buttonStyle(.plain)
-
-                        Button {
-                            weekAnchor = calendar.date(byAdding: .day, value: 7, to: weekAnchor) ?? weekAnchor
-                        } label: {
-                            Image(systemName: "chevron.right")
-                        }
-                    }
-                }
-            }
-            .navigationDestination(for: Date.self) { date in
-                DayContentView(initialDate: date, allowsDateNavigation: false)
-            }
-            .sheet(isPresented: $showingQuickAdd) {
-                QuickAddToDosView(date: quickAddDate)
+            } header: {
+                weekHeading
             }
         }
+        .sheet(isPresented: $showingQuickAdd) {
+            QuickAddToDosView(date: quickAddDate)
+        }
+    }
+
+    /// Mirrors `DayContentView.dateHeading`'s look (large-title heading atop
+    /// the list) but shows the week range instead of a single date, and taps
+    /// to jump back to the current week instead of opening a date picker.
+    @ViewBuilder
+    private var weekHeading: some View {
+        Group {
+            Button {
+                weekAnchor = calendar.startOfDay(for: .now)
+            } label: {
+                Text(weekRangeText)
+                    .font(.largeTitle.bold())
+                    .foregroundStyle(.primary)
+            }
+            .buttonStyle(.plain)
+        }
+        .textCase(nil)
+        .foregroundStyle(.primary)
+        .padding(.bottom, 4)
     }
 }
 

@@ -16,13 +16,11 @@ struct RootTabView: View {
 
     var body: some View {
         TabView {
+            // Woche is folded into Heute as a segmented Tag/Woche control
+            // (see DayContentView/WeekContentView) rather than its own tab.
             DayView()
                 .tabItem {
                     Label("Today", systemImage: "calendar")
-                }
-            WeekView()
-                .tabItem {
-                    Label("Week", systemImage: "calendar.day.timeline.left")
                 }
             HabitListView()
                 .tabItem {
@@ -32,9 +30,9 @@ struct RootTabView: View {
                 .tabItem {
                     Label("Focus", systemImage: "timer")
                 }
-            StatsView()
+            ProfileView()
                 .tabItem {
-                    Label("Statistics", systemImage: "chart.bar.fill")
+                    Label("Profile", systemImage: "person.crop.circle")
                 }
         }
         .task {
