@@ -11,9 +11,7 @@ struct WeekView: View {
     @State private var quickAddDate: Date = .now
 
     private var calendar: Calendar {
-        var cal = Calendar.current
-        cal.firstWeekday = 2 // Monday, matching WeekdaySelector's ordering.
-        return cal
+        CalendarProvider.current
     }
 
     private var daysInWeek: [Date] {
