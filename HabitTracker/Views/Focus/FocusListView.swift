@@ -127,32 +127,6 @@ private func timeText(_ date: Date) -> String {
     return formatter.string(from: date)
 }
 
-private struct ActiveFocusBanner: View {
-    let session: FocusSession
-
-    private var endText: String {
-        let endDate = session.isOnDemand ? session.activeUntil : session.endTime
-        guard let endDate else { return "" }
-        return String(localized: "Until \(timeText(endDate))")
-    }
-
-    var body: some View {
-        HStack(spacing: 12) {
-            Image(systemName: "timer")
-                .font(.title3)
-                .foregroundStyle(Color.accentColor)
-            VStack(alignment: .leading, spacing: 2) {
-                Text("Currently active: \(session.title)")
-                    .font(.subheadline.weight(.semibold))
-                Text(endText)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            Spacer()
-        }
-    }
-}
-
 private struct FocusRow: View {
     let session: FocusSession
     let isActive: Bool

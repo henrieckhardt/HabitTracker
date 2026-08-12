@@ -62,6 +62,53 @@ final class FocusSession {
     /// field existed.
     var pendingStart: Date?
 
+    // MARK: - Task linking (set only while this run is active)
+    //
+    // All four fields below are pure runtime state, exactly like
+    // `activeUntil`/`pendingStart` above: they're set when a linked focus
+    // starts and cleared the moment it ends — the permanent record of what a
+    // run was linked to lives in `FocusRun.linkedToDoID`/`.linkedHabitID`/
+    // `.linkedTitle` instead. `FocusSessionController` is the only writer.
+    //
+    // A `ToDo`/`Habit` `id` is stored rather than a `@Relationship`: `ToDo`
+    // has zero relationships anywhere else in this schema, and adding one
+    // here would change that entity for every process sharing this store
+    // (see `AppGroup`'s doc comment) for a field that's empty outside of an
+    // active linked run.
+
+    /// The `ToDo` this session is currently running for, if started from
+    /// one (see `DayContentView`'s leading swipe action).
+    var activeToDoID: UUID?
+
+    /// The `Habit` this session is currently running for.
+    ///
+    /// ⚠️ This is **never** set on a habit's own companion session
+    /// (`ownerHabit != nil`, managed by `HabitEditorView`'s time-window
+    /// section) — starting a focus *for* a habit always runs the shared
+    /// "Quick Focus" on-demand template (or another user-chosen standalone
+    /// template) instead, with this field pointing at the habit. Running an
+    /// on-demand start directly on a companion session would tear down and
+    /// replace its repeating `DeviceActivitySchedule` registration
+    /// (`FocusBlockingScheduler.registerOneOffSchedule` calls
+    /// `stopMonitoring` first), permanently breaking the habit's daily
+    /// time window. `StartFocusSheet` only ever offers standalone sessions
+    /// (`ownerHabit == nil`), which makes this impossible by construction
+    /// rather than a runtime check this comment would otherwise have to ask
+    /// you to trust.
+    var activeHabitID: UUID?
+
+    /// Denormalized title of whatever `activeToDoID`/`activeHabitID` points
+    /// at, captured at start time — lets the shield subtitle
+    /// (`FocusShieldConfigurationExtension`) and the active-focus banner
+    /// show "Steuererklärung · bis 15:30" without either process faulting a
+    /// relationship to resolve it.
+    var activeLabel: String?
+
+    /// `FocusRun.id` of the run currently tracking this session's active
+    /// window, so `FocusSessionController.stop`/`.reconcile` can find it in
+    /// O(1) instead of a fetch-by-predicate.
+    var currentRunID: UUID?
+
     init(
         title: String,
         startTime: Date,

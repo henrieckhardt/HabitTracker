@@ -24,6 +24,7 @@ enum AppSettings {
         static let defaultFocusDurationMinutes = "defaultFocusDurationMinutes"
         static let promptCompleteAfterFocus = "promptCompleteAfterFocus"
         static let profileName = "profileName"
+        static let quickFocusSessionID = "quickFocusSessionID"
     }
 
     enum Default {
@@ -62,5 +63,15 @@ enum AppSettings {
     static var promptCompleteAfterFocus: Bool {
         get { (defaults.object(forKey: Key.promptCompleteAfterFocus) as? Bool) ?? Default.promptCompleteAfterFocus }
         set { defaults.set(newValue, forKey: Key.promptCompleteAfterFocus) }
+    }
+
+    /// The `FocusSession.id` of the lazily-created "Quick Focus" template
+    /// (see `FocusSessionController.quickFocusSession`) — `nil` until the
+    /// user starts a focus from a to-do/habit row for the first time.
+    /// Stored by id, not looked up by title, so renaming the session in
+    /// `FocusEditorView` doesn't orphan the pointer or spawn a duplicate.
+    static var quickFocusSessionID: UUID? {
+        get { (defaults.string(forKey: Key.quickFocusSessionID)).flatMap(UUID.init(uuidString:)) }
+        set { defaults.set(newValue?.uuidString, forKey: Key.quickFocusSessionID) }
     }
 }

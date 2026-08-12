@@ -53,7 +53,32 @@ final class FocusRunReconcilerTests: XCTestCase {
         let mutations = FocusRunReconciler.mutations(sessions: [session], openRuns: [], now: now)
 
         XCTAssertEqual(mutations, [
-            .openRun(sessionID: session.id, sessionTitle: "Deep Work", startedAt: date(9, 0), plannedEnd: date(9, 30), wasBlockingApps: false)
+            .openRun(
+                sessionID: session.id, sessionTitle: "Deep Work", startedAt: date(9, 0), plannedEnd: date(9, 30),
+                wasBlockingApps: false, linkedToDoID: nil, linkedHabitID: nil, linkedTitle: nil
+            )
+        ])
+    }
+
+    func testRetroactiveOpenCarriesForwardTheSessionsActiveLink() {
+        // A delayed start of a task-linked focus (see StartFocusSheet)
+        // should still be attributable to that task even if the retroactive
+        // open only materializes later.
+        let session = makeSession()
+        session.pendingStart = date(9, 0)
+        session.activeUntil = date(9, 30)
+        let toDoID = UUID()
+        session.activeToDoID = toDoID
+        session.activeLabel = "Steuererklärung"
+        let now = date(9, 10)
+
+        let mutations = FocusRunReconciler.mutations(sessions: [session], openRuns: [], now: now)
+
+        XCTAssertEqual(mutations, [
+            .openRun(
+                sessionID: session.id, sessionTitle: "Deep Work", startedAt: date(9, 0), plannedEnd: date(9, 30),
+                wasBlockingApps: false, linkedToDoID: toDoID, linkedHabitID: nil, linkedTitle: "Steuererklärung"
+            )
         ])
     }
 
@@ -71,7 +96,10 @@ final class FocusRunReconcilerTests: XCTestCase {
         let mutations = FocusRunReconciler.mutations(sessions: [session], openRuns: [], now: now)
 
         XCTAssertEqual(mutations, [
-            .openRun(sessionID: session.id, sessionTitle: "Deep Work", startedAt: date(9, 0), plannedEnd: date(9, 30), wasBlockingApps: false),
+            .openRun(
+                sessionID: session.id, sessionTitle: "Deep Work", startedAt: date(9, 0), plannedEnd: date(9, 30),
+                wasBlockingApps: false, linkedToDoID: nil, linkedHabitID: nil, linkedTitle: nil
+            ),
             .clearSessionRuntimeState(sessionID: session.id)
         ])
     }

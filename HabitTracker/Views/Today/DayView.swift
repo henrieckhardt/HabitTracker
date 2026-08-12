@@ -19,13 +19,30 @@ struct DayContentView: View {
     @Query(filter: #Predicate<Habit> { !$0.isArchived }, sort: \Habit.createdAt)
     private var allHabits: [Habit]
     @Query(sort: \ToDo.createdAt) private var allToDos: [ToDo]
+    // Standalone sessions only (`ownerHabit == nil`) — same predicate as
+    // `FocusListView`/`StartFocusSheet` — so a habit's own companion window
+    // is never mistaken for "the" active focus here.
+    @Query(filter: #Predicate<FocusSession> { !$0.isArchived && $0.ownerHabit == nil }, sort: \FocusSession.createdAt)
+    private var allFocusSessions: [FocusSession]
 
     @State private var selectedDate: Date
     @State private var showingAddToDo = false
     @State private var showingQuickAdd = false
     @State private var showingDatePicker = false
     @State private var toDoToMove: ToDo?
+    @State private var startFocusItem: DayItem?
     @State private var editMode: EditMode = .inactive
+
+    /// Drives `activeFocusSession` below. Only needs to catch a session's
+    /// window *elapsing* while this view sits open — starts/stops made
+    /// through the app itself already refresh `allFocusSessions` via
+    /// `@Query` the moment they save. Same pattern as `FocusListView`.
+    @State private var now: Date = .now
+    private let focusTimer = Timer.publish(every: 30, on: .main, in: .common).autoconnect()
+
+    private var activeFocusSession: FocusSession? {
+        FocusScheduleEngine.currentlyActiveSession(in: allFocusSessions, at: now)
+    }
 
     /// Whether the day can be changed at all — true for the standalone
     /// "Heute" tab, false when this view is pushed from `WeekView` for a
@@ -115,6 +132,16 @@ struct DayContentView: View {
                 dateHeading
             }
         }
+        .safeAreaInset(edge: .top) {
+            // Deliberately a `safeAreaInset` on the `List`, not a
+            // conditional `Section` inside it — see `FocusListView`'s
+            // comment on why that broke sibling-row hit testing.
+            if let activeFocusSession {
+                ActiveFocusBanner(session: activeFocusSession)
+                    .padding()
+                    .background(.bar)
+            }
+        }
         .environment(\.editMode, $editMode)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -180,8 +207,19 @@ struct DayContentView: View {
         .sheet(isPresented: $showingDatePicker) {
             DatePickerSheet(selectedDate: $selectedDate)
         }
+        .sheet(item: $startFocusItem) { item in
+            switch item {
+            case .habit(let habit, _):
+                StartFocusSheet(itemTitle: habit.title, linkedToDo: nil, linkedHabit: habit)
+            case .toDo(let toDo):
+                StartFocusSheet(itemTitle: toDo.title, linkedToDo: toDo, linkedHabit: nil)
+            }
+        }
         .task {
             RolloverService.rolloverIfNeeded(context: modelContext)
+        }
+        .onReceive(focusTimer) { date in
+            now = date
         }
     }
 
@@ -258,6 +296,14 @@ struct DayContentView: View {
                     }
                     .tint(.blue)
                 }
+            }
+            .swipeActions(edge: .leading) {
+                Button {
+                    startFocusItem = item
+                } label: {
+                    Label("Focus", systemImage: "timer")
+                }
+                .tint(.indigo)
             }
     }
 

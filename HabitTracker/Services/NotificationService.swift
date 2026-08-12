@@ -121,6 +121,47 @@ enum NotificationService {
         cancelRequests(withPrefix: toDoIdentifier(for: toDo))
     }
 
+    /// Schedules a one-time "focus ended, mark done?" notification for
+    /// `plannedEnd`, reusing the exact same "Complete" quick-action
+    /// categories as habit/to-do reminders — so `NotificationDelegate`
+    /// (already handling `COMPLETE_TODO`/`COMPLETE_HABIT` against the
+    /// persistent store) needs zero changes to support checking an item off
+    /// straight from this notification, without opening the app. This is
+    /// the out-of-app half of "focus ended, mark done?"; the in-app half is
+    /// `RootTabView`'s confirmation dialog, driven by
+    /// `FocusSessionController.reconcile`'s return value.
+    ///
+    /// No-ops if `plannedEnd` is already in the past, or if neither
+    /// `linkedToDo` nor `linkedHabit` is given — nothing to notify about.
+    static func scheduleFocusEnd(for session: FocusSession, plannedEnd: Date, linkedToDo: ToDo?, linkedHabit: Habit?) {
+        cancelFocusEnd(for: session)
+        guard plannedEnd > .now else { return }
+
+        let content = UNMutableNotificationContent()
+        content.body = String(localized: "Focus ended — mark as done?")
+        content.sound = .default
+
+        if let linkedToDo {
+            content.title = linkedToDo.title
+            content.categoryIdentifier = toDoCategoryIdentifier
+            content.userInfo = [toDoIDKey: linkedToDo.id.uuidString]
+        } else if let linkedHabit {
+            content.title = linkedHabit.title
+            content.categoryIdentifier = habitCategoryIdentifier
+            content.userInfo = [habitIDKey: linkedHabit.id.uuidString]
+        } else {
+            return
+        }
+
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: plannedEnd.timeIntervalSinceNow, repeats: false)
+        let request = UNNotificationRequest(identifier: focusEndIdentifier(for: session), content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request)
+    }
+
+    static func cancelFocusEnd(for session: FocusSession) {
+        cancelRequests(withPrefix: focusEndIdentifierPrefix(for: session))
+    }
+
     private static func cancelRequests(withPrefix prefix: String) {
         UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
             let idsToRemove = requests.map(\.identifier).filter { $0.hasPrefix(prefix) }
@@ -134,5 +175,13 @@ enum NotificationService {
 
     private static func toDoIdentifier(for toDo: ToDo) -> String {
         "todo-reminder-\(toDo.id.uuidString)"
+    }
+
+    private static func focusEndIdentifierPrefix(for session: FocusSession) -> String {
+        "focus-end-\(session.id.uuidString)-"
+    }
+
+    private static func focusEndIdentifier(for session: FocusSession) -> String {
+        focusEndIdentifierPrefix(for: session) + "end"
     }
 }

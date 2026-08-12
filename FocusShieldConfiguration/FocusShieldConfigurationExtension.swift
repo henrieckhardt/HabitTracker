@@ -28,11 +28,17 @@ final class FocusShieldConfigurationExtension: ShieldConfigurationDataSource {
         let subtitleText: String
         if let session = currentlyActiveSession() {
             let endDate = session.isOnDemand ? session.activeUntil : session.endTime
+            // `activeLabel` — set by `FocusSessionController.start` when
+            // this session was started for a specific to-do/habit — takes
+            // priority over the session's own (template) title, so the
+            // shield reads "Steuererklärung · bis 15:30" instead of
+            // "Quick Focus · bis 15:30".
+            let displayTitle = session.activeLabel ?? session.title
             if let endDate {
                 let endText = Self.timeFormatter.string(from: endDate)
-                subtitleText = String(localized: "\(session.title) · until \(endText)")
+                subtitleText = String(localized: "\(displayTitle) · until \(endText)")
             } else {
-                subtitleText = session.title
+                subtitleText = displayTitle
             }
         } else {
             subtitleText = String(localized: "This app is blocked during your focus period.")

@@ -29,7 +29,16 @@ enum FocusRunReconciler {
     static let minimumLoggedMinutes = 1
 
     enum Mutation: Equatable {
-        case openRun(sessionID: UUID, sessionTitle: String, startedAt: Date, plannedEnd: Date, wasBlockingApps: Bool)
+        case openRun(
+            sessionID: UUID,
+            sessionTitle: String,
+            startedAt: Date,
+            plannedEnd: Date,
+            wasBlockingApps: Bool,
+            linkedToDoID: UUID?,
+            linkedHabitID: UUID?,
+            linkedTitle: String?
+        )
         case closeRun(runID: UUID, endedAt: Date, wasEndedEarly: Bool)
         case clearSessionRuntimeState(sessionID: UUID)
         case discardRun(runID: UUID)
@@ -83,7 +92,10 @@ enum FocusRunReconciler {
                     sessionTitle: session.title,
                     startedAt: pendingStart,
                     plannedEnd: activeUntil,
-                    wasBlockingApps: session.isBlockingEnabled
+                    wasBlockingApps: session.isBlockingEnabled,
+                    linkedToDoID: session.activeToDoID,
+                    linkedHabitID: session.activeHabitID,
+                    linkedTitle: session.activeLabel
                 ))
             } else if session.pendingStart == nil, session.isOnDemand, let activeUntil = session.activeUntil {
                 let estimatedStart = activeUntil.addingTimeInterval(-TimeInterval(session.durationMinutes * 60))
@@ -92,7 +104,10 @@ enum FocusRunReconciler {
                     sessionTitle: session.title,
                     startedAt: estimatedStart,
                     plannedEnd: activeUntil,
-                    wasBlockingApps: session.isBlockingEnabled
+                    wasBlockingApps: session.isBlockingEnabled,
+                    linkedToDoID: session.activeToDoID,
+                    linkedHabitID: session.activeHabitID,
+                    linkedTitle: session.activeLabel
                 ))
             }
         }
