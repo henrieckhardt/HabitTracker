@@ -48,7 +48,7 @@ struct FocusEditorView: View {
         _endTime = State(initialValue: session?.endTime ?? Self.defaultEndTime)
         _recurrenceState = State(initialValue: RecurrenceEditorState.from(session?.recurrenceRule ?? .daily))
         _isOnDemand = State(initialValue: session?.isOnDemand ?? false)
-        _durationMinutes = State(initialValue: session?.durationMinutes ?? 30)
+        _durationMinutes = State(initialValue: session?.durationMinutes ?? AppSettings.defaultFocusDurationMinutes)
         _blockingEnabled = State(initialValue: session?.isBlockingEnabled ?? false)
         _appSelection = State(initialValue: session?.blockedSelection ?? FamilyActivitySelection())
     }

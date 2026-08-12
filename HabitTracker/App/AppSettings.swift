@@ -37,6 +37,24 @@ enum AppSettings {
         static let reminderMinutes = 9 * 60
         static let focusDurationMinutes = 30
         static let promptCompleteAfterFocus = true
+        static let onboardingVersion = 0
+    }
+
+    /// Bumped whenever onboarding's content changes materially enough that
+    /// returning users should see it again — unused today (every version
+    /// bump would need its own opt-in re-presentation policy in
+    /// `RootTabView`, not built yet), but stored from the first release
+    /// onward so that policy has real history to compare against later.
+    static let currentOnboardingVersion = 1
+
+    static var hasCompletedOnboarding: Bool {
+        get { defaults.bool(forKey: Key.hasCompletedOnboarding) }
+        set { defaults.set(newValue, forKey: Key.hasCompletedOnboarding) }
+    }
+
+    static var onboardingVersion: Int {
+        get { (defaults.object(forKey: Key.onboardingVersion) as? Int) ?? Default.onboardingVersion }
+        set { defaults.set(newValue, forKey: Key.onboardingVersion) }
     }
 
     /// 1-indexed like `Calendar.Component.weekday` (1 = Sunday … 7 =

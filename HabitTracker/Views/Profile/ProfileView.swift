@@ -12,6 +12,8 @@ struct ProfileView: View {
     @Query(sort: \ToDo.createdAt) private var allToDos: [ToDo]
     @Query private var allFocusRuns: [FocusRun]
 
+    @State private var showingSettings = false
+
     private var calendar: Calendar {
         CalendarProvider.current
     }
@@ -30,6 +32,18 @@ struct ProfileView: View {
                 .padding()
             }
             .navigationTitle("Profile")
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        showingSettings = true
+                    } label: {
+                        Image(systemName: "gearshape")
+                    }
+                }
+            }
+            .sheet(isPresented: $showingSettings) {
+                SettingsView()
+            }
         }
     }
 }

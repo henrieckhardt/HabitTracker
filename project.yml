@@ -15,6 +15,7 @@ targets:
     platform: iOS
     sources:
       - path: HabitTracker
+      - path: docs/privacy.html
     info:
       path: HabitTracker/Resources/Info.plist
       properties:

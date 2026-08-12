@@ -14,6 +14,8 @@ struct RootTabView: View {
     /// just waits for the next reconcile.
     @State private var completionPromptRun: FocusRun?
 
+    @State private var showingOnboarding = !AppSettings.hasCompletedOnboarding
+
     var body: some View {
         TabView {
             // Woche is folded into Heute as a segmented Tag/Woche control
@@ -65,7 +67,7 @@ struct RootTabView: View {
                 // FocusRunReconciler for why this is safe to derive after
                 // the fact instead of needing to observe it live.
                 let closedRuns = FocusSessionController.reconcile(context: modelContext)
-                if completionPromptRun == nil {
+                if AppSettings.promptCompleteAfterFocus, completionPromptRun == nil {
                     completionPromptRun = closedRuns.first { $0.linkedToDoID != nil || $0.linkedHabitID != nil }
                 }
             }
@@ -98,6 +100,9 @@ struct RootTabView: View {
             }
         } message: { run in
             Text("Your focus session for \"\(run.linkedTitle ?? run.sessionTitle)\" just ended.")
+        }
+        .fullScreenCover(isPresented: $showingOnboarding) {
+            OnboardingContainerView()
         }
     }
 

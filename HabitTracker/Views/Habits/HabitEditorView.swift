@@ -31,7 +31,8 @@ struct HabitEditorView: View {
     ]
 
     private static var defaultReminderTime: Date {
-        Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: .now) ?? .now
+        let minutes = AppSettings.defaultReminderMinutes
+        return Calendar.current.date(bySettingHour: minutes / 60, minute: minutes % 60, second: 0, of: .now) ?? .now
     }
 
     private static var defaultWindowStart: Date {

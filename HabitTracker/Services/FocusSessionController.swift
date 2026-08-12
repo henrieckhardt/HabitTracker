@@ -69,7 +69,7 @@ enum FocusSessionController {
 
         FocusBlockingScheduler.startNow(session)
 
-        if linkedToDo != nil || linkedHabit != nil {
+        if AppSettings.promptCompleteAfterFocus, linkedToDo != nil || linkedHabit != nil {
             NotificationService.scheduleFocusEnd(for: session, plannedEnd: plannedEnd, linkedToDo: linkedToDo, linkedHabit: linkedHabit)
         }
     }
