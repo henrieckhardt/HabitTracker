@@ -65,7 +65,7 @@ final class FocusShieldMonitorExtension: DeviceActivityMonitor {
     private func fetchSession(id: String) -> FocusSession? {
         guard let uuid = UUID(uuidString: id) else { return nil }
         guard let container = try? ModelContainer(
-            for: Habit.self, HabitCompletion.self, ToDo.self, FocusSession.self,
+            for: Habit.self, HabitCompletion.self, ToDo.self, FocusSession.self, FocusRun.self,
             configurations: AppGroup.makeModelConfiguration()
         ) else {
             logger.error("fetchSession: failed to open shared ModelContainer")

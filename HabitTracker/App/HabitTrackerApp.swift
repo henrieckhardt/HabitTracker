@@ -15,7 +15,7 @@ struct HabitTrackerApp: App {
             // FocusShieldConfiguration extensions can read FocusSession
             // data directly.
             let container = try ModelContainer(
-                for: Habit.self, HabitCompletion.self, ToDo.self, FocusSession.self,
+                for: Habit.self, HabitCompletion.self, ToDo.self, FocusSession.self, FocusRun.self,
                 configurations: AppGroup.makeModelConfiguration()
             )
             modelContainer = container

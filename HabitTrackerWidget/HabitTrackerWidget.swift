@@ -46,7 +46,7 @@ struct HabitTrackerWidgetProvider: TimelineProvider {
         let today = calendar.startOfDay(for: .now)
 
         guard let container = try? ModelContainer(
-            for: Habit.self, HabitCompletion.self, ToDo.self, FocusSession.self,
+            for: Habit.self, HabitCompletion.self, ToDo.self, FocusSession.self, FocusRun.self,
             configurations: AppGroup.makeModelConfiguration()
         ) else {
             return HabitTrackerWidgetEntry(date: .now, items: [])

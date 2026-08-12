@@ -49,7 +49,7 @@ final class FocusShieldConfigurationExtension: ShieldConfigurationDataSource {
 
     private func currentlyActiveSession() -> FocusSession? {
         guard let container = try? ModelContainer(
-            for: Habit.self, HabitCompletion.self, ToDo.self, FocusSession.self,
+            for: Habit.self, HabitCompletion.self, ToDo.self, FocusSession.self, FocusRun.self,
             configurations: AppGroup.makeModelConfiguration()
         ) else { return nil }
 
