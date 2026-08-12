@@ -66,11 +66,13 @@ targets:
     sources:
       - path: FocusShieldMonitor
       - path: HabitTracker/App/AppGroup.swift
+      - path: HabitTracker/App/AppSettings.swift
       - path: HabitTracker/Models/Habit.swift
       - path: HabitTracker/Models/HabitCompletion.swift
       - path: HabitTracker/Models/ToDo.swift
       - path: HabitTracker/Models/FocusSession.swift
       - path: HabitTracker/Models/FocusRun.swift
+      - path: HabitTracker/Services/FocusExitPolicy.swift
       - path: HabitTracker/Models/RecurrenceRule.swift
       - path: HabitTracker/Models/Weekday.swift
       - path: HabitTracker/Services/RecurrenceEngine.swift
@@ -102,11 +104,13 @@ targets:
     sources:
       - path: FocusShieldConfiguration
       - path: HabitTracker/App/AppGroup.swift
+      - path: HabitTracker/App/AppSettings.swift
       - path: HabitTracker/Models/Habit.swift
       - path: HabitTracker/Models/HabitCompletion.swift
       - path: HabitTracker/Models/ToDo.swift
       - path: HabitTracker/Models/FocusSession.swift
       - path: HabitTracker/Models/FocusRun.swift
+      - path: HabitTracker/Services/FocusExitPolicy.swift
       - path: HabitTracker/Models/RecurrenceRule.swift
       - path: HabitTracker/Models/Weekday.swift
       - path: HabitTracker/Services/RecurrenceEngine.swift
@@ -139,11 +143,13 @@ targets:
     sources:
       - path: HabitTrackerWidget
       - path: HabitTracker/App/AppGroup.swift
+      - path: HabitTracker/App/AppSettings.swift
       - path: HabitTracker/Models/Habit.swift
       - path: HabitTracker/Models/HabitCompletion.swift
       - path: HabitTracker/Models/ToDo.swift
       - path: HabitTracker/Models/FocusSession.swift
       - path: HabitTracker/Models/FocusRun.swift
+      - path: HabitTracker/Services/FocusExitPolicy.swift
       - path: HabitTracker/Models/RecurrenceRule.swift
       - path: HabitTracker/Models/Weekday.swift
       - path: HabitTracker/Services/RecurrenceEngine.swift

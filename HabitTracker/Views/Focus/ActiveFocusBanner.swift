@@ -7,8 +7,8 @@ import SwiftUI
 /// Extracted out of `FocusListView`, where this used to be a private
 /// struct, so both hosts share one implementation instead of drifting.
 struct ActiveFocusBanner: View {
-    @Environment(\.modelContext) private var modelContext
     let session: FocusSession
+    @State private var showingExitSheet = false
 
     private var endDate: Date? {
         session.isOnDemand ? session.activeUntil : session.endTime
@@ -44,7 +44,11 @@ struct ActiveFocusBanner: View {
             }
             Spacer()
             Button {
-                FocusSessionController.stop(session, context: modelContext)
+                // Ending a running focus goes through FocusExitSheet's
+                // cooling-off period, not a direct stop — see that view's
+                // doc comment for why quitting is deliberately made harder
+                // than starting.
+                showingExitSheet = true
             } label: {
                 Image(systemName: "stop.fill")
                     .font(.subheadline.weight(.semibold))
@@ -54,6 +58,9 @@ struct ActiveFocusBanner: View {
                     .clipShape(Circle())
             }
             .buttonStyle(.plain)
+        }
+        .sheet(isPresented: $showingExitSheet) {
+            FocusExitSheet(session: session)
         }
     }
 }

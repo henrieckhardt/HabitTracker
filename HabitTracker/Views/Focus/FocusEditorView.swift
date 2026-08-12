@@ -20,6 +20,7 @@ struct FocusEditorView: View {
     @State private var showingActivityPicker = false
     @State private var isRequestingAuthorization = false
     @State private var authorizationDeniedAlert = false
+    @State private var showingExitSheet = false
 
     /// Only used for the "Später starten" control on an already-saved
     /// on-demand session — how far in the future to schedule the start.
@@ -217,6 +218,11 @@ struct FocusEditorView: View {
             } message: {
                 Text("Without Screen Time access, apps can't be blocked. You can allow this in Settings under Screen Time.")
             }
+            .sheet(isPresented: $showingExitSheet) {
+                if let session = sessionToEdit {
+                    FocusExitSheet(session: session)
+                }
+            }
         }
     }
 
@@ -225,8 +231,13 @@ struct FocusEditorView: View {
         VStack(spacing: 14) {
             if isRunning, let activeUntil = session.activeUntil {
                 statCard(icon: "timer", title: "Time Remaining", value: "\(remainingMinutes(until: activeUntil)) min", tint: .accentColor)
+                // Ending a running session goes through FocusExitSheet's
+                // cooling-off period, not a direct stop — see that view's
+                // doc comment. "Cancel Scheduled Start" below stays direct:
+                // a merely-pending session was never granted a shield, so
+                // there's nothing to guard against quitting.
                 actionButton("Stop", icon: "stop.fill", tint: .red, role: .destructive) {
-                    stopOrCancel(session)
+                    showingExitSheet = true
                 }
             } else if isPending, let pendingStart = session.pendingStart {
                 statCard(icon: "clock", title: "Starts at \(timeText(pendingStart))", value: "in \(remainingMinutes(until: pendingStart)) min", tint: .orange)

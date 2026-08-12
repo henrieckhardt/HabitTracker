@@ -116,6 +116,29 @@ enum FocusSessionController {
         session.activeHabitID = nil
         session.activeLabel = nil
         session.currentRunID = nil
+        session.exitRequestedAt = nil
+        try? context.save()
+    }
+
+    /// Begins the cooling-off period for stopping `session` early — see
+    /// `FocusExitPolicy`/`FocusExitSheet`. Doesn't touch
+    /// `FocusBlockingScheduler` or end anything; the run keeps going exactly
+    /// as before until the user actually confirms via `stop`, which is
+    /// gated purely at the UI level (`FocusExitSheet` disables its "End
+    /// Focus" button until `FocusExitPolicy.canExit` allows it) — `stop`
+    /// itself stays an ungated primitive, since it's also used to cancel a
+    /// merely-*pending* session that was never granted a shield and so
+    /// never needed a cooling-off period in the first place.
+    static func requestExit(_ session: FocusSession, context: ModelContext, now: Date = .now) {
+        session.exitRequestedAt = now
+        try? context.save()
+    }
+
+    /// Cancels an in-progress cooling-off period without ending the session
+    /// — "Fokus fortsetzen" in `FocusExitSheet`, or leaving the app before
+    /// it elapses (see that view's doc comment on why that's deliberate).
+    static func cancelExitRequest(_ session: FocusSession, context: ModelContext) {
+        session.exitRequestedAt = nil
         try? context.save()
     }
 

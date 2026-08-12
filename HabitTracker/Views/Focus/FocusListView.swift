@@ -15,6 +15,7 @@ struct FocusListView: View {
 
     @State private var showingAddSession = false
     @State private var sessionToEdit: FocusSession?
+    @State private var sessionToExit: FocusSession?
     @State private var now: Date = .now
 
     /// Ticks periodically so the "currently active" banner/highlight stay
@@ -68,8 +69,17 @@ struct FocusListView: View {
                             .swipeActions(edge: .leading) {
                                 if session.isOnDemand {
                                     if isRunning {
+                                        // Ending a running session goes
+                                        // through FocusExitSheet's
+                                        // cooling-off period, not a direct
+                                        // stop — see that view's doc
+                                        // comment. Cancelling a merely-
+                                        // pending session below stays
+                                        // direct: it was never granted a
+                                        // shield, so there's nothing to
+                                        // guard against quitting.
                                         Button("Stop", systemImage: "stop.fill") {
-                                            FocusSessionController.stop(session, context: modelContext)
+                                            sessionToExit = session
                                         }
                                         .tint(.red)
                                     } else if isPending {
@@ -111,6 +121,9 @@ struct FocusListView: View {
             }
             .sheet(item: $sessionToEdit) { session in
                 FocusEditorView(session: session)
+            }
+            .sheet(item: $sessionToExit) { session in
+                FocusExitSheet(session: session)
             }
             .onReceive(timer) { date in
                 now = date

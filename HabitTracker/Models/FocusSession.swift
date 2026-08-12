@@ -109,6 +109,26 @@ final class FocusSession {
     /// O(1) instead of a fetch-by-predicate.
     var currentRunID: UUID?
 
+    // MARK: - Exit policy (see FocusExitPolicy)
+
+    /// Per-template, not per-run — adjustable like any other setting on the
+    /// session, not something a running focus can change about itself.
+    /// `String`, not `FocusExitDifficulty`, for the same SwiftData-friendly-
+    /// primitive reason as every other raw-backed enum in this file.
+    private var exitDifficultyRaw: String = AppSettings.defaultFocusExitDifficulty.rawValue
+
+    var exitDifficulty: FocusExitDifficulty {
+        get { FocusExitDifficulty(rawValue: exitDifficultyRaw) ?? .easy }
+        set { exitDifficultyRaw = newValue.rawValue }
+    }
+
+    /// Non-nil while the user has tapped Stop on a running session and is
+    /// sitting through `FocusExitPolicy`'s cooling-off period
+    /// (`FocusExitSheet`). Cleared by choosing "Fokus fortsetzen", by
+    /// leaving the app before the countdown finishes (deliberate — see
+    /// `FocusExitSheet`'s doc comment), or once the session actually ends.
+    var exitRequestedAt: Date?
+
     init(
         title: String,
         startTime: Date,
@@ -118,7 +138,8 @@ final class FocusSession {
         isArchived: Bool = false,
         blockedSelection: FamilyActivitySelection? = nil,
         isOnDemand: Bool = false,
-        durationMinutes: Int = 30
+        durationMinutes: Int = 30,
+        exitDifficulty: FocusExitDifficulty = AppSettings.defaultFocusExitDifficulty
     ) {
         self.id = UUID()
         self.title = title
@@ -130,6 +151,7 @@ final class FocusSession {
         self.blockedSelectionData = blockedSelection.flatMap(FocusSession.encodeSelection)
         self.isOnDemand = isOnDemand
         self.durationMinutes = durationMinutes
+        self.exitDifficultyRaw = exitDifficulty.rawValue
     }
 
     private static func encode(_ rule: RecurrenceRule) -> Data {

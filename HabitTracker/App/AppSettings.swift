@@ -25,6 +25,7 @@ enum AppSettings {
         static let promptCompleteAfterFocus = "promptCompleteAfterFocus"
         static let profileName = "profileName"
         static let quickFocusSessionID = "quickFocusSessionID"
+        static let defaultFocusExitDifficulty = "defaultFocusExitDifficulty"
     }
 
     enum Default {
@@ -73,5 +74,15 @@ enum AppSettings {
     static var quickFocusSessionID: UUID? {
         get { (defaults.string(forKey: Key.quickFocusSessionID)).flatMap(UUID.init(uuidString:)) }
         set { defaults.set(newValue?.uuidString, forKey: Key.quickFocusSessionID) }
+    }
+
+    /// Applied to every newly-created `FocusSession` (see its `init`) —
+    /// there's no Settings UI to change this yet (planned for A7), but the
+    /// key exists now so sessions created today already read from a single
+    /// place rather than a hardcoded `.easy` that Settings would later have
+    /// to retrofit into every call site.
+    static var defaultFocusExitDifficulty: FocusExitDifficulty {
+        get { (defaults.string(forKey: Key.defaultFocusExitDifficulty)).flatMap(FocusExitDifficulty.init(rawValue:)) ?? .easy }
+        set { defaults.set(newValue.rawValue, forKey: Key.defaultFocusExitDifficulty) }
     }
 }
