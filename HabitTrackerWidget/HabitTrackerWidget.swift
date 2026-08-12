@@ -1,12 +1,19 @@
 import WidgetKit
 import SwiftUI
 import SwiftData
+import AppIntents
 
 struct WidgetItem: Identifiable {
+    enum Kind {
+        case habit
+        case toDo
+    }
+
     let id: UUID
     let title: String
     let icon: String
     let isCompleted: Bool
+    let kind: Kind
 }
 
 struct HabitTrackerWidgetEntry: TimelineEntry {
@@ -17,8 +24,8 @@ struct HabitTrackerWidgetEntry: TimelineEntry {
 struct HabitTrackerWidgetProvider: TimelineProvider {
     func placeholder(in context: Context) -> HabitTrackerWidgetEntry {
         HabitTrackerWidgetEntry(date: .now, items: [
-            WidgetItem(id: UUID(), title: "Run", icon: "figure.run", isCompleted: false),
-            WidgetItem(id: UUID(), title: "Groceries", icon: "checklist", isCompleted: true)
+            WidgetItem(id: UUID(), title: "Run", icon: "figure.run", isCompleted: false, kind: .habit),
+            WidgetItem(id: UUID(), title: "Groceries", icon: "checklist", isCompleted: true, kind: .toDo)
         ])
     }
 
@@ -61,7 +68,8 @@ struct HabitTrackerWidgetProvider: TimelineProvider {
                     id: habit.id,
                     title: habit.title,
                     icon: habit.icon,
-                    isCompleted: habit.isCompleted(on: today, calendar: calendar)
+                    isCompleted: habit.isCompleted(on: today, calendar: calendar),
+                    kind: .habit
                 )
             }
 
@@ -69,7 +77,7 @@ struct HabitTrackerWidgetProvider: TimelineProvider {
         let toDoItems = toDos
             .filter { calendar.isDate($0.scheduledDate, inSameDayAs: today) }
             .map { toDo in
-                WidgetItem(id: toDo.id, title: toDo.title, icon: "checklist", isCompleted: toDo.isCompleted)
+                WidgetItem(id: toDo.id, title: toDo.title, icon: "checklist", isCompleted: toDo.isCompleted, kind: .toDo)
             }
 
         // Completed items sink to the bottom, keeping their relative order
@@ -100,8 +108,12 @@ struct HabitTrackerWidgetEntryView: View {
             } else {
                 ForEach(visibleItems) { item in
                     HStack(spacing: 6) {
-                        Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
-                            .foregroundStyle(item.isCompleted ? Color.accentColor : Color.secondary)
+                        // A widget's rows aren't inside a List, so none of
+                        // this codebase's documented List/NavigationLink
+                        // hit-testing hazards around nested Buttons apply
+                        // here — WidgetKit gives every interactive control
+                        // its own tap target regardless.
+                        toggleButton(for: item)
                         Text(item.title)
                             .strikethrough(item.isCompleted)
                             .foregroundStyle(item.isCompleted ? .secondary : .primary)
@@ -120,6 +132,27 @@ struct HabitTrackerWidgetEntryView: View {
         }
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    // `Button(intent:)`'s generic parameter is constrained to a concrete
+    // `AppIntent`-conforming type, not the `any AppIntent` existential — an
+    // existential doesn't satisfy that constraint, since `AppIntent` isn't
+    // usable as such (it has associated-type requirements). `@ViewBuilder`
+    // branching, rather than a function returning one shared type, is what
+    // lets each case build its own concrete `Button<Image>` over its own
+    // concrete intent type.
+    @ViewBuilder
+    private func toggleButton(for item: WidgetItem) -> some View {
+        let icon = Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
+            .foregroundStyle(item.isCompleted ? Color.accentColor : Color.secondary)
+        switch item.kind {
+        case .habit:
+            Button(intent: ToggleHabitIntent(habitID: item.id)) { icon }
+                .buttonStyle(.plain)
+        case .toDo:
+            Button(intent: ToggleToDoIntent(toDoID: item.id)) { icon }
+                .buttonStyle(.plain)
+        }
     }
 }
 

@@ -44,19 +44,21 @@ final class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
         }
     }
 
+    /// Routes through `ItemCompletionService` for the actual mutation, but
+    /// — unlike `DayItemRow`'s checkbox or the widget's `AppIntent`, which
+    /// both want a genuine toggle — guards it behind "not already complete"
+    /// first. This is a one-shot "Erledigt" action, not a checkbox: a
+    /// notification the user already handled some other way (completed the
+    /// habit in-app, then tapped a still-lingering notification banner)
+    /// must not silently *uncomplete* it.
     private func completeHabit(userInfo: [AnyHashable: Any], context: ModelContext) {
         guard let habitIDString = userInfo[NotificationService.habitIDKey] as? String,
               let habitID = UUID(uuidString: habitIDString) else { return }
 
         let descriptor = FetchDescriptor<Habit>(predicate: #Predicate { $0.id == habitID })
-        guard let habit = try? context.fetch(descriptor).first else { return }
+        guard let habit = try? context.fetch(descriptor).first, habit.completion(on: .now) == nil else { return }
 
-        let today = Calendar.current.startOfDay(for: .now)
-        if habit.completion(on: today) == nil {
-            let completion = HabitCompletion(date: today, habit: habit)
-            context.insert(completion)
-            try? context.save()
-        }
+        ItemCompletionService.toggleHabit(id: habitID, on: .now, context: context)
     }
 
     private func completeToDo(userInfo: [AnyHashable: Any], context: ModelContext) {
@@ -64,10 +66,8 @@ final class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
               let toDoID = UUID(uuidString: toDoIDString) else { return }
 
         let descriptor = FetchDescriptor<ToDo>(predicate: #Predicate { $0.id == toDoID })
-        guard let toDo = try? context.fetch(descriptor).first else { return }
+        guard let toDo = try? context.fetch(descriptor).first, !toDo.isCompleted else { return }
 
-        toDo.isCompleted = true
-        toDo.completedAt = .now
-        try? context.save()
+        ItemCompletionService.toggleToDo(id: toDoID, context: context)
     }
 }

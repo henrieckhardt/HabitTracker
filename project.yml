@@ -49,6 +49,7 @@ targets:
       - sdk: ManagedSettings.framework
       - sdk: DeviceActivity.framework
       - sdk: WidgetKit.framework
+      - sdk: AppIntents.framework
   HabitTrackerTests:
     type: bundle.unit-test
     platform: iOS
@@ -142,6 +143,7 @@ targets:
     platform: iOS
     sources:
       - path: HabitTrackerWidget
+      - path: HabitTracker/Intents
       - path: HabitTracker/App/AppGroup.swift
       - path: HabitTracker/App/AppSettings.swift
       - path: HabitTracker/Models/Habit.swift
@@ -150,6 +152,8 @@ targets:
       - path: HabitTracker/Models/FocusSession.swift
       - path: HabitTracker/Models/FocusRun.swift
       - path: HabitTracker/Services/FocusExitPolicy.swift
+      - path: HabitTracker/Services/ItemCompletionService.swift
+      - path: HabitTracker/Services/NotificationService.swift
       - path: HabitTracker/Models/RecurrenceRule.swift
       - path: HabitTracker/Models/Weekday.swift
       - path: HabitTracker/Services/RecurrenceEngine.swift
@@ -168,6 +172,8 @@ targets:
     dependencies:
       - sdk: WidgetKit.framework
       - sdk: SwiftUI.framework
+      - sdk: AppIntents.framework
+      - sdk: UserNotifications.framework
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.henrieckhardt.habittracker.HabitTrackerWidget

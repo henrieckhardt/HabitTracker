@@ -643,21 +643,9 @@ private struct DayItemRow: View {
     private func toggle() {
         switch item {
         case .habit(let habit, _):
-            if let completion = habit.completion(on: date) {
-                modelContext.delete(completion)
-            } else {
-                let completion = HabitCompletion(date: date, habit: habit)
-                modelContext.insert(completion)
-            }
+            ItemCompletionService.toggleHabit(id: habit.id, on: date, context: modelContext)
         case .toDo(let toDo):
-            toDo.isCompleted.toggle()
-            toDo.completedAt = toDo.isCompleted ? .now : nil
-            if toDo.isCompleted {
-                NotificationService.cancelReminder(for: toDo)
-            } else if toDo.reminderTime != nil {
-                NotificationService.scheduleReminder(for: toDo)
-            }
+            ItemCompletionService.toggleToDo(id: toDo.id, context: modelContext)
         }
-        try? modelContext.save()
     }
 }

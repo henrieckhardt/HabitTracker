@@ -40,6 +40,17 @@ struct RootTabView: View {
         }
         .onChange(of: scenePhase) { _, newPhase in
             if newPhase == .active {
+                // SwiftData has no cross-process change notification: the
+                // widget's ToggleHabitIntent/ToggleToDoIntent write to this
+                // same App Group store from the widget extension process,
+                // and without this, `mainContext` can keep serving cached
+                // objects afterward — a habit checked off from the home
+                // screen wouldn't visibly update here until some unrelated
+                // mutation happened to touch it. `rollback()` discards no
+                // real data (every mutation path in this app already saves
+                // immediately), it just forces every `@Query` here to
+                // refetch against whatever's actually persisted.
+                modelContext.rollback()
                 RolloverService.rolloverIfNeeded(context: modelContext)
                 // Self-healing safety net: `FocusShieldMonitorExtension`'s
                 // `intervalDidStart`/`intervalDidEnd` are known to be
