@@ -69,26 +69,17 @@ struct FocusListView: View {
                                 if session.isOnDemand {
                                     if isRunning {
                                         Button("Stop", systemImage: "stop.fill") {
-                                            FocusBlockingScheduler.stopNow(session)
-                                            session.activeUntil = nil
-                                            session.pendingStart = nil
-                                            try? modelContext.save()
+                                            FocusSessionController.stop(session, context: modelContext)
                                         }
                                         .tint(.red)
                                     } else if isPending {
                                         Button("Cancel", systemImage: "xmark") {
-                                            FocusBlockingScheduler.stopNow(session)
-                                            session.activeUntil = nil
-                                            session.pendingStart = nil
-                                            try? modelContext.save()
+                                            FocusSessionController.stop(session, context: modelContext)
                                         }
                                         .tint(.orange)
                                     } else {
                                         Button("Start", systemImage: "play.fill") {
-                                            session.pendingStart = nil
-                                            session.activeUntil = Date.now.addingTimeInterval(TimeInterval(session.durationMinutes * 60))
-                                            try? modelContext.save()
-                                            FocusBlockingScheduler.startNow(session)
+                                            FocusSessionController.start(session, context: modelContext)
                                         }
                                         .tint(.green)
                                     }

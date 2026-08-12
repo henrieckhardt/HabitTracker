@@ -26,6 +26,14 @@ final class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
         let userInfo = response.notification.request.content.userInfo
         let context = ModelContext(modelContainer)
 
+        // This delegate method runs in the app process even on a
+        // notification-triggered background launch, so it's a
+        // reconciliation opportunity independent of which notification this
+        // particular response was for — including, eventually, a dedicated
+        // focus-end notification (not scheduled yet; see the Focus↔task
+        // linking work).
+        FocusSessionController.reconcile(context: context)
+
         switch response.actionIdentifier {
         case NotificationService.completeHabitActionIdentifier:
             completeHabit(userInfo: userInfo, context: context)

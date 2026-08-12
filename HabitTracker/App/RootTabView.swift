@@ -42,6 +42,12 @@ struct RootTabView: View {
                 // state against the current time whenever the app is
                 // opened, instead of relying solely on the extension.
                 FocusBlockingScheduler.resyncAll(context: modelContext)
+                // Materializes FocusRun history for whatever happened while
+                // the app wasn't in the foreground — a delayed start that
+                // began, a session that ran to its planned end. See
+                // FocusRunReconciler for why this is safe to derive after
+                // the fact instead of needing to observe it live.
+                FocusSessionController.reconcile(context: modelContext)
             }
             // Widget has no way to observe SwiftData changes itself, so
             // nudge it on every phase change — cheap, and covers both

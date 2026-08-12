@@ -29,6 +29,7 @@
 		30206E6E9873C166BEE292AA /* FocusRun.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B91DB1332FAB718DDC97A51 /* FocusRun.swift */; };
 		37EBC680AE8E3D4CD1E0D43A /* Weekday.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB6375487A04DF9F68E955F /* Weekday.swift */; };
 		39C10189F97EE0176B533650 /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F68627CFACA866D15E0AA93 /* RootTabView.swift */; };
+		3BBAB7D915F8FD0891466FC7 /* FocusSessionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29C79D8D7223F407765FD8AC /* FocusSessionController.swift */; };
 		3D1DDB58121531A27A01760E /* NotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC653A32D3ABE164A1B0B52 /* NotificationDelegate.swift */; };
 		3DD321180CB2E2C7D19D02FD /* FocusEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9087B2979A0F23FDAD5D478 /* FocusEditorView.swift */; };
 		41F08B4027265B2B7693F6E6 /* RecurrenceEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D806678F8172CF38BA7A78E8 /* RecurrenceEngine.swift */; };
@@ -37,6 +38,7 @@
 		475FDC217413F0F74D75AA2E /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D7986493087DA7D8F34952 /* AppSettings.swift */; };
 		49F3FD74D5A6DEA6C8970556 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 9E2B0A6EF8CDEC4EDD91841A /* Localizable.xcstrings */; };
 		4AAB4AF8353ACE80C6E1EF32 /* FocusShieldConfiguration.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 4D4C525344D1CE660C9F15C5 /* FocusShieldConfiguration.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		4CA34972ADC41CB76CA8D20E /* FocusStatsEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E52D56DB461823974EB9094 /* FocusStatsEngine.swift */; };
 		4D77F973A94205A2123F5B4A /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 587E83514D32CE4A425AC064 /* ManagedSettings.framework */; };
 		62E2D3FD08B76A4A701585B0 /* HabitTrackerWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD3FF37B0FF8587EE08CEE9 /* HabitTrackerWidgetBundle.swift */; };
 		6D75FBD0545D5566BFC5757C /* FocusListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D914890A5E6D0547398053 /* FocusListView.swift */; };
@@ -59,6 +61,7 @@
 		92B8C4DFE5D6A7477354E4F0 /* Weekday.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB6375487A04DF9F68E955F /* Weekday.swift */; };
 		96F5E318B45A058525A70DF7 /* FocusSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB76B67E667A2BA36D3BAE1 /* FocusSession.swift */; };
 		9A417BFF0907812DBE1F78EF /* MonthDaySelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7524BCC44507CB4B57E59A9A /* MonthDaySelector.swift */; };
+		9A85BE426F53A8050C9EF105 /* FocusStatsEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816B06A78FBCF4D33CCC8EBE /* FocusStatsEngineTests.swift */; };
 		9B7A0B5C97511CA41AFACBA9 /* WeekdaySelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA330085B77C76D00AED076 /* WeekdaySelector.swift */; };
 		9D8D5967743A202ED967A5EE /* RecurrenceEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D806678F8172CF38BA7A78E8 /* RecurrenceEngine.swift */; };
 		9E250E1A040EBA53879360F7 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B0D9D8E170506613A74C49 /* AppGroup.swift */; };
@@ -67,6 +70,7 @@
 		A3457606E68302E288C3A696 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 9E2B0A6EF8CDEC4EDD91841A /* Localizable.xcstrings */; };
 		A6A78DC48ABD8248EE7108BA /* HabitListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF3E6BE07F9FB7C10D61993 /* HabitListView.swift */; };
 		A814FA11645DFC239CACCA77 /* Habit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757134E23848D6632FD1EA11 /* Habit.swift */; };
+		A83700F6CEEC74C40A965B64 /* FocusRunReconciler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502505D4B516E17026AC609C /* FocusRunReconciler.swift */; };
 		A8CB5D0AA8755ACC890CB2FD /* RecurrencePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93789DB634C41D94F7DCF78 /* RecurrencePickerView.swift */; };
 		A9CE582473EE0E505E5B6FAF /* FocusShieldMonitor.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 1CDCEFED00DEDE430332289C /* FocusShieldMonitor.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		AC0CC1C935707A7C84BC7118 /* Habit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757134E23848D6632FD1EA11 /* Habit.swift */; };
@@ -85,6 +89,7 @@
 		CE1B442D3325CC2FF5DA2F46 /* HabitTrackerWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F3405CBD123109ACE1B843 /* HabitTrackerWidget.swift */; };
 		CF50E3AE5857E1B2CC416875 /* FocusSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB76B67E667A2BA36D3BAE1 /* FocusSession.swift */; };
 		D15908D094A110E475ABE2F0 /* RolloverService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014B24A6799466357380EC3F /* RolloverService.swift */; };
+		D1BC31FC7D0016D9587F88A1 /* FocusRunReconcilerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD86C46158F0E9C9D51D587 /* FocusRunReconcilerTests.swift */; };
 		D7939F54AAD0CEFDF233CCB2 /* DeviceActivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE58A4F8D8BB6A0992661F94 /* DeviceActivity.framework */; };
 		D9B7E8B008CA3B5662B45A0A /* StreakEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F9090466EA890C4BF98B0 /* StreakEngineTests.swift */; };
 		DB73304452AC290F45E21202 /* ManagedSettingsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D43C794243615BD12D73A2B /* ManagedSettingsUI.framework */; };
@@ -153,12 +158,14 @@
 /* Begin PBXFileReference section */
 		014B24A6799466357380EC3F /* RolloverService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RolloverService.swift; sourceTree = "<group>"; };
 		0ABFADBE1397278CC5A2E920 /* HabitTracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HabitTracker.entitlements; sourceTree = "<group>"; };
+		0E52D56DB461823974EB9094 /* FocusStatsEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusStatsEngine.swift; sourceTree = "<group>"; };
 		0EC26A00D3B0B955B78554C8 /* HabitDisplayOrderingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDisplayOrderingTests.swift; sourceTree = "<group>"; };
 		1CDCEFED00DEDE430332289C /* FocusShieldMonitor.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = FocusShieldMonitor.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D43C794243615BD12D73A2B /* ManagedSettingsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ManagedSettingsUI.framework; path = System/Library/Frameworks/ManagedSettingsUI.framework; sourceTree = SDKROOT; };
 		1EA330085B77C76D00AED076 /* WeekdaySelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekdaySelector.swift; sourceTree = "<group>"; };
 		21E0EB92AE9E9404755F136D /* DayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayView.swift; sourceTree = "<group>"; };
 		26C4BCEFC3DD5733BBFAA70E /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
+		29C79D8D7223F407765FD8AC /* FocusSessionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusSessionController.swift; sourceTree = "<group>"; };
 		2E9FA273696D88F0CEC5FECA /* DisplayOrderReorderingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayOrderReorderingTests.swift; sourceTree = "<group>"; };
 		3589D67DEDADA94EC3A18C15 /* DisplayOrderReordering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayOrderReordering.swift; sourceTree = "<group>"; };
 		371571CDFA9AE634FC04F59D /* FamilyControls.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FamilyControls.framework; path = System/Library/Frameworks/FamilyControls.framework; sourceTree = SDKROOT; };
@@ -168,6 +175,7 @@
 		3E76BAA37AAE86C749C7AC17 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		4D4C525344D1CE660C9F15C5 /* FocusShieldConfiguration.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = FocusShieldConfiguration.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D7D84A363520C55FC28C760 /* DisplayOrderMigration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayOrderMigration.swift; sourceTree = "<group>"; };
+		502505D4B516E17026AC609C /* FocusRunReconciler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusRunReconciler.swift; sourceTree = "<group>"; };
 		51DE77127A2CFCC34F55BD00 /* RecurrenceEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurrenceEngineTests.swift; sourceTree = "<group>"; };
 		587E83514D32CE4A425AC064 /* ManagedSettings.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ManagedSettings.framework; path = System/Library/Frameworks/ManagedSettings.framework; sourceTree = SDKROOT; };
 		5DB6375487A04DF9F68E955F /* Weekday.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weekday.swift; sourceTree = "<group>"; };
@@ -180,6 +188,7 @@
 		757134E23848D6632FD1EA11 /* Habit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Habit.swift; sourceTree = "<group>"; };
 		7D61281011B7203F7DD7891D /* WeekView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekView.swift; sourceTree = "<group>"; };
 		7E7A7503A51307877B3536AC /* FocusBlockingScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusBlockingScheduler.swift; sourceTree = "<group>"; };
+		816B06A78FBCF4D33CCC8EBE /* FocusStatsEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusStatsEngineTests.swift; sourceTree = "<group>"; };
 		8AFF0F0D973401BA1712F320 /* FamilyControlsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyControlsService.swift; sourceTree = "<group>"; };
 		8D70D86BA3678F134DEB547D /* FocusShieldMonitorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusShieldMonitorExtension.swift; sourceTree = "<group>"; };
 		8F68627CFACA866D15E0AA93 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
@@ -202,6 +211,7 @@
 		C5F3405CBD123109ACE1B843 /* HabitTrackerWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitTrackerWidget.swift; sourceTree = "<group>"; };
 		CA9129998B0948C210BF3E3B /* FocusShieldConfigurationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusShieldConfigurationExtension.swift; sourceTree = "<group>"; };
 		CCD60F3DA66C4CB96DD2150E /* HabitTrackerWidget.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = HabitTrackerWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		CCD86C46158F0E9C9D51D587 /* FocusRunReconcilerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusRunReconcilerTests.swift; sourceTree = "<group>"; };
 		CCDD184D3F2BFEC3C4FE1683 /* FocusScheduleEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusScheduleEngineTests.swift; sourceTree = "<group>"; };
 		CEE09BE65A43EAAC056D676D /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		D2F7D0902CF3C29F0640A516 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -276,7 +286,9 @@
 			isa = PBXGroup;
 			children = (
 				2E9FA273696D88F0CEC5FECA /* DisplayOrderReorderingTests.swift */,
+				CCD86C46158F0E9C9D51D587 /* FocusRunReconcilerTests.swift */,
 				CCDD184D3F2BFEC3C4FE1683 /* FocusScheduleEngineTests.swift */,
+				816B06A78FBCF4D33CCC8EBE /* FocusStatsEngineTests.swift */,
 				0EC26A00D3B0B955B78554C8 /* HabitDisplayOrderingTests.swift */,
 				51DE77127A2CFCC34F55BD00 /* RecurrenceEngineTests.swift */,
 				D50BD2B73001619495CF21EF /* RolloverServiceTests.swift */,
@@ -434,7 +446,10 @@
 				3589D67DEDADA94EC3A18C15 /* DisplayOrderReordering.swift */,
 				8AFF0F0D973401BA1712F320 /* FamilyControlsService.swift */,
 				7E7A7503A51307877B3536AC /* FocusBlockingScheduler.swift */,
+				502505D4B516E17026AC609C /* FocusRunReconciler.swift */,
 				FC40D6421982FC4F52C6A557 /* FocusScheduleEngine.swift */,
+				29C79D8D7223F407765FD8AC /* FocusSessionController.swift */,
+				0E52D56DB461823974EB9094 /* FocusStatsEngine.swift */,
 				953FA2DFA644FEEBE280650E /* HabitDisplayOrdering.swift */,
 				BEC653A32D3ABE164A1B0B52 /* NotificationDelegate.swift */,
 				CEE09BE65A43EAAC056D676D /* NotificationService.swift */,
@@ -687,7 +702,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				AEC60D5D33CE96609DB2ECF7 /* DisplayOrderReorderingTests.swift in Sources */,
+				D1BC31FC7D0016D9587F88A1 /* FocusRunReconcilerTests.swift in Sources */,
 				FF76F3964B838D40D4AF8E17 /* FocusScheduleEngineTests.swift in Sources */,
+				9A85BE426F53A8050C9EF105 /* FocusStatsEngineTests.swift in Sources */,
 				E7021724C066ABFB6D7085C1 /* HabitDisplayOrderingTests.swift in Sources */,
 				DE12831EA16BD8A1399D0B2B /* RecurrenceEngineTests.swift in Sources */,
 				784C2B3695187B5FD94B2CC4 /* RolloverServiceTests.swift in Sources */,
@@ -746,8 +763,11 @@
 				3DD321180CB2E2C7D19D02FD /* FocusEditorView.swift in Sources */,
 				6D75FBD0545D5566BFC5757C /* FocusListView.swift in Sources */,
 				2022CE76EDBF950EB4F89501 /* FocusRun.swift in Sources */,
+				A83700F6CEEC74C40A965B64 /* FocusRunReconciler.swift in Sources */,
 				CDB1BA19612E567C4894A8C1 /* FocusScheduleEngine.swift in Sources */,
 				96F5E318B45A058525A70DF7 /* FocusSession.swift in Sources */,
+				3BBAB7D915F8FD0891466FC7 /* FocusSessionController.swift in Sources */,
+				4CA34972ADC41CB76CA8D20E /* FocusStatsEngine.swift in Sources */,
 				AC0CC1C935707A7C84BC7118 /* Habit.swift in Sources */,
 				EA98341D44B7F7B69684C6B0 /* HabitCompletion.swift in Sources */,
 				E9CC65BBF43495A398021B56 /* HabitDisplayOrdering.swift in Sources */,

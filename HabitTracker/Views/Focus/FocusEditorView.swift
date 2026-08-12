@@ -359,26 +359,16 @@ struct FocusEditorView: View {
     }
 
     private func startSessionNow(_ session: FocusSession) {
-        session.pendingStart = nil
-        session.activeUntil = Date.now.addingTimeInterval(TimeInterval(session.durationMinutes * 60))
-        try? modelContext.save()
-        FocusBlockingScheduler.startNow(session)
+        FocusSessionController.start(session, context: modelContext)
         dismiss()
     }
 
     private func scheduleFutureStart(_ session: FocusSession, delayMinutes: Int) {
-        let start = Date.now.addingTimeInterval(TimeInterval(delayMinutes * 60))
-        session.pendingStart = start
-        session.activeUntil = start.addingTimeInterval(TimeInterval(session.durationMinutes * 60))
-        try? modelContext.save()
-        FocusBlockingScheduler.scheduleStart(session, delayMinutes: delayMinutes)
+        FocusSessionController.scheduleLater(session, delayMinutes: delayMinutes, context: modelContext)
         dismiss()
     }
 
     private func stopOrCancel(_ session: FocusSession) {
-        FocusBlockingScheduler.stopNow(session)
-        session.activeUntil = nil
-        session.pendingStart = nil
-        try? modelContext.save()
+        FocusSessionController.stop(session, context: modelContext)
     }
 }
