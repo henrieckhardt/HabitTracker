@@ -14,6 +14,13 @@ struct RootTabView: View {
     /// just waits for the next reconcile.
     @State private var completionPromptRun: FocusRun?
 
+    /// Set when the user taps "Share" in the "Focus Ended" dialog below —
+    /// a separate optional rather than reusing `completionPromptRun`
+    /// itself, since the confirmation dialog needs to be dismissed (its
+    /// `run.linkedTitle ?? run.sessionTitle` job is done) while the share
+    /// sheet for that same run is only just starting.
+    @State private var runToShare: FocusRun?
+
     @State private var showingOnboarding = !AppSettings.hasCompletedOnboarding
 
     var body: some View {
@@ -95,6 +102,10 @@ struct RootTabView: View {
                 markLinkedItemDone(run)
                 completionPromptRun = nil
             }
+            Button("Share") {
+                runToShare = run
+                completionPromptRun = nil
+            }
             Button("Not Yet", role: .cancel) {
                 completionPromptRun = nil
             }
@@ -103,6 +114,11 @@ struct RootTabView: View {
         }
         .fullScreenCover(isPresented: $showingOnboarding) {
             OnboardingContainerView()
+        }
+        .sheet(item: $runToShare) { run in
+            ShareCardPreviewSheet(fileName: "habiz-focus") {
+                FocusSessionShareCard(run: run)
+            }
         }
     }
 

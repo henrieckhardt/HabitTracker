@@ -15,6 +15,7 @@ struct HabitDetailView: View {
 
     @State private var showingEditor = false
     @State private var showingDeleteConfirmation = false
+    @State private var showingShareSheet = false
 
     private var currentStreak: Int { StreakEngine.currentStreak(for: habit) }
     private var longestStreak: Int { StreakEngine.longestStreak(for: habit) }
@@ -65,6 +66,13 @@ struct HabitDetailView: View {
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
+                    showingShareSheet = true
+                } label: {
+                    Image(systemName: "square.and.arrow.up")
+                }
+            }
+            ToolbarItem(placement: .primaryAction) {
+                Button {
                     showingEditor = true
                 } label: {
                     Image(systemName: "pencil")
@@ -73,6 +81,16 @@ struct HabitDetailView: View {
         }
         .sheet(isPresented: $showingEditor) {
             HabitEditorView(habit: habit)
+        }
+        .sheet(isPresented: $showingShareSheet) {
+            ShareCardPreviewSheet(fileName: "habiz-streak") {
+                HabitStreakShareCard(
+                    habit: habit,
+                    currentStreak: currentStreak,
+                    longestStreak: longestStreak,
+                    historyGrid: HabitHistoryEngine.grid(for: habit, weeks: 12, endingOn: .now, calendar: CalendarProvider.current)
+                )
+            }
         }
         .confirmationDialog("Delete Habit", isPresented: $showingDeleteConfirmation, titleVisibility: .visible) {
             Button("Delete", role: .destructive) {

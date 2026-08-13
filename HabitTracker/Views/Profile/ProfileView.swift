@@ -13,9 +13,23 @@ struct ProfileView: View {
     @Query private var allFocusRuns: [FocusRun]
 
     @State private var showingSettings = false
+    @State private var showingShareSheet = false
 
     private var calendar: Calendar {
         CalendarProvider.current
+    }
+
+    private var weekCompletionRate: Double {
+        AggregateStatsEngine.weekCompletionRate(habits: habits, containing: .now, calendar: calendar)
+    }
+    private var toDoStats: AggregateStatsEngine.ToDoStats {
+        AggregateStatsEngine.toDoStats(toDos: allToDos, on: .now, calendar: calendar)
+    }
+    private var focusMinutesThisWeek: Int {
+        FocusStatsEngine.weekMinutes(allFocusRuns, containing: .now, calendar: calendar)
+    }
+    private var bestCurrentStreak: Int {
+        AggregateStatsEngine.bestCurrentStreak(habits: habits, today: .now, calendar: calendar)
     }
 
     var body: some View {
@@ -23,11 +37,19 @@ struct ProfileView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     WeeklySummaryCard(
-                        weekCompletionRate: AggregateStatsEngine.weekCompletionRate(habits: habits, containing: .now, calendar: calendar),
-                        toDoStats: AggregateStatsEngine.toDoStats(toDos: allToDos, on: .now, calendar: calendar),
-                        focusMinutesThisWeek: FocusStatsEngine.weekMinutes(allFocusRuns, containing: .now, calendar: calendar),
-                        bestCurrentStreak: AggregateStatsEngine.bestCurrentStreak(habits: habits, today: .now, calendar: calendar)
+                        weekCompletionRate: weekCompletionRate,
+                        toDoStats: toDoStats,
+                        focusMinutesThisWeek: focusMinutesThisWeek,
+                        bestCurrentStreak: bestCurrentStreak
                     )
+
+                    Button {
+                        showingShareSheet = true
+                    } label: {
+                        Label("Share This Week", systemImage: "square.and.arrow.up")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.bordered)
                 }
                 .padding()
             }
@@ -43,6 +65,16 @@ struct ProfileView: View {
             }
             .sheet(isPresented: $showingSettings) {
                 SettingsView()
+            }
+            .sheet(isPresented: $showingShareSheet) {
+                ShareCardPreviewSheet(fileName: "habiz-week") {
+                    WeeklyReviewShareCard(
+                        weekCompletionRate: weekCompletionRate,
+                        toDoStats: toDoStats,
+                        focusMinutesThisWeek: focusMinutesThisWeek,
+                        bestCurrentStreak: bestCurrentStreak
+                    )
+                }
             }
         }
     }

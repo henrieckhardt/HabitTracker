@@ -252,6 +252,26 @@
         }
       }
     },
+    "Best current streak: %lld days": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beste aktuelle Serie: %lld Tage"
+          }
+        }
+      }
+    },
+    "Best streak: %lld days": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beste Serie: %lld Tage"
+          }
+        }
+      }
+    },
     "Block Apps": {
       "extractionState": "stale",
       "localizations": {
@@ -450,6 +470,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tag"
+          }
+        }
+      }
+    },
+    "Day Streak": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tage-Serie"
           }
         }
       }
@@ -694,12 +724,32 @@
         }
       }
     },
+    "Focus Ended": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fokus beendet"
+          }
+        }
+      }
+    },
     "Focus Sessions": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Fokus-Zeiträume"
+          }
+        }
+      }
+    },
+    "Focused": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fokussiert"
           }
         }
       }
@@ -767,6 +817,16 @@
         }
       }
     },
+    "Habits Completed": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Habits erledigt"
+          }
+        }
+      }
+    },
     "Habiz helps you plan your week, protect time for what matters with Focus, and see the habits you're actually keeping.": {
       "localizations": {
         "de": {
@@ -793,6 +853,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ermöglicht es Fokus-Sitzungen, ablenkende Apps während der Laufzeit zu blockieren."
+          }
+        }
+      }
+    },
+    "Mark %@ as Done": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ als erledigt markieren"
           }
         }
       }
@@ -898,6 +968,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Keine ausgewählt"
+          }
+        }
+      }
+    },
+    "Not Yet": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noch nicht"
           }
         }
       }
@@ -1149,6 +1229,26 @@
         }
       }
     },
+    "Share": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Teilen"
+          }
+        }
+      }
+    },
+    "Share This Week": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese Woche teilen"
+          }
+        }
+      }
+    },
     "Shows your habits and to-dos for today.": {
       "extractionState": "stale",
       "localizations": {
@@ -1300,6 +1400,16 @@
         }
       }
     },
+    "This Week": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese Woche"
+          }
+        }
+      }
+    },
     "This app is blocked during your focus period.": {
       "extractionState": "stale",
       "localizations": {
@@ -1392,6 +1502,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "ToDos"
+          }
+        }
+      }
+    },
+    "To-Dos Done": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ToDos erledigt"
           }
         }
       }
@@ -1497,6 +1617,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ohne Bildschirmzeit-Zugriff können keine Apps blockiert werden. Du kannst das in den Einstellungen unter Bildschirmzeit erlauben."
+          }
+        }
+      }
+    },
+    "Your focus session for \"%@\" just ended.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dein Fokus für „%@“ ist gerade zu Ende gegangen."
           }
         }
       }
