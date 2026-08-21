@@ -15,7 +15,7 @@ struct ShareCardPreviewSheet<CardContent: View>: View {
     let fileName: String
     @ViewBuilder let card: () -> CardContent
 
-    @State private var exportURL: URL?
+    @State private var exportData: Data?
 
     var body: some View {
         NavigationStack {
@@ -26,8 +26,8 @@ struct ShareCardPreviewSheet<CardContent: View>: View {
                     .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
                     .shadow(color: .black.opacity(0.25), radius: 20, y: 10)
                 Spacer()
-                if let exportURL, let preview = UIImage(contentsOfFile: exportURL.path) {
-                    ShareLink(item: exportURL, preview: SharePreview(fileName, image: Image(uiImage: preview))) {
+                if let exportData, let preview = UIImage(data: exportData) {
+                    ShareLink(item: ShareCardPNG(data: exportData), preview: SharePreview(fileName, image: Image(uiImage: preview))) {
                         Label("Share", systemImage: "square.and.arrow.up")
                             .frame(maxWidth: .infinity)
                     }
@@ -47,7 +47,7 @@ struct ShareCardPreviewSheet<CardContent: View>: View {
                 }
             }
             .task {
-                exportURL = ShareCardRenderer.writeTemporaryPNG(named: fileName) { card() }
+                exportData = ShareCardRenderer.renderPNG { card() }
             }
         }
     }

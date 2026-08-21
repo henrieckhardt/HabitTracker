@@ -1,4 +1,19 @@
 import SwiftUI
+import CoreTransferable
+import UniformTypeIdentifiers
+
+/// A rendered card's PNG bytes, typed as `.png` for `ShareLink`. Sharing a
+/// plain file `URL` only ever offers "Save to Files" — the receiving
+/// extension has no way to tell a generic file is actually an image.
+/// Declaring the transfer as `.png` data is what makes Photos' "Save
+/// Image" show up alongside it.
+struct ShareCardPNG: Transferable {
+    let data: Data
+
+    static var transferRepresentation: some TransferRepresentation {
+        DataRepresentation(exportedContentType: .png) { $0.data }
+    }
+}
 
 /// Renders a share card view into a PNG file, off-screen and at a fixed
 /// pixel size — independent of the exporting device's actual screen size
@@ -19,22 +34,5 @@ enum ShareCardRenderer {
         renderer.isOpaque = false
         guard let uiImage = renderer.uiImage else { return nil }
         return uiImage.pngData()
-    }
-
-    /// Writes the rendered PNG to a uniquely-named temp file and returns
-    /// its URL, for `ShareLink` — the same "render once, hand off a file
-    /// URL" pattern `DataExportService.exportURL` already uses.
-    @MainActor
-    static func writeTemporaryPNG<Content: View>(named name: String, @ViewBuilder content: () -> Content) -> URL? {
-        guard let data = renderPNG(content: content) else { return nil }
-        let url = FileManager.default.temporaryDirectory
-            .appendingPathComponent("\(name)-\(Int(Date.now.timeIntervalSince1970))")
-            .appendingPathExtension("png")
-        do {
-            try data.write(to: url, options: .atomic)
-            return url
-        } catch {
-            return nil
-        }
     }
 }
