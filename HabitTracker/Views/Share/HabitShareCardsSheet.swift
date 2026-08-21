@@ -133,10 +133,10 @@ private struct TransparencyCheckerboard: View {
             for row in 0..<rows {
                 for column in 0..<columns where (row + column).isMultiple(of: 2) {
                     let rect = CGRect(x: CGFloat(column) * tile, y: CGFloat(row) * tile, width: tile, height: tile)
-                    context.fill(Path(rect), with: .color(Color(white: 0.82)))
+                    context.fill(Path(rect), with: .color(Color(white: 0.3)))
                 }
             }
         }
-        .background(Color(white: 0.95))
+        .background(Color(white: 0.42))
     }
 }
