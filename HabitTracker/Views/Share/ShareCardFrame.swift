@@ -50,11 +50,16 @@ struct ShareCardFrame<Content: View>: View {
     }
 
     private var footer: some View {
-        Image("HabizLogo")
-            .resizable()
-            .scaledToFit()
-            .frame(height: 22)
-            .opacity(0.6)
-            .padding(.top, 20)
+        HStack(spacing: 8) {
+            Image("HabizLogo")
+                .resizable()
+                .scaledToFit()
+                .frame(height: 32)
+            Text("Habiz")
+                .font(.system(size: 18, weight: .semibold))
+        }
+        .foregroundStyle(.white)
+        .opacity(0.6)
+        .padding(.top, 20)
     }
 }
