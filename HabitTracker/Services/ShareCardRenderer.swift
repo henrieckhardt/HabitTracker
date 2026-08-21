@@ -16,6 +16,7 @@ enum ShareCardRenderer {
     static func renderPNG<Content: View>(@ViewBuilder content: () -> Content) -> Data? {
         let renderer = ImageRenderer(content: content().frame(width: cardPointSize.width, height: cardPointSize.height))
         renderer.scale = renderScale
+        renderer.isOpaque = false
         guard let uiImage = renderer.uiImage else { return nil }
         return uiImage.pngData()
     }

@@ -54,11 +54,31 @@ enum StreakEngine {
         let todayStart = calendar.startOfDay(for: today)
         let creationStart = calendar.startOfDay(for: habit.createdAt)
         let earliestPossible = calendar.date(byAdding: .day, value: -(lastDays - 1), to: todayStart) ?? todayStart
-        var cursor = max(earliestPossible, creationStart)
+        let from = max(earliestPossible, creationStart)
+        return rate(for: habit, from: from, to: todayStart, calendar: calendar)
+    }
 
+    /// Fraction of scheduled days completed over the habit's entire
+    /// lifetime, from `habit.createdAt` through today — unlike
+    /// `completionRate`, never clamped to a trailing window.
+    static func allTimeCompletionRate(for habit: Habit, today: Date = .now, calendar: Calendar = .current) -> Double {
+        let todayStart = calendar.startOfDay(for: today)
+        let creationStart = calendar.startOfDay(for: habit.createdAt)
+        return rate(for: habit, from: creationStart, to: todayStart, calendar: calendar)
+    }
+
+    /// Total number of days this habit has ever been completed, regardless
+    /// of whether the day was actually scheduled (an off-day completion,
+    /// while not something the UI currently offers, should still count).
+    static func totalCompletions(for habit: Habit) -> Int {
+        habit.completions.count
+    }
+
+    private static func rate(for habit: Habit, from: Date, to: Date, calendar: Calendar) -> Double {
+        var cursor = from
         var scheduledCount = 0
         var completedCount = 0
-        while cursor <= todayStart {
+        while cursor <= to {
             if RecurrenceEngine.isScheduled(habit.recurrenceRule, on: cursor, calendar: calendar) {
                 scheduledCount += 1
                 if habit.isCompleted(on: cursor, calendar: calendar) {

@@ -97,4 +97,32 @@ final class StreakEngineTests: XCTestCase {
         let rate = StreakEngine.completionRate(for: habit, lastDays: 30, today: today, calendar: calendar)
         XCTAssertEqual(rate, 2.0 / 5.0, accuracy: 0.0001)
     }
+
+    func testTotalCompletionsCountsAllCompletionsRegardlessOfSchedule() {
+        let context = makeContext()
+        let habit = makeDailyHabit(createdAt: date(2026, 1, 1), in: context)
+
+        complete(habit, on: date(2026, 1, 2), in: context)
+        complete(habit, on: date(2026, 3, 15), in: context)
+        complete(habit, on: date(2026, 7, 31), in: context)
+
+        XCTAssertEqual(StreakEngine.totalCompletions(for: habit), 3)
+    }
+
+    func testAllTimeCompletionRateCoversFullHistoryNotJustLast30Days() {
+        let context = makeContext()
+        let today = date(2026, 7, 31)
+        // Created well over 30 days before "today" so the two windows differ.
+        let habit = makeDailyHabit(createdAt: date(2026, 1, 1), in: context)
+
+        // A single completion far outside the trailing-30-day window.
+        complete(habit, on: date(2026, 1, 1), in: context)
+
+        let allTimeRate = StreakEngine.allTimeCompletionRate(for: habit, today: today, calendar: calendar)
+        let trailingRate = StreakEngine.completionRate(for: habit, lastDays: 30, today: today, calendar: calendar)
+
+        XCTAssertGreaterThan(allTimeRate, 0)
+        XCTAssertEqual(trailingRate, 0)
+        XCTAssertNotEqual(allTimeRate, trailingRate)
+    }
 }

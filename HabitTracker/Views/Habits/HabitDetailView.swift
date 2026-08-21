@@ -20,6 +20,8 @@ struct HabitDetailView: View {
     private var currentStreak: Int { StreakEngine.currentStreak(for: habit) }
     private var longestStreak: Int { StreakEngine.longestStreak(for: habit) }
     private var completionRate: Double { StreakEngine.completionRate(for: habit) }
+    private var totalCompletions: Int { StreakEngine.totalCompletions(for: habit) }
+    private var allTimeCompletionRate: Double { StreakEngine.allTimeCompletionRate(for: habit) }
     private var focusMinutes: Int { FocusStatsEngine.minutes(allFocusRuns, forHabit: habit.id) }
 
     private var focusTimeText: String {
@@ -41,6 +43,11 @@ struct HabitDetailView: View {
                     StatTile(value: "\(currentStreak)", label: "Current", systemImage: "flame.fill", tint: .orange)
                     StatTile(value: "\(longestStreak)", label: "Best", systemImage: "trophy.fill", tint: .yellow)
                     StatTile(value: "\(Int((completionRate * 100).rounded()))%", label: "30 Days", systemImage: "chart.bar.fill", tint: .accentColor)
+                }
+
+                HStack(spacing: 0) {
+                    StatTile(value: "\(totalCompletions)", label: "Total", systemImage: "checkmark.seal.fill", tint: .green)
+                    StatTile(value: "\(Int((allTimeCompletionRate * 100).rounded()))%", label: "All Time", systemImage: "chart.line.uptrend.xyaxis", tint: .accentColor)
                 }
 
                 if focusMinutes > 0 {
@@ -83,14 +90,14 @@ struct HabitDetailView: View {
             HabitEditorView(habit: habit)
         }
         .sheet(isPresented: $showingShareSheet) {
-            ShareCardPreviewSheet(fileName: "habiz-streak") {
-                HabitStreakShareCard(
-                    habit: habit,
-                    currentStreak: currentStreak,
-                    longestStreak: longestStreak,
-                    historyGrid: HabitHistoryEngine.grid(for: habit, weeks: 12, endingOn: .now, calendar: CalendarProvider.current)
-                )
-            }
+            HabitShareCardsSheet(
+                habit: habit,
+                currentStreak: currentStreak,
+                longestStreak: longestStreak,
+                totalCompletions: totalCompletions,
+                allTimeCompletionRate: allTimeCompletionRate,
+                historyGrid: HabitHistoryEngine.grid(for: habit, weeks: 12, endingOn: .now, calendar: CalendarProvider.current)
+            )
         }
         .confirmationDialog("Delete Habit", isPresented: $showingDeleteConfirmation, titleVisibility: .visible) {
             Button("Delete", role: .destructive) {

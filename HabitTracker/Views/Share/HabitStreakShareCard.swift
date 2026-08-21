@@ -12,7 +12,7 @@ struct HabitStreakShareCard: View {
     let historyGrid: [[HabitHistoryEngine.DayCell]]
 
     var body: some View {
-        ShareCardFrame {
+        ShareCardFrame(isTransparent: true) {
             VStack(spacing: 22) {
                 Image(systemName: habit.icon)
                     .font(.system(size: 36, weight: .semibold))

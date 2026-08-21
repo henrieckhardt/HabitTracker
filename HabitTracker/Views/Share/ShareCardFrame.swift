@@ -13,6 +13,12 @@ import SwiftUI
 /// text size or appearance the exporting device happened to be in — the
 /// one thing a card that's about to leave the app must never do.
 struct ShareCardFrame<Content: View>: View {
+    /// `true` for cards meant to be laid over a photo (see
+    /// `HabitStreakShareCard`/`HabitAllTimeShareCard`) — no background fill
+    /// at all, just the content with a drop shadow for legibility. `false`
+    /// keeps the original opaque dark-gradient card used by
+    /// `WeeklyReviewShareCard`/`FocusSessionShareCard`.
+    var isTransparent: Bool = false
     @ViewBuilder let content: Content
 
     var body: some View {
@@ -24,25 +30,31 @@ struct ShareCardFrame<Content: View>: View {
         }
         .padding(28)
         .frame(width: ShareCardRenderer.cardPointSize.width, height: ShareCardRenderer.cardPointSize.height)
-        .background(
+        .background(background)
+        .shadow(color: isTransparent ? .black.opacity(0.35) : .clear, radius: 6, y: 2)
+        .environment(\.dynamicTypeSize, .large)
+        .environment(\.colorScheme, .dark)
+    }
+
+    @ViewBuilder
+    private var background: some View {
+        if isTransparent {
+            Color.clear
+        } else {
             LinearGradient(
                 colors: [Color(red: 0.11, green: 0.13, blue: 0.22), Color(red: 0.04, green: 0.05, blue: 0.1)],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-        )
-        .environment(\.dynamicTypeSize, .large)
-        .environment(\.colorScheme, .dark)
+        }
     }
 
     private var footer: some View {
-        HStack(spacing: 6) {
-            Image(systemName: "checkmark.circle.fill")
-                .font(.system(size: 14, weight: .semibold))
-            Text("Habiz")
-                .font(.system(size: 14, weight: .semibold))
-        }
-        .foregroundStyle(.white.opacity(0.6))
-        .padding(.top, 20)
+        Image("HabizLogo")
+            .resizable()
+            .scaledToFit()
+            .frame(height: 22)
+            .opacity(0.6)
+            .padding(.top, 20)
     }
 }

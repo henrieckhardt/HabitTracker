@@ -160,6 +160,17 @@
         }
       }
     },
+    "All Time": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gesamtzeit"
+          }
+        }
+      }
+    },
     "Allow": {
       "localizations": {
         "de": {
@@ -1533,6 +1544,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Morgen"
+          }
+        }
+      }
+    },
+    "Total": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gesamt"
+          }
+        }
+      }
+    },
+    "Total Check-ins": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check-ins gesamt"
           }
         }
       }

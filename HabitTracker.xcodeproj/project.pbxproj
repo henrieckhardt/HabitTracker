@@ -98,7 +98,9 @@
 		9E250E1A040EBA53879360F7 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B0D9D8E170506613A74C49 /* AppGroup.swift */; };
 		9E693C06309A4DDF08D6D246 /* FamilyControls.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 371571CDFA9AE634FC04F59D /* FamilyControls.framework */; };
 		A034AFE57BB9E522B8CF25FF /* DisplayOrderReordering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3589D67DEDADA94EC3A18C15 /* DisplayOrderReordering.swift */; };
+		A23D0474A0781B03D7B18D54 /* HabitAllTimeShareCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D472346C86ED849D7442D14B /* HabitAllTimeShareCard.swift */; };
 		A3457606E68302E288C3A696 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 9E2B0A6EF8CDEC4EDD91841A /* Localizable.xcstrings */; };
+		A4AABD21B257AB4CF6EC769D /* HabitShareCardsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE5B56D91A9E20975F43A95 /* HabitShareCardsSheet.swift */; };
 		A4CB691FF9CFDD07552AB554 /* ShareCardRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8356DFD6AE8FF682AE3FCECA /* ShareCardRenderer.swift */; };
 		A6A78DC48ABD8248EE7108BA /* HabitListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF3E6BE07F9FB7C10D61993 /* HabitListView.swift */; };
 		A814FA11645DFC239CACCA77 /* Habit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757134E23848D6632FD1EA11 /* Habit.swift */; };
@@ -303,6 +305,7 @@
 		CCDD184D3F2BFEC3C4FE1683 /* FocusScheduleEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusScheduleEngineTests.swift; sourceTree = "<group>"; };
 		CEE09BE65A43EAAC056D676D /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		D2F7D0902CF3C29F0640A516 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D472346C86ED849D7442D14B /* HabitAllTimeShareCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitAllTimeShareCard.swift; sourceTree = "<group>"; };
 		D50BD2B73001619495CF21EF /* RolloverServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RolloverServiceTests.swift; sourceTree = "<group>"; };
 		D806678F8172CF38BA7A78E8 /* RecurrenceEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurrenceEngine.swift; sourceTree = "<group>"; };
 		DBC4C9A0E022A89CA0F9FAA6 /* StreakEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakEngine.swift; sourceTree = "<group>"; };
@@ -315,6 +318,7 @@
 		E75D86581B2E62CDFFB891E4 /* QuickAddToDosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAddToDosView.swift; sourceTree = "<group>"; };
 		E97EFFB8565352178B4673D9 /* WeeklySummaryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklySummaryCard.swift; sourceTree = "<group>"; };
 		EB48AC30135969B0C589B709 /* DataDeletionServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataDeletionServiceTests.swift; sourceTree = "<group>"; };
+		EBE5B56D91A9E20975F43A95 /* HabitShareCardsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitShareCardsSheet.swift; sourceTree = "<group>"; };
 		F01D32A0AB735D4EA1A2E29F /* FocusShieldConfiguration.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FocusShieldConfiguration.entitlements; sourceTree = "<group>"; };
 		F3FA5E147FAFCCC29C2E1A2B /* ItemCompletionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCompletionService.swift; sourceTree = "<group>"; };
 		F5244EDD07F0925353F2C064 /* StatTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatTile.swift; sourceTree = "<group>"; };
@@ -584,6 +588,8 @@
 			isa = PBXGroup;
 			children = (
 				841914B012554AC6FFC80DD2 /* FocusSessionShareCard.swift */,
+				D472346C86ED849D7442D14B /* HabitAllTimeShareCard.swift */,
+				EBE5B56D91A9E20975F43A95 /* HabitShareCardsSheet.swift */,
 				98DA5E57045A965D66BD0B9C /* HabitStreakShareCard.swift */,
 				334A9ADC8B699FBDB16CECAF /* ShareCardFrame.swift */,
 				A47A972A98D93395BA28574C /* ShareCardPreviewSheet.swift */,
@@ -964,6 +970,7 @@
 				B7AFC30B20872D9ADC3F6E24 /* FocusSessionShareCard.swift in Sources */,
 				4CA34972ADC41CB76CA8D20E /* FocusStatsEngine.swift in Sources */,
 				AC0CC1C935707A7C84BC7118 /* Habit.swift in Sources */,
+				A23D0474A0781B03D7B18D54 /* HabitAllTimeShareCard.swift in Sources */,
 				EA98341D44B7F7B69684C6B0 /* HabitCompletion.swift in Sources */,
 				F2C8043CE73F13E16A600C02 /* HabitDetailView.swift in Sources */,
 				E9CC65BBF43495A398021B56 /* HabitDisplayOrdering.swift in Sources */,
@@ -971,6 +978,7 @@
 				6F5E0708B500D3200635450C /* HabitHistoryEngine.swift in Sources */,
 				E608550CC34F8A99C5F5515F /* HabitHistoryGridView.swift in Sources */,
 				A6A78DC48ABD8248EE7108BA /* HabitListView.swift in Sources */,
+				A4AABD21B257AB4CF6EC769D /* HabitShareCardsSheet.swift in Sources */,
 				F6F1D1CB5BB4C93375D37A3A /* HabitStreakShareCard.swift in Sources */,
 				24BAD097D640501F3D0E4A68 /* HabitTrackerApp.swift in Sources */,
 				084287D4161E7EA970D8FF0A /* ItemCompletionService.swift in Sources */,
